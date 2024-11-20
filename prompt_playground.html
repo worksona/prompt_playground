@@ -11,11 +11,21 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js'></script>
     
     <style>
+        /* Color Variables */
+        :root {
+            --bold-orange: #FFA07A;
+            --deep-blue: #5A7D9A;
+            --light-orange: #FFDAB9;
+            --light-blue: #B0E0E6;
+            --neutral-gray: #A9A9A9;
+            --white: #FFFFFF;
+        }
+
         /* Base styles */
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f9fafb;
+            background-color: var(--light-blue);
             overflow-x: hidden;
             position: relative;
         }
@@ -27,7 +37,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: #ffffff;
+            background: var(--white);
         }
 
         .container {
@@ -45,7 +55,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(249, 250, 251, 0.5);
+            background-color: rgba(176, 224, 230, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -59,6 +69,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 300px;
             backdrop-filter: blur(10px);
+            border: 1px solid var(--deep-blue);
         }
 
         /* Fixed left section */
@@ -68,14 +79,14 @@
             max-width: 400px;
             flex-shrink: 0;
             padding: 1.5rem;
-            border-right: 1px solid #e5e7eb;
-            background: rgba(249, 250, 251, 0.9);
+            border-right: 1px solid var(--deep-blue);
+            background: rgba(255, 255, 255, 0.9);
             height: calc(100vh - 4rem - 76px);
             overflow-y: auto;
             position: fixed;
             left: 2rem;
             top: 2rem;
-            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 2px 0 4px rgba(90, 125, 154, 0.2);
             z-index: 100;
             backdrop-filter: blur(5px);
             border-radius: 1rem;
@@ -102,7 +113,7 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
+            scrollbar-color: var(--deep-blue) transparent;
         }
 
         .horizontal-scroll::-webkit-scrollbar {
@@ -116,7 +127,7 @@
         }
 
         .horizontal-scroll::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1;
+            background-color: var(--deep-blue);
             border-radius: 4px;
         }
 
@@ -133,29 +144,39 @@
         /* Input styles */
         .api-key-input, .password-input {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #e5e7eb;
+            padding: 0.75rem 1rem 0.75rem 2rem;
+            border: 1px solid var(--deep-blue);
             border-radius: 0.75rem;
             outline: none;
             transition: border-color 0.2s;
             margin-bottom: 0.75rem;
+            background-color: var(--white);
+            box-sizing: border-box;
+        }
+
+        .api-key-input:focus, .password-input:focus {
+            border-color: var(--bold-orange);
         }
 
         select {
             width: 100%;
             padding: 0.75rem 1rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--deep-blue);
             border-radius: 0.75rem;
-            background-color: white;
+            background-color: var(--white);
             outline: none;
             margin-bottom: 1rem;
+        }
+
+        select:focus {
+            border-color: var(--bold-orange);
         }
 
         /* Prompt card styles */
         .prompt-card {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(90, 125, 154, 0.2);
             padding: 0.75rem;
             min-width: 300px;
             max-width: 400px;
@@ -165,13 +186,14 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            border: 1px solid var(--light-orange);
         }
 
         .prompt-textarea {
             width: 100%;
             min-height: 150px;
             padding: 0.75rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--deep-blue);
             border-radius: 0.75rem;
             resize: vertical;
             outline: none;
@@ -181,18 +203,26 @@
             box-sizing: border-box;
         }
 
+        .prompt-textarea:focus {
+            border-color: var(--bold-orange);
+        }
+
         .result-textarea {
             width: 100%;
             min-height: 150px;
             padding: 0.75rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--deep-blue);
             border-radius: 0.75rem;
             resize: vertical;
             outline: none;
             font-family: inherit;
-            background: rgba(248, 250, 252, 0.95);
+            background: rgba(176, 224, 230, 0.1);
             margin: 0;
             box-sizing: border-box;
+        }
+
+        .result-textarea:focus {
+            border-color: var(--bold-orange);
         }
 
         /* Button styles */
@@ -204,37 +234,48 @@
             border-radius: 0.75rem;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
-            background-color: #2563eb;
-            color: white;
+            background-color: var(--deep-blue);
+            color: var(--white);
         }
 
         .btn-primary:hover {
-            background-color: #1d4ed8;
+            background-color: var(--bold-orange);
+            transform: translateY(-1px);
         }
 
         .btn-success {
-            background-color: #16a34a;
-            color: white;
+            background-color: var(--bold-orange);
+            color: var(--white);
             width: 100%;
             justify-content: center;
             margin: 0;
         }
 
+        .btn-success:hover {
+            background-color: var(--deep-blue);
+            transform: translateY(-1px);
+        }
+
         .btn-danger {
-            background-color: #dc2626;
-            color: white;
+            background-color: var(--neutral-gray);
+            color: var(--white);
             width: 100%;
             justify-content: center;
         }
 
+        .btn-danger:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
         /* Error styles */
         .error {
-            background-color: rgba(254, 226, 226, 0.9);
-            border-left: 4px solid #ef4444;
+            background-color: rgba(255, 160, 122, 0.2);
+            border-left: 4px solid var(--bold-orange);
             padding: 1rem;
             margin: 1rem 0;
             color: #b91c1c;
@@ -249,13 +290,14 @@
             right: 0;
             background: rgba(255, 255, 255, 0.9);
             padding: 1rem;
-            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -1px 3px rgba(90, 125, 154, 0.2);
             display: flex;
             justify-content: center;
             gap: 1rem;
             z-index: 200;
             backdrop-filter: blur(5px);
             border-radius: 1rem 1rem 0 0;
+            border-top: 1px solid var(--light-blue);
         }
 
         /* Hide file input */
@@ -321,7 +363,7 @@
             for (var i = 0; i < voronoi.length; i++) {
                 var poly = voronoi[i];
                 context.beginPath();
-                context.strokeStyle = "#e5e7eb";
+                context.strokeStyle = "#5A7D9A";
 
                 if (poly && poly.length > 0) {
                     context.moveTo(poly[0][0], poly[0][1]);
@@ -379,7 +421,7 @@
             return (
                 <div className="login-screen">
                     <div className="login-box">
-                        <h2 style={{ marginBottom: '1rem' }}>Login Required</h2>
+                        <h2 style={{ marginBottom: '1rem', color: 'var(--deep-blue)' }}>Login Required</h2>
                         <input
                             type="password"
                             placeholder="Enter password"
@@ -562,7 +604,7 @@
             return (
                 <div className="container">
                     <div className="fixed-section">
-                        <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                        <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '1rem', color: 'var(--deep-blue)' }}>
                             Worksona Prompt Playground #1
                         </h1>
                         
@@ -577,7 +619,7 @@
 
                         {error && <div className="error">{error}</div>}
 
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem', color: 'var(--deep-blue)' }}>
                             Source Content
                         </h2>
                         <div style={{ marginBottom: '1rem' }}>
