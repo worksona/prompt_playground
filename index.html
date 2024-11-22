@@ -16,7 +16,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     
     <script>
-        // Initialize PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
     
@@ -147,7 +146,7 @@
             border-radius: 1rem;
         }
 
-        /* Scrollable content area */
+        /* Content area */
         .content-area {
             flex: 1;
             margin-left: calc(25% + 3rem);
@@ -159,7 +158,7 @@
             gap: 2rem;
         }
 
-        /* Horizontal scroll container */
+        /* Horizontal scroll */
         .horizontal-scroll {
             display: flex;
             gap: 1rem;
@@ -186,99 +185,6 @@
             border-radius: 4px;
         }
 
-        /* Loading animation */
-        .loading {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-
-        /* Input styles */
-        .api-key-input, .password-input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            outline: none;
-            transition: border-color 0.2s;
-            margin-bottom: 0.75rem;
-            background-color: var(--white);
-            box-sizing: border-box;
-        }
-
-        .api-key-input:focus, .password-input:focus {
-            border-color: var(--bold-orange);
-        }
-
-        select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background-color: var(--white);
-            outline: none;
-            margin-bottom: 1rem;
-        }
-
-        select:focus {
-            border-color: var(--bold-orange);
-        }
-
-        /* Source selector styles */
-        .source-selector {
-            margin-bottom: 0.75rem;
-            width: 100%;
-        }
-        
-        .source-selector select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background-color: var(--white);
-            outline: none;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .source-selector select:focus {
-            border-color: var(--bold-orange);
-        }
-
-        /* Result label styles */
-        .result-label {
-            font-weight: 500;
-            color: var(--deep-blue);
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            padding: 0.25rem 0.5rem;
-            background: rgba(90, 125, 154, 0.1);
-            border-radius: 0.375rem;
-            display: inline-block;
-        }
-
-        /* Processing indicator styles */
-        .processing-file {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 2000;
-            text-align: center;
-            border: 1px solid var(--deep-blue);
-        }
-
-        .processing-file.hidden {
-            display: none;
-        }
-
         /* Prompt card styles */
         .prompt-card {
             background: rgba(255, 255, 255, 0.9);
@@ -294,6 +200,28 @@
             flex-direction: column;
             gap: 0.5rem;
             border: 1px solid var(--light-orange);
+        }
+
+        .source-label {
+            color: var(--deep-blue);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .source-selector {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--deep-blue);
+            border-radius: 0.75rem;
+            background-color: var(--white);
+            outline: none;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .source-selector:focus {
+            border-color: var(--bold-orange);
         }
 
         .prompt-textarea {
@@ -314,9 +242,14 @@
             border-color: var(--bold-orange);
         }
 
+        .result-container {
+            position: relative;
+            width: 100%;
+        }
+
         .result-textarea {
             width: 100%;
-            min-height: 150px;
+            min-height: 200px;
             padding: 0.75rem;
             border: 1px solid var(--deep-blue);
             border-radius: 0.75rem;
@@ -330,6 +263,46 @@
 
         .result-textarea:focus {
             border-color: var(--bold-orange);
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--deep-blue);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            padding: 0.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .copy-button:hover {
+            background: var(--bold-orange);
+            transform: translateY(-1px);
+        }
+
+        .copy-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--deep-blue);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(90, 125, 154, 0.1);
+            border-radius: 0.375rem;
+            display: inline-block;
         }
 
         /* Button styles */
@@ -347,6 +320,7 @@
         .btn-primary {
             background-color: var(--deep-blue);
             color: var(--white);
+            width: 100%;
         }
 
         .btn-primary:hover {
@@ -390,16 +364,6 @@
             transform: translateY(-1px);
         }
 
-        /* Error styles */
-        .error {
-            background-color: rgba(255, 160, 122, 0.2);
-            border-left: 4px solid var(--bold-orange);
-            padding: 1rem;
-            margin: 1rem 0;
-            color: #b91c1c;
-            border-radius: 0.75rem;
-        }
-
         /* Footer styles */
         .footer {
             position: fixed;
@@ -418,9 +382,88 @@
             border-top: 1px solid var(--light-blue);
         }
 
-        /* Hide file input */
+        /* Utility styles */
         .hidden {
             display: none;
+        }
+
+        .error {
+            background-color: rgba(255, 160, 122, 0.2);
+            border-left: 4px solid var(--bold-orange);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #b91c1c;
+            border-radius: 0.75rem;
+        }
+
+        /* Input styles */
+        .api-key-input, .password-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2rem;
+            border: 1px solid var(--deep-blue);
+            border-radius: 0.75rem;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 0.75rem;
+            background-color: var(--white);
+            box-sizing: border-box;
+        }
+
+        .api-key-input:focus, .password-input:focus {
+            border-color: var(--bold-orange);
+        }
+
+        /* Processing indicator */
+        .processing-file {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+            text-align: center;
+            border: 1px solid var(--deep-blue);
+        }
+
+        .processing-file.hidden {
+            display: none;
+        }
+
+        .model-selector {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--deep-blue);
+        border-radius: 0.75rem;
+        background-color: var(--white);
+        appearance: none;
+        cursor: pointer;
+        transition: border-color 0.2s;
+        margin-bottom: 1rem;
+        position: relative;
+        font-size: 0.875rem;
+        }
+
+        .model-selector:focus {
+            border-color: var(--bold-orange);
+            outline: none;
+        }
+
+        .model-selector-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .model-selector-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--neutral-gray);
         }
     </style>
 </head>
@@ -446,7 +489,7 @@
 
         function resizeCanvas() {
             width = window.innerWidth;
-            height = window.innerHeight
+            height = window.innerHeight;
             canvas.width = width;
             canvas.height = height;
         }
@@ -592,9 +635,43 @@
         };
 
         // React Components
+        const CopyButton = ({ text }) => {
+            const [copied, setCopied] = React.useState(false);
+            
+            const copyToClipboard = async () => {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            };
+
+            return (
+                <button 
+                    onClick={copyToClipboard} 
+                    className="copy-button" 
+                    title={copied ? "Copied!" : "Copy to clipboard"}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        {copied ? (
+                            <path d="M20 6L9 17l-5-5"/>
+                        ) : (
+                            <>
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </>
+                        )}
+                    </svg>
+                </button>
+            );
+        };
+
         const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun }) => {
             return (
                 <div className="prompt-card">
+                    <div className="source-label">Select Source</div>
                     <select 
                         value={prompt.source}
                         onChange={(e) => onUpdate(prompt.id, { source: e.target.value })}
@@ -617,12 +694,15 @@
                     
                     <div className="result-label">RESULT{prompt.id}</div>
                     
-                    <textarea
-                        value={prompt.result}
-                        readOnly
-                        placeholder="Results will appear here..."
-                        className="result-textarea"
-                    />
+                    <div className="result-container">
+                        <textarea
+                            value={prompt.result}
+                            onChange={(e) => onUpdate(prompt.id, { result: e.target.value })}
+                            placeholder="Results will appear here..."
+                            className="result-textarea"
+                        />
+                        <CopyButton text={prompt.result} />
+                    </div>
                     
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button 
@@ -643,16 +723,16 @@
             );
         };
 
-        function ProcessingIndicator({ isVisible }) {
+        const ProcessingIndicator = ({ isVisible }) => {
             return (
                 <div className={`processing-file ${!isVisible ? 'hidden' : ''}`}>
                     <h3>Processing File...</h3>
                     <p>Please wait while we extract the text</p>
                 </div>
             );
-        }
+        };
 
-        function LoginScreen({ onLogin }) {
+        const LoginScreen = ({ onLogin }) => {
             const [password, setPassword] = React.useState('');
             const [apiKey, setApiKey] = React.useState('');
             const [error, setError] = React.useState('');
@@ -685,14 +765,14 @@
                             className="api-key-input"
                             onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                         />
-                        <button onClick={handleLogin} className="btn btn-primary" style={{ width: '100%' }}>
+                        <button onClick={handleLogin} className="btn btn-primary">
                             Login
                         </button>
                         {error && <div className="error">{error}</div>}
                     </div>
                 </div>
             );
-        }
+        };
 
         // Main App Component
         function App() {
@@ -879,6 +959,29 @@
                 }
             };
 
+            const exportContent = () => {
+                try {
+                    const content = prompts.map(prompt => 
+                        `PROMPT ${prompt.id}:\n${prompt.text}\n\nRESULT ${prompt.id}:\n${prompt.result}\n\n---\n\n`
+                    ).join('');
+                    
+                    const blob = new Blob([content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'agency-content.txt';
+                    
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    URL.revokeObjectURL(url);
+                } catch (error) {
+                    setError('Error exporting content: ' + error.message);
+                }
+            };
+
             const loadAgency = (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
@@ -899,123 +1002,143 @@
                         // Load agency name and description if they exist
                         if (data.agencyName !== undefined) setAgencyName(data.agencyName);
                         if (data.agencyDescription !== undefined) setAgencyDescription(data.agencyDescription);
-                            if (data.settings.apiKey && data.settings.apiKey !== apiKey) {
-                                setApiKey(data.settings.apiKey);
-                            }
-                        } catch (error) {
-                            setError('Error loading agency: ' + error.message);
-                        }
-                    };
-                    reader.readAsText(file);
-                };
-    
-                return (
-                    <div className="container">
-                        <ProcessingIndicator isVisible={isProcessingFile} />
                         
-                        <div className="fixed-section">
-                            <input
-                                type="file"
-                                id="fileInput"
-                                className="hidden"
-                                accept=".pdf,.doc,.docx,.txt,.md"
-                                onChange={handleFileUpload}
+                        // Update API key if it exists and is different
+                        if (data.settings.apiKey && data.settings.apiKey !== apiKey) {
+                            setApiKey(data.settings.apiKey);
+                        }
+                    } catch (error) {
+                        setError('Error loading agency: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+
+            return (
+                <div className="container">
+                    <ProcessingIndicator isVisible={isProcessingFile} />
+                    
+                    <div className="fixed-section">
+                        <input
+                            type="file"
+                            id="fileInput"
+                            className="hidden"
+                            accept=".pdf,.doc,.docx,.txt,.md"
+                            onChange={handleFileUpload}
+                        />
+                        <button 
+                            onClick={() => document.getElementById('fileInput').click()}
+                            className="btn btn-primary"
+                            style={{ marginBottom: '1rem' }}
+                        >
+                            Upload Source File
+                        </button>
+                        <textarea
+                            value={sourceContent}
+                            onChange={(e) => setSourceContent(e.target.value)}
+                            placeholder="Enter or upload source content..."
+                            style={{ 
+                                width: '100%',
+                                minHeight: '200px',
+                                marginBottom: '1rem',
+                                padding: '0.75rem',
+                                borderRadius: '0.75rem',
+                                border: '1px solid var(--deep-blue)',
+                                resize: 'vertical'
+                            }}
+                        />
+                    <div className="model-selector-wrapper">
+                        <select 
+                            value={model}
+                            onChange={(e) => setModel(e.target.value)}
+                            className="model-selector"
+                        >
+                            {OPENAI_MODELS.map(model => (
+                                <option key={model} value={model}>{model}</option>
+                            ))}
+                        </select>
+                        <svg 
+                            className="model-selector-icon" 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 20 20" 
+                            fill="currentColor"
+                        >
+                            <path 
+                                fillRule="evenodd" 
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" 
+                                clipRule="evenodd" 
                             />
-                            <button 
-                                onClick={() => document.getElementById('fileInput').click()}
-                                className="btn btn-primary"
-                                style={{ marginBottom: '1rem', width: '100%' }}
-                            >
-                                Upload Source File
-                            </button>
+                        </svg>
+                    </div>
+                        {error && <div className="error">{error}</div>}
+                    </div>
+    
+                    <div className="content-area">
+                        <div className="agency-details">
                             <textarea
-                                value={sourceContent}
-                                onChange={(e) => setSourceContent(e.target.value)}
-                                placeholder="Enter or upload source content..."
-                                style={{ 
-                                    width: '100%',
-                                    minHeight: '200px',
-                                    marginBottom: '1rem',
-                                    padding: '0.75rem',
-                                    borderRadius: '0.75rem',
-                                    border: '1px solid var(--deep-blue)',
-                                    resize: 'vertical'
-                                }}
+                                value={agencyName}
+                                onChange={(e) => setAgencyName(e.target.value)}
+                                placeholder="Enter Agency Name..."
+                                className="agency-name-textarea"
                             />
-                            <select 
-                                value={model}
-                                onChange={(e) => setModel(e.target.value)}
-                                style={{ marginBottom: '1rem' }}
-                            >
-                                {OPENAI_MODELS.map(model => (
-                                    <option key={model} value={model}>{model}</option>
-                                ))}
-                            </select>
-                            {error && <div className="error">{error}</div>}
-                        </div>
-    
-                        <div className="content-area">
-                            <div className="agency-details">
-                                <textarea
-                                    value={agencyName}
-                                    onChange={(e) => setAgencyName(e.target.value)}
-                                    placeholder="Enter Agency Name..."
-                                    className="agency-name-textarea"
-                                />
-                                <textarea
-                                    value={agencyDescription}
-                                    onChange={(e) => setAgencyDescription(e.target.value)}
-                                    placeholder="Enter Agency Description..."
-                                    className="agency-description-textarea"
-                                />
-                            </div>
-                            
-                            <div className="horizontal-scroll">
-                                {prompts.map(prompt => (
-                                    <PromptCard
-                                        key={prompt.id}
-                                        prompt={prompt}
-                                        sourceOptions={prompts.filter(p => p.id < prompt.id)}
-                                        loading={loading[prompt.id]}
-                                        onUpdate={updatePrompt}
-                                        onDelete={deletePrompt}
-                                        onRun={runPrompt}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-    
-                        <div className="footer">
-                            <button onClick={addPrompt} className="btn btn-agency">
-                                Add Prompt
-                            </button>
-                            <button onClick={runAllPrompts} className="btn btn-agency">
-                                Run All
-                            </button>
-                            <input
-                                type="file"
-                                id="loadAgencyInput"
-                                className="hidden"
-                                accept=".json"
-                                onChange={loadAgency}
+                            <textarea
+                                value={agencyDescription}
+                                onChange={(e) => setAgencyDescription(e.target.value)}
+                                placeholder="Enter Agency Description..."
+                                className="agency-description-textarea"
                             />
-                            <button 
-                                onClick={() => document.getElementById('loadAgencyInput').click()} 
-                                className="btn btn-agency"
-                            >
-                                Load Agency
-                            </button>
-                            <button onClick={exportAgency} className="btn btn-agency">
-                                Export Agency
-                            </button>
+                        </div>
+                        
+                        <div className="horizontal-scroll">
+                            {prompts.map(prompt => (
+                                <PromptCard
+                                    key={prompt.id}
+                                    prompt={prompt}
+                                    sourceOptions={prompts.filter(p => p.id < prompt.id)}
+                                    loading={loading[prompt.id]}
+                                    onUpdate={updatePrompt}
+                                    onDelete={deletePrompt}
+                                    onRun={runPrompt}
+                                />
+                            ))}
                         </div>
                     </div>
-                );
-            }
     
-            // Initialize React App
-            const root = ReactDOM.createRoot(document.getElementById('root'));
-            root.render(<App />);
-        </script>
-    </body>
-    </html>
+                    <div className="footer">
+                        <button onClick={addPrompt} className="btn btn-agency">
+                            Add Prompt
+                        </button>
+                        <button onClick={runAllPrompts} className="btn btn-agency">
+                            Run All
+                        </button>
+                        <input
+                            type="file"
+                            id="loadAgencyInput"
+                            className="hidden"
+                            accept=".json"
+                            onChange={loadAgency}
+                        />
+                        <button 
+                            onClick={() => document.getElementById('loadAgencyInput').click()} 
+                            className="btn btn-agency"
+                        >
+                            Load Agency
+                        </button>
+                        <button onClick={exportAgency} className="btn btn-agency">
+                            Export Agency
+                        </button>
+                        <button onClick={exportContent} className="btn btn-agency">
+                            Export Content
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    
+        // Initialize React App
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
