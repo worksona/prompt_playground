@@ -365,18 +365,6 @@
             background: rgba(255, 255, 255, 0.95);
             margin: 0;
             box-sizing: border-box;
-            cursor: text;
-            transition: border-color 0.2s ease;
-        }
-
-        .prompt-textarea:focus {
-            border-color: var(--bold-orange);
-            box-shadow: 0 0 0 2px rgba(255, 160, 122, 0.2);
-        }
-
-        .prompt-textarea::placeholder {
-            color: var(--neutral-gray);
-            opacity: 0.7;
         }
 
         .result-container {
@@ -528,7 +516,7 @@
     <script type="text/babel">
         // Constants
         const OPENAI_MODELS = [
-        "gpt-4-1106-vision-preview",
+            "gpt-4-1106-vision-preview",
             "gpt-4-vision-preview",
             "gpt-4-turbo-preview",
             "gpt-4-1106-preview",
@@ -744,7 +732,6 @@
                 </button>
             );
         };
-
         const ProcessingIndicator = ({ isVisible }) => (
             <div className={`processing-file ${!isVisible ? 'hidden' : ''}`}>
                 <h3>Processing File...</h3>
@@ -789,102 +776,6 @@
                             Login
                         </button>
                         {error && <div className="error">{error}</div>}
-                    </div>
-                </div>
-            );
-        };
-
-        // Updated PromptCard Component with uploadedImages prop
-        const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun, uploadedImages }) => {
-            const isImageMode = prompt.sourceType === 'image';
-
-            return (
-                <div className={`prompt-card ${isImageMode ? 'image-mode' : ''}`}>
-                    <div className="source-type-selector">
-                        <button 
-                            className={`source-type-button ${!isImageMode ? 'active' : ''}`}
-                            onClick={() => onUpdate(prompt.id, { sourceType: 'text', selectedImage: null })}
-                        >
-                            Text
-                        </button>
-                        <button 
-                            className={`source-type-button ${isImageMode ? 'active' : ''}`}
-                            onClick={() => onUpdate(prompt.id, { sourceType: 'image' })}
-                        >
-                            Image
-                        </button>
-                    </div>
-
-                    {isImageMode ? (
-                        <select
-                            value={prompt.selectedImage || ''}
-                            onChange={(e) => onUpdate(prompt.id, { selectedImage: parseInt(e.target.value) })}
-                            className="source-selector"
-                        >
-                            <option value="">Select an image...</option>
-                            {uploadedImages.map(img => (
-                                <option key={img.id} value={img.id}>
-                                    {img.name || `Image ${img.id}`}
-                                </option>
-                            ))}
-                        </select>
-                    ) : (
-                        <select 
-                            value={prompt.source}
-                            onChange={(e) => onUpdate(prompt.id, { source: e.target.value })}
-                            className="source-selector"
-                        >
-                            <option value="SOURCE">SOURCE</option>
-                            {sourceOptions.map(option => (
-                                <option key={option.id} value={`RESULT${option.id}`}>
-                                    RESULT{option.id}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-                    
-                    <textarea
-                        value={prompt.text}
-                        onChange={(e) => onUpdate(prompt.id, { text: e.target.value })}
-                        placeholder={isImageMode ? "Enter your image analysis prompt..." : "Enter your prompt..."}
-                        className="prompt-textarea"
-                        spellCheck="true"
-                        autoComplete="off"
-                        rows="6"
-                    />
-                    
-                    <div className="result-label">RESULT{prompt.id}</div>
-                    
-                    <div className="result-container">
-                        <textarea
-                            value={prompt.result}
-                            onChange={(e) => onUpdate(prompt.id, { result: e.target.value })}
-                            placeholder="Results will appear here..."
-                            className="result-textarea"
-                            readOnly
-                            rows="8"
-                        />
-                        <CopyButton text={prompt.result} />
-                    </div>
-                    
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button 
-                            onClick={() => onRun(prompt.id)} 
-                            className="btn btn-success"
-                            disabled={loading || (isImageMode && !prompt.selectedImage)}
-                        >
-                            {loading ? (
-                                <span className="loading-spinner" />
-                            ) : (
-                                isImageMode ? 'Analyze Image' : 'Run'
-                            )}
-                        </button>
-                        <button 
-                            onClick={() => onDelete(prompt.id)}
-                            className="btn btn-danger"
-                        >
-                            Delete
-                        </button>
                     </div>
                 </div>
             );
@@ -1182,6 +1073,97 @@
                 reader.readAsText(file);
             };
 
+            const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun }) => {
+                const isImageMode = prompt.sourceType === 'image';
+
+                return (
+                    <div className={`prompt-card ${isImageMode ? 'image-mode' : ''}`}>
+                        <div className="source-type-selector">
+                            <button 
+                                className={`source-type-button ${!isImageMode ? 'active' : ''}`}
+                                onClick={() => onUpdate(prompt.id, { sourceType: 'text', selectedImage: null })}
+                            >
+                                Text
+                            </button>
+                            <button 
+                                className={`source-type-button ${isImageMode ? 'active' : ''}`}
+                                onClick={() => onUpdate(prompt.id, { sourceType: 'image' })}
+                            >
+                                Image
+                            </button>
+                        </div>
+
+                        {isImageMode ? (
+                            <select
+                                value={prompt.selectedImage || ''}
+                                onChange={(e) => onUpdate(prompt.id, { selectedImage: parseInt(e.target.value) })}
+                                className="source-selector"
+                            >
+                                <option value="">Select an image...</option>
+                                {uploadedImages.map(img => (
+                                    <option key={img.id} value={img.id}>
+                                        {img.name || `Image ${img.id}`}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <select 
+                                value={prompt.source}
+                                onChange={(e) => onUpdate(prompt.id, { source: e.target.value })}
+                                className="source-selector"
+                            >
+                                <option value="SOURCE">SOURCE</option>
+                                {sourceOptions.map(option => (
+                                    <option key={option.id} value={`RESULT${option.id}`}>
+                                        RESULT{option.id}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                        
+                        <textarea
+                            value={prompt.text}
+                            onChange={(e) => onUpdate(prompt.id, { text: e.target.value })}
+                            placeholder={isImageMode ? "Enter your image analysis prompt..." : "Enter your prompt..."}
+                            className="prompt-textarea"
+                        />
+                        
+                        <div className="result-label">RESULT{prompt.id}</div>
+                        
+                        <div className="result-container">
+                            <textarea
+                                value={prompt.result}
+                                onChange={(e) => onUpdate(prompt.id, { result: e.target.value })}
+                                placeholder="Results will appear here..."
+                                className="result-textarea"
+                                readOnly
+                            />
+                            <CopyButton text={prompt.result} />
+                        </div>
+                        
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button 
+                                onClick={() => onRun(prompt.id)} 
+                                className="btn btn-success"
+                                disabled={loading || (isImageMode && !prompt.selectedImage)}
+                            >
+                                {loading ? (
+                                    <span className="loading-spinner" />
+                                ) : (
+                                    isImageMode ? 'Analyze Image' : 'Run'
+                                )}
+                            </button>
+                            <button 
+                                onClick={() => onDelete(prompt.id)} 
+                                className="btn btn-danger"
+                            >
+                                Delete
+                            </button>
+                            </div>
+                    </div>
+                );
+            };
+
             return (
                 <>
                     <VoronoiBackground />
@@ -1262,7 +1244,6 @@
                                         onUpdate={updatePrompt}
                                         onDelete={deletePrompt}
                                         onRun={runPrompt}
-                                        uploadedImages={uploadedImages}
                                     />
                                 ))}
                             </div>
