@@ -96,95 +96,6 @@
             min-height: 6rem;
         }
 
-        /* Persona styles */
-        .persona-tray {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-        }
-
-        .persona-selector-container {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .persona-selector {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: var(--white);
-        }
-
-        .add-persona-btn {
-            background: var(--deep-blue);
-            color: var(--white);
-            border: none;
-            border-radius: 0.75rem;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .persona-card {
-            background: var(--light-orange);
-            border-radius: 1rem;
-            padding: 1rem;
-            min-width: 300px;
-            max-width: 400px;
-            height: fit-content;
-            flex-shrink: 0;
-            border: 1px solid var(--bold-orange);
-        }
-
-        .persona-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .persona-emoji {
-            font-size: 2rem;
-        }
-
-        .persona-title {
-            font-weight: 500;
-            color: var(--deep-blue);
-        }
-
-        .persona-name {
-            font-weight: 500;
-            color: var(--deep-blue);
-        }
-
-        .direction-selector {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: var(--white);
-            margin-bottom: 1rem;
-        }
-
-        .persona-textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 0.75rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            resize: vertical;
-            outline: none;
-            font-family: inherit;
-            background: rgba(255, 255, 255, 0.95);
-            margin-bottom: 1rem;
-        }
-
         /* Image Upload styles */
         .image-upload-zone {
             border: 2px dashed var(--deep-blue);
@@ -617,50 +528,17 @@
     <script type="text/babel">
         // Constants
         const OPENAI_MODELS = [
-            "gpt-4-1106-vision-preview",
+        "gpt-4-1106-vision-preview",
             "gpt-4-vision-preview",
             "gpt-4-turbo-preview",
             "gpt-4-1106-preview",
-            "gpt-4",
+            "gpt-4o",
             "gpt-3.5-turbo-1106",
             "gpt-3.5-turbo",
         ];
 
         const SUPPORTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
         const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
-
-        const PERSONAS = [
-            {
-                id: 'executive',
-                name: 'Executive',
-                emoji: '👔',
-                description: 'A senior business executive focused on strategic decision-making and high-level business impact.'
-            },
-            {
-                id: 'engineer',
-                name: 'Engineer',
-                emoji: '👨‍💻',
-                description: 'A technical professional with deep understanding of systems, processes, and technical implementations.'
-            },
-            {
-                id: 'creative',
-                name: 'Creative Director',
-                emoji: '🎨',
-                description: 'A creative professional focused on design, aesthetics, and brand storytelling.'
-            },
-            {
-                id: 'analyst',
-                name: 'Data Analyst',
-                emoji: '📊',
-                description: 'An analytical professional focused on data-driven insights and quantitative analysis.'
-            },
-            {
-                id: 'marketer',
-                name: 'Marketing Manager',
-                emoji: '📢',
-                description: 'A marketing professional focused on audience engagement and campaign effectiveness.'
-            }
-        ];
 
         // Voronoi Background Component
         const VoronoiBackground = () => {
@@ -907,10 +785,7 @@
                             className="api-key-input"
                             onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                         />
-                        <button 
-                            onClick={handleLogin}
-                            className="btn btn-primary"
-                        >
+                        <button onClick={handleLogin} className="btn btn-primary">
                             Login
                         </button>
                         {error && <div className="error">{error}</div>}
@@ -918,84 +793,8 @@
                 </div>
             );
         };
-        const PersonaCard = ({ persona, onUpdate, onDelete }) => {
-            return (
-                <div className="persona-card">
-                    <div className="persona-header">
-                        <span className="persona-emoji">{persona.emoji}</span>
-                        <span className="persona-title">PERSONA CARD</span>
-                        <span className="persona-name">{persona.name}</span>
-                    </div>
-                    
-                    <select 
-                        value={persona.direction}
-                        onChange={(e) => onUpdate(persona.cardId, { direction: e.target.value })}
-                        className="direction-selector"
-                    >
-                        <option value="from">FROM</option>
-                        <option value="to">TO</option>
-                    </select>
-                    
-                    <textarea
-                        value={persona.description}
-                        onChange={(e) => onUpdate(persona.cardId, { description: e.target.value })}
-                        className="persona-textarea"
-                        spellCheck="true"
-                        rows="6"
-                    />
-                    
-                    <button 
-                        onClick={() => onDelete(persona.cardId)}
-                        className="btn btn-danger"
-                    >
-                        Delete
-                    </button>
-                </div>
-            );
-        };
 
-        const PersonaTray = ({ onAddPersona }) => {
-            const [selectedPersona, setSelectedPersona] = React.useState('');
-
-            const handleAddPersona = () => {
-                if (selectedPersona) {
-                    const persona = PERSONAS.find(p => p.id === selectedPersona);
-                    onAddPersona({
-                        ...persona,
-                        cardId: Date.now(),
-                        direction: 'from'
-                    });
-                    setSelectedPersona('');
-                }
-            };
-
-            return (
-                <div className="persona-tray">
-                    <div className="persona-selector-container">
-                        <select 
-                            value={selectedPersona}
-                            onChange={(e) => setSelectedPersona(e.target.value)}
-                            className="persona-selector"
-                        >
-                            <option value="">Select Persona...</option>
-                            {PERSONAS.map(persona => (
-                                <option key={persona.id} value={persona.id}>
-                                    {persona.emoji} {persona.name}
-                                </option>
-                            ))}
-                        </select>
-                        <button 
-                            onClick={handleAddPersona}
-                            className="add-persona-btn"
-                            disabled={!selectedPersona}
-                        >
-                            +
-                        </button>
-                    </div>
-                </div>
-            );
-        };
-
+        // Updated PromptCard Component with uploadedImages prop
         const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun, uploadedImages }) => {
             const isImageMode = prompt.sourceType === 'image';
 
@@ -1100,7 +899,6 @@
             const [uploadedImages, setUploadedImages] = React.useState([]);
             const [agencyName, setAgencyName] = React.useState('');
             const [agencyDescription, setAgencyDescription] = React.useState('');
-            const [personaCards, setPersonaCards] = React.useState([]);
             const [prompts, setPrompts] = React.useState([{ 
                 id: 1, 
                 text: '', 
@@ -1178,20 +976,6 @@
                 </div>
             );
 
-            const addPersonaCard = (persona) => {
-                setPersonaCards([...personaCards, persona]);
-            };
-
-            const updatePersonaCard = (id, changes) => {
-                setPersonaCards(personaCards.map(p => 
-                    p.cardId === id ? {...p, ...changes} : p
-                ));
-            };
-
-            const deletePersonaCard = (id) => {
-                setPersonaCards(personaCards.filter(p => p.cardId !== id));
-            };
-
             const addPrompt = () => {
                 const newPrompt = {
                     id: Date.now(),
@@ -1223,25 +1007,6 @@
                 return sourcePrompt ? sourcePrompt.result : '';
             };
 
-            const getPersonaContext = () => {
-                const fromPersonas = personaCards.filter(p => p.direction === 'from');
-                const toPersonas = personaCards.filter(p => p.direction === 'to');
-                
-                let context = '';
-                
-                if (fromPersonas.length > 0) {
-                    context += `\nRespond FROM the perspective of: ${fromPersonas.map(p => 
-                        `${p.name} (${p.description})`).join(', ')}`;
-                }
-                
-                if (toPersonas.length > 0) {
-                    context += `\nTarget your response TO: ${toPersonas.map(p => 
-                        `${p.name} (${p.description})`).join(', ')}`;
-                }
-                
-                return context;
-            };
-
             const runPrompt = async (id) => {
                 setLoading(prev => ({ ...prev, [id]: true }));
                 setError('');
@@ -1262,7 +1027,7 @@
                                     content: [
                                         {
                                             type: "text",
-                                            text: `${getPersonaContext()}\n${prompt.text}`
+                                            text: prompt.text
                                         },
                                         {
                                             type: "image_url",
@@ -1277,13 +1042,12 @@
                         };
                     } else {
                         const sourceText = getPromptSource(id);
-                        const personaContext = getPersonaContext();
                         requestBody = {
                             model: model,
                             messages: [
                                 { 
                                     role: "system", 
-                                    content: `Context:\n${sourceText}${personaContext}`
+                                    content: `Context:\n${sourceText}`
                                 },
                                 { 
                                     role: "user", 
@@ -1334,7 +1098,6 @@
                         agencyDescription,
                         sourceContent,
                         uploadedImages,
-                        personaCards,
                         prompts: prompts.map(({ id, text, result, source, sourceType, selectedImage }) => ({
                             id,
                             text,
@@ -1343,7 +1106,7 @@
                             sourceType,
                             selectedImage
                         })),
-                        settings: { model }
+                        settings: { model, apiKey }
                     };
                     
                     const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
@@ -1408,7 +1171,10 @@
                         setAgencyName(data.agencyName || '');
                         setAgencyDescription(data.agencyDescription || '');
                         setUploadedImages(data.uploadedImages || []);
-                        setPersonaCards(data.personaCards || []);
+                        
+                        if (data.settings.apiKey && data.settings.apiKey !== apiKey) {
+                            setApiKey(data.settings.apiKey);
+                        }
                     } catch (error) {
                         setError('Error loading agency: ' + error.message);
                     }
@@ -1454,7 +1220,6 @@
                             />
 
                             <ImageTray />
-                            <PersonaTray onAddPersona={addPersonaCard} />
 
                             <div className="model-selector-wrapper">
                                 <select 
@@ -1488,14 +1253,6 @@
                             </div>
                             
                             <div className="horizontal-scroll">
-                                {personaCards.map(persona => (
-                                    <PersonaCard
-                                        key={persona.cardId}
-                                        persona={persona}
-                                        onUpdate={updatePersonaCard}
-                                        onDelete={deletePersonaCard}
-                                    />
-                                ))}
                                 {prompts.map(prompt => (
                                     <PromptCard
                                         key={prompt.id}
