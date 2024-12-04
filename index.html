@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     
     <!-- Document Processing Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -18,34 +19,37 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
-    
     <style>
-        /* Color Variables */
+        /* Theme Variables */
         :root {
-            --bold-orange: #FFA07A;
-            --deep-blue: #5A7D9A;
-            --light-orange: #FFDAB9;
-            --light-blue: #B0E0E6;
-            --neutral-gray: #A9A9A9;
-            --white: #FFFFFF;
+            --primary-bg: #ffffff;
+            --secondary-bg: #f5f5f7;
+            --accent-color: #e29863;
+            --text-primary: #1a1e21;
+            --text-secondary: #6b7280;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-radius: 0;  /* Add this variable for consistency */
         }
 
         /* Base styles */
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--light-blue);
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
         }
 
-        #voronoi-canvas {
+        #particles-js {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+            pointer-events: none;
+            border-radius: 0;
         }
 
         .container {
@@ -58,51 +62,86 @@
 
         /* Agency Details styles */
         .agency-details {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(90, 125, 154, 0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--light-orange);
+            gap: 0.75rem;
+            background: transparent;
+            padding: 0;
+            border: none;
+            border-radius: 0;
         }
 
         .agency-name-textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
             resize: none;
             outline: none;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.95);
-            font-size: 1.25rem;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            font-size: 1.125rem;
             font-weight: 500;
-            height: 3rem;
+            height: 2.5rem;
         }
 
         .agency-description-textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
             resize: vertical;
             outline: none;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.95);
-            min-height: 6rem;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 4rem;
+            font-size: 0.875rem;
+        }
+        /* Fixed section */
+        .fixed-section {
+            width: 400px; /* Fixed width instead of percentage */
+            min-width: 400px;
+            max-width: 400px;
+            flex-shrink: 0;
+            padding: 1.25rem;
+            border-right: 1px solid var(--border-color);
+            background: var(--secondary-bg);
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+            position: fixed;
+            left: 2rem;
+            top: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Focus states for textareas */
+        .agency-name-textarea:focus,
+        .agency-description-textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.1);
+        }
+
+        /* Placeholder colors */
+        .agency-name-textarea::placeholder,
+        .agency-description-textarea::placeholder {
+            color: var(--text-secondary);
         }
 
         /* Persona styles */
         .persona-tray {
             margin-top: 1rem;
             padding: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
         }
 
         .persona-selector-container {
@@ -114,32 +153,47 @@
         .persona-selector {
             flex: 1;
             padding: 0.5rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
         }
 
         .add-persona-btn {
-            background: var(--deep-blue);
-            color: var(--white);
+            background: var(--accent-color);
+            color: var(--primary-bg);
             border: none;
-            border-radius: 0.75rem;
+            border-radius: 0;
             padding: 0.5rem 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .persona-card {
-            background: var(--light-orange);
-            border-radius: 1rem;
+            background: var(--secondary-bg);
+            border-radius: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             padding: 1rem;
             min-width: 300px;
             max-width: 400px;
             height: fit-content;
             flex-shrink: 0;
-            border: 1px solid var(--bold-orange);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #FF9800; /* Orange accent for personas */
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+        }
+
+        .persona-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
         }
 
         .persona-header {
@@ -155,58 +209,84 @@
 
         .persona-title {
             font-weight: 500;
-            color: var(--deep-blue);
+            color: var(--text-primary);
         }
 
         .persona-name {
-            font-weight: 500;
-            color: var(--deep-blue);
+            width: calc(100% - 1rem);
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            outline: none;
+            margin: 0 0.5rem 0.5rem 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .persona-name:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
         }
 
         .direction-selector {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
             margin-bottom: 1rem;
         }
 
         .persona-textarea {
-            width: 100%;
+            width: calc(100% - 1rem);
             min-height: 150px;
-            padding: '0.75rem 1rem';
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
             resize: vertical;
             outline: none;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.95);
-            margin-bottom: 1rem;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            margin: 0 0.5rem 1rem 0.5rem;
+            box-sizing: border-box;
+        }
+
+        .persona-textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
+        }
+
+        .persona-textarea::placeholder {
+            color: var(--text-secondary);
         }
 
         /* Image Upload styles */
         .image-upload-zone {
-            border: 2px dashed var(--deep-blue);
+            border: 2px dashed var(--border-color);
             padding: 2rem;
-            border-radius: 1rem;
+            border-radius: 0;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--secondary-bg);
             margin-bottom: 1rem;
         }
 
         .image-upload-zone:hover {
-            border-color: var(--bold-orange);
-            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--accent-color);
+            background: var(--secondary-bg);
         }
 
         .image-preview {
             max-width: 100%;
             max-height: 300px;
             margin: 1rem 0;
-            border-radius: 0.5rem;
+            border-radius: 0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -214,15 +294,15 @@
         .image-tray {
             margin-top: 1rem;
             padding: 1rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--secondary-bg);
         }
 
         .image-tray-title {
             font-weight: 500;
             margin-bottom: 0.5rem;
-            color: var(--deep-blue);
+            color: var(--text-primary);
         }
 
         .image-preview-list {
@@ -235,9 +315,9 @@
             position: relative;
             width: 100px;
             height: 100px;
-            border-radius: 0.5rem;
+            border-radius: 0;
             overflow: hidden;
-            border: 2px solid transparent;
+            border: 2px solid var(--border-color);
         }
 
         .image-preview-item img {
@@ -247,104 +327,30 @@
         }
 
         .image-preview-item.selected {
-            border-color: var(--bold-orange);
+            border-color: var(--accent-color);
         }
 
         .image-preview-item .delete-button {
             position: absolute;
             top: 4px;
             right: 4px;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--secondary-bg);
             border: none;
-            border-radius: 50%;
+            border-radius: 0;
             width: 20px;
             height: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--deep-blue);
+            color: var(--text-primary);
             font-weight: bold;
-        }
-
-        .image-prompt-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .image-preview-container {
-            position: relative;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-
-        .image-preview-container img {
-            max-width: 100%;
-            display: block;
-        }
-
-        /* Login screen styles */
-        .login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(176, 224, 230, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .login-box {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--deep-blue);
-        }
-
-        .password-input,
-        .api-key-input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        /* Fixed left section */
-        .fixed-section {
-            width: 25%;
-            min-width: 300px;
-            max-width: 400px;
-            flex-shrink: 0;
-            padding: 1.5rem;
-            border-right: 1px solid var(--deep-blue);
-            background: rgba(255, 255, 255, 0.9);
-            height: calc(100vh - 4rem - 76px);
-            overflow-y: auto;
-            position: fixed;
-            left: 2rem;
-            top: 2rem;
-            box-shadow: 2px 0 4px rgba(90, 125, 154, 0.2);
-            z-index: 100;
-            backdrop-filter: blur(5px);
-            border-radius: 1rem;
         }
 
         /* Content area */
         .content-area {
             flex: 1;
-            margin-left: calc(25% + 3rem);
+            margin-left: calc(400px + 2rem); /* Fixed margin based on tray width plus padding */
             min-width: 0;
             padding-bottom: 76px;
             padding-left: 2rem;
@@ -356,116 +362,116 @@
         /* Horizontal scroll */
         .horizontal-scroll {
             display: flex;
-            gap: 1rem;
+            gap: 2rem; /* Fixed gap between cards */
             overflow-x: auto;
             padding: 1rem 0;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
-            scrollbar-color: var(--deep-blue) transparent;
+            scrollbar-color: var(--accent-color) transparent;
         }
 
         .horizontal-scroll::-webkit-scrollbar {
             height: 8px;
-            border-radius: 4px;
+            border-radius: 0;
         }
 
         .horizontal-scroll::-webkit-scrollbar-track {
             background: transparent;
-            border-radius: 4px;
+            border-radius: 0;
         }
 
         .horizontal-scroll::-webkit-scrollbar-thumb {
-            background-color: var(--deep-blue);
-            border-radius: 4px;
+            background-color: var(--accent-color);
+            border-radius: 0;
         }
-
         /* Prompt card styles */
         .prompt-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(90, 125, 154, 0.2);
-            padding: 0.75rem;
+            background: var(--secondary-bg);
+            border-radius: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 1rem;
             min-width: 300px;
             max-width: 400px;
             height: fit-content;
+            min-height: 500px; /* Increased from default height */
             flex-shrink: 0;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            border: 1px solid var(--light-orange);
+            gap: 0.75rem; /* Slightly increased gap */
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
         }
 
         .prompt-card.image-mode {
-            border-left: 4px solid var(--bold-orange);
-        }
-
-        .source-label {
-            color: var(--deep-blue);
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .source-selector {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background-color: var(--white);
-            outline: none;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
+            border-left: 4px solid var(--accent-color);
         }
 
         .source-type-selector {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1rem;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 0.5rem;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
         }
 
         .source-type-button {
+            flex: 1;
             padding: 0.5rem 1rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.5rem;
-            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .source-type-button.active {
-            background: var(--deep-blue);
-            color: var(--white);
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border-color: var(--accent-color);
+        }
+
+        .source-selector {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            outline: none;
+            margin-bottom: 0.5rem;
         }
 
         .prompt-textarea {
             width: 100%;
-            min-height: 150px;
+            min-height: 200px; /* Increased from 150px */
+            height: 200px;
             padding: 0.75rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
             resize: vertical;
             outline: none;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--primary-bg);
+            color: var(--text-primary);
             margin: 0;
             box-sizing: border-box;
-            cursor: text;
             transition: border-color 0.2s ease;
         }
 
         .prompt-textarea:focus {
-            border-color: var(--bold-orange);
-            box-shadow: 0 0 0 2px rgba(255, 160, 122, 0.2);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
         }
 
         .prompt-textarea::placeholder {
-            color: var(--neutral-gray);
-            opacity: 0.7;
+            color: var(--text-secondary);
         }
 
         .result-container {
@@ -475,16 +481,48 @@
 
         .result-textarea {
             width: 100%;
-            min-height: 200px;
+            min-height: 250px; /* Increased from 200px */
+            height: 250px;
             padding: 0.75rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
             resize: vertical;
             outline: none;
             font-family: inherit;
-            background: rgba(176, 224, 230, 0.1);
+            background: var(--primary-bg);
+            color: var(--text-primary);
             margin: 0;
             box-sizing: border-box;
+        }
+
+        /* API Key Input styles */
+        .api-key-input,
+        .model-selector {
+            width: 100%;
+            height: 45px;  /* Explicit height to match */
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.875rem;
+            outline: none;
+            margin: 0.5rem 0;
+            box-sizing: border-box;
+            -webkit-appearance: none;  /* Remove default styling */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .api-key-input {
+            type: password;  /* Make the input secure */
+        }
+
+        .api-key-input:focus,
+        .model-selector:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(226, 152, 99, 0.1);
         }
 
         /* Button styles */
@@ -492,53 +530,49 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 0.5rem;
             padding: 0.75rem 1rem;
             border: none;
-            border-radius: 0.75rem;
+            border-radius: 0;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 0.875rem;
         }
 
-        .btn-primary {
-            background-color: var(--deep-blue);
-            color: var(--white);
-            width: 100%;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 226, 183, 0.3);
+        }
+
+        .btn-primary, .btn-agency {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary:hover, .btn-agency:hover {
+            background-color: var(--primary-bg);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         .btn-success {
-            background-color: var(--bold-orange);
-            color: var(--white);
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
             width: 100%;
         }
 
-        .btn-danger {
-            background-color: var(--neutral-gray);
-            color: var(--white);
-            width: 100%;
+        .btn-danger,
+        .delete-button {
+            background-color: #8B7E7E;  /* Muted gray-red */
+            color: var(--primary-bg);
         }
 
-        .btn-agency {
-            background-color: var(--deep-blue);
-            color: var(--white);
-        }
-
-        /* Footer styles */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-            box-shadow: 0 -1px 3px rgba(90, 125, 154, 0.2);
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            z-index: 200;
-            backdrop-filter: blur(5px);
-            border-radius: 1rem 1rem 0 0;
-            border-top: 1px solid var(--light-blue);
+        .btn-danger:hover,
+        .delete-button:hover {
+            background-color: #766868;  /* Slightly darker on hover */
+            color: var(--primary-bg);
         }
 
         /* Loading spinner */
@@ -548,7 +582,7 @@
             height: 20px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            border-top-color: var(--white);
+            border-top-color: var(--primary-bg);
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -562,12 +596,11 @@
         }
 
         .error {
-            background-color: rgba(255, 160, 122, 0.2);
-            border-left: 4px solid var(--bold-orange);
+            background-color: rgba(139, 126, 126, 0.2);  /* Matching muted color with transparency */
+            border-left: 4px solid #8B7E7E;
             padding: 1rem;
             margin: 1rem 0;
-            color: #b91c1c;
-            border-radius: 0.75rem;
+            color: #8B7E7E;
         }
 
         /* Copy button styles */
@@ -575,9 +608,9 @@
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.5rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
             padding: 0.25rem;
             cursor: pointer;
             display: flex;
@@ -589,35 +622,689 @@
         .copy-button svg {
             width: 16px;
             height: 16px;
-            stroke: var(--deep-blue);
+            stroke: var(--text-primary);
         }
 
         .copy-button:hover {
-            background: var(--deep-blue);
+            background: var(--accent-color);
         }
 
         .copy-button:hover svg {
-            stroke: var(--white);
+            stroke: var(--primary-bg);
         }
 
         .model-selector {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--deep-blue);
-            border-radius: 0.75rem;
-            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
             outline: none;
             margin-bottom: 1rem;
         }
+
+        /* Add styles for the button bar */
+        .button-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .button-bar .btn {
+            flex: 1;
+            min-width: calc(50% - 0.25rem);  /* 2 buttons per row with gap */
+        }
+
+        .document-tray {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+        }
+
+        .document-tray-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .document-preview-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .document-preview-item {
+            display: flex;
+            flex-direction: column;
+            background: var(--primary-bg);
+            border-radius: 0;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .document-preview-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--secondary-bg);
+        }
+
+        .document-icon {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .document-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .preview-button,
+        .use-button {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 0;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .preview-button:hover,
+        .use-button:hover {
+            opacity: 0.9;
+        }
+
+        .document-content {
+            width: 100%;
+            min-height: 100px;
+            max-height: 200px;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            resize: vertical;
+            overflow-y: auto;
+        }
+
+        .prompt-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .prompt-title-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .prompt-title-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(226, 152, 99, 0.1);
+        }
+
+        /* Scenario styles */
+        .scenario-card {
+            background: var(--secondary-bg);
+            border-radius: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            min-width: 300px;
+            max-width: 400px;
+            height: fit-content;
+            min-height: 320px; /* Match persona card initial height */
+            flex-shrink: 0;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #4CAF50; /* Green accent for scenarios */
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .scenario-name {
+            width: calc(100% - 1rem);
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            outline: none;
+            margin: 0 0.5rem 0.5rem 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .scenario-name:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
+        }
+
+        .scenario-textarea {
+            width: calc(100% - 1rem);
+            min-height: 150px;
+            height: 150px; /* Set initial height to match persona textarea */
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            margin: 0 0.5rem 1rem 0.5rem;
+            box-sizing: border-box;
+        }
+
+        .scenario-textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
+        }
+
+        .scenario-textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Scenario Tray styles */
+        .scenario-tray {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+        }
+
+        .scenario-selector-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-selector {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+        }
+
+        .add-scenario-btn {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 0;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .add-scenario-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .add-scenario-btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 15px;
+            width: 300px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .card-content {
+            flex-grow: 1;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        .scenario-card {
+            border-left: 5px solid #4CAF50;  /* Green accent */
+        }
+
+        .prompt-card {
+            border-left: 5px solid #2196F3;  /* Blue accent */
+        }
+
+        .persona-card {
+            border-left: 5px solid #FF9800;  /* Orange accent */
+        }
+
+        /* Add emoji styles for both cards */
+        .prompt-emoji,
+        .scenario-emoji {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Update headers to accommodate emojis */
+        .prompt-header,
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-title,
+        .scenario-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            margin-right: 0.5rem;
+        }
+
+        .source-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-button.active {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border-color: var(--accent-color);
+        }
+
+        .tab-button emoji {
+            font-size: 1rem;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .instructions-content {
+            padding: 1rem;
+            background: var(--primary-bg);
+            border-radius: 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .instructions-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .instructions-section h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .instructions-section p {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .instructions-section ul {
+            list-style-type: none;
+            padding-left: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .instructions-section li {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .instructions-section li::before {
+            content: "•";
+            color: var(--accent-color);
+            position: absolute;
+            left: -1rem;
+        }
+
+        /* Update the tab buttons to accommodate three tabs */
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* In the App component, update the tab buttons and add instructions content */
+        <div className="tab-buttons">
+            <button 
+                className={`tab-button ${activeTab === 'welcome' ? 'active' : ''}`}
+                onClick={() => setActiveTab('welcome')}
+            >
+                👋 Welcome
+            </button>
+            <button 
+                className={`tab-button ${activeTab === 'content' ? 'active' : ''}`}
+                onClick={() => setActiveTab('content')}
+            >
+                🎮 Play
+            </button>
+            <button 
+                className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`}
+                onClick={() => setActiveTab('settings')}
+            >
+                ⚙️ Settings
+            </button>
+        </div>
+
+        <div className="tab-content">
+            {activeTab === 'settings' ? (
+                <>
+                    <input
+                        type="text"
+                        placeholder="Enter OpenAI API Key"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        className="api-key-input"
+                    />
+
+                    <div className="model-selector-wrapper">
+                        <select 
+                            value={model}
+                            onChange={(e) => setModel(e.target.value)}
+                            className="model-selector"
+                        >
+                            {OPENAI_MODELS.map(model => (
+                                <option key={model} value={model}>{model}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="agency-details">
+                        <textarea
+                            value={agencyName}
+                            onChange={(e) => setAgencyName(e.target.value)}
+                            placeholder="Enter Playground Name..."
+                            className="agency-name-textarea"
+                        />
+                        <textarea
+                            value={agencyDescription}
+                            onChange={(e) => setAgencyDescription(e.target.value)}
+                            placeholder="Enter Playground Description..."
+                            className="agency-description-textarea"
+                        />
+                    </div>
+                </>
+            ) : activeTab === 'content' ? (
+                <>
+                    <input
+                        type="file"
+                        id="fileInput"
+                        className="hidden"
+                        accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                        onChange={handleFileUpload}
+                        multiple
+                    />
+                    <button 
+                        onClick={() => document.getElementById('fileInput').click()}
+                        className="btn btn-primary"
+                        style={{ marginBottom: '1rem' }}
+                    >
+                        📎 Upload File or Image
+                    </button>
+
+                    <DocumentTray 
+                        uploadedDocuments={uploadedDocuments} 
+                        onDeleteDocument={(id) => {
+                            setUploadedDocuments(current => current.filter(doc => doc.id !== id));
+                        }}
+                        onSelectDocument={(content) => setSourceContent(content)}
+                    />
+
+                    <textarea
+                        value={sourceContent}
+                        onChange={(e) => setSourceContent(e.target.value)}
+                        placeholder="Enter or upload source content..."
+                        style={{ 
+                            display: 'block',
+                            width: '100%',
+                            minHeight: '200px',
+                            margin: '1rem 0',
+                            padding: '0.75rem',
+                            borderRadius: '0',
+                            border: '1px solid var(--border-color)',
+                            background: 'var(--primary-bg)',
+                            color: 'var(--text-primary)',
+                            resize: 'vertical'
+                        }}
+                    />
+
+                    <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
+                    <PersonaTray onAddPersona={addPersonaCard} />
+                    <ScenarioTray onAddScenario={addScenarioCard} />
+                </>
+            ) : (
+                <div className="instructions-content">
+                    <div className="instructions-section">
+                        <h3> Getting Started</h3>
+                        <p>Before using the playground, set up your environment in the Settings tab:</p>
+                        <ul>
+                            <li>Enter your OpenAI API key</li>
+                            <li>Select your preferred model</li>
+                            <li>Set your agency name and description</li>
+                        </ul>
+                    </div>
+
+                    <div className="instructions-section">
+                        <h3>📄 Working with Content</h3>
+                        <p>In the Content tab, you can:</p>
+                        <ul>
+                            <li>Upload documents (PDF, DOC, TXT) or images</li>
+                            <li>Enter source content manually in the text area</li>
+                            <li>Create and manage personas for different communication styles</li>
+                            <li>Define scenarios for specific use cases</li>
+                        </ul>
+                    </div>
+
+                    <div className="instructions-section">
+                        <h3>💡 Using Prompts</h3>
+                        <p>Create and manage prompts in the main area:</p>
+                        <ul>
+                            <li>Click "Add Prompt" to create a new prompt card</li>
+                            <li>Choose between text or image analysis</li>
+                            <li>Select source content from uploaded files</li>
+                            <li>Use previous results as sources for new prompts</li>
+                            <li>Run prompts individually or all at once</li>
+                        </ul>
+                    </div>
+
+                    <div className="instructions-section">
+                        <h3>👥 Personas & Scenarios</h3>
+                        <p>Enhance your prompts with context:</p>
+                        <ul>
+                            <li>Add personas to define the voice (FROM) or audience (TO)</li>
+                            <li>Create scenarios to set specific business contexts</li>
+                            <li>Combine multiple personas and scenarios for complex use cases</li>
+                        </ul>
+                    </div>
+
+                    <div className="instructions-section">
+                        <h3>💾 Saving Your Work</h3>
+                        <p>Manage your playground setup:</p>
+                        <ul>
+                            <li>Export your entire playground configuration</li>
+                            <li>Save just the content and results</li>
+                            <li>Load previously saved configurations</li>
+                        </ul>
+                    </div>
+
+                    <div className="instructions-section">
+                        <h3>⚡ Pro Tips</h3>
+                        <ul>
+                            <li>Use multiple personas to create more nuanced responses</li>
+                            <li>Chain prompts together by using previous results as sources</li>
+                            <li>Combine text and image analysis for comprehensive insights</li>
+                            <li>Save different configurations for various use cases</li>
+                        </ul>
+                    </div>
+                </div>
+            )}
+        </div>
     </style>
 </head>
 <body>
-    <canvas id="voronoi-canvas"></canvas>
+    <div id="particles-js"></div>
     <div id="root"></div>
     <script type="text/babel">
+        // Add this constant at the top of your script, before any other code
+        const PERSONAS = [
+            {
+                id: 'executive',
+                name: 'Executive',
+                emoji: '👔',
+                description: 'Strategic, high-level communication focused on business impact and ROI'
+            },
+            {
+                id: 'technical',
+                name: 'Technical Expert',
+                emoji: '🔧',
+                description: 'Detailed, precise communication with technical specifications and implementation details'
+            },
+            {
+                id: 'creative',
+                name: 'Creative Director',
+                emoji: '🎨',
+                description: 'Visual and conceptual thinking with emphasis on design and innovation'
+            },
+            {
+                id: 'marketer',
+                name: 'Marketing Specialist',
+                emoji: '📢',
+                description: 'Persuasive communication focused on value proposition and audience engagement'
+            },
+            {
+                id: 'customer',
+                name: 'Customer Service',
+                emoji: '🤝',
+                description: 'Empathetic, solution-oriented communication focused on user satisfaction'
+            },
+            {
+                id: 'analyst',
+                name: 'Data Analyst',
+                emoji: '📊',
+                description: 'Analytical communication with focus on metrics, trends, and insights'
+            },
+            {
+                id: 'trainer',
+                name: 'Training Specialist',
+                emoji: '📚',
+                description: 'Educational communication focused on learning outcomes and skill development'
+            },
+            {
+                id: 'hr',
+                name: 'HR Professional',
+                emoji: '👥',
+                description: 'People-focused communication emphasizing policies, culture, and employee relations'
+            }
+        ];
+
         // Constants
         const OPENAI_MODELS = [
-            "gpt-4o",
+            "gpt-4o",  // GPT-4o
+            "gpt-4",
             "gpt-3.5-turbo-1106",
             "gpt-3.5-turbo",
         ];
@@ -625,197 +1312,33 @@
         const SUPPORTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
         const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
 
-        const PERSONAS = [
-  {
-    "id": "chief_executive_officer",
-    "name": "Chief Executive Officer",
-    "emoji": "\ud83d\udc54",
-    "description": "The CEO is the highest-ranking executive responsible for overseeing all aspects of the tech company's operations, strategy, and growth. This role involves setting the company's vision, leading the executive team, and ensuring the organization's success in a competitive and rapidly evolving industry. ### Key Responsibilities - Develop and implement high-quality business strategies aligned with short-term and long-term objectives[3] - ..."
-  },
-  {
-    "id": "financial_asset_evaluator",
-    "name": "Financial Asset Evaluator",
-    "emoji": "\ud83d\udc54",
-    "description": "The Financial Asset Evaluator is responsible for assessing the value of technology companies, their assets, and financial instruments. This role requires a deep understanding of the tech industry, financial markets, and valuation methodologies specific to technology firms. ### Key Responsibilities - Conduct comprehensive valuations of tech companies, startups, and their assets using various methodologies - Analyze financial..."
-  },
-  {
-    "id": "financial_modeler",
-    "name": "Financial Modeler",
-    "emoji": "\ud83d\udc54",
-    "description": "The Financial Modeler is responsible for developing and maintaining complex financial models to support strategic decision-making, valuation, and forecasting for tech companies. This role requires a deep understanding of the tech industry, financial analysis, and advanced modeling techniques. ### Key Responsibilities - Develop and maintain sophisticated financial models for tech companies, including revenue forecasts, cost structur..."
-  },
-  {
-    "id": "asset_custodian",
-    "name": "Asset Custodian",
-    "emoji": "\ud83d\udc54",
-    "description": "The Asset Custodian in the DeFi sector is responsible for the safekeeping, management, and oversight of digital assets within decentralized finance protocols and platforms. This role requires a deep understanding of blockchain technology, smart contracts, and DeFi ecosystems, as well as expertise in digital asset security and compliance. ### Key Responsibilities - Implement and maintain secure custody solutions for various digital as..."
-  },
-  {
-    "id": "return_analyst",
-    "name": "Return Analyst",
-    "emoji": "\ud83d\udc54",
-    "description": "The Return Analyst in the DeFi sector is responsible for analyzing and evaluating the performance of various decentralized finance protocols, strategies, and investments. This role requires a deep understanding of DeFi ecosystems, blockchain technology, and financial analysis techniques to provide valuable insights for decision-making and strategy development. ### Key Responsibilities - Analyze the performance and returns of various D..."
-  },
-  {
-    "id": "tech_integrator",
-    "name": "Tech Integrator",
-    "emoji": "\ud83d\udc54",
-    "description": "The Tech Integrator in the DeFi sector is responsible for integrating various decentralized finance protocols and technologies into cohesive systems. This role involves working with blockchain technology, smart contracts, and DeFi platforms to ensure seamless integration and functionality. The Tech Integrator plays a crucial role in enhancing the interoperability and efficiency of DeFi applications. ### Key Responsibilities - Design ..."
-  },
-  {
-    "id": "trust_facilitator",
-    "name": "Trust Facilitator",
-    "emoji": "\ud83d\udc54",
-    "description": "The Trust Facilitator in the DeFi sector is responsible for building and maintaining trust between the organization, its users, and other stakeholders. This role involves implementing trust-building strategies, ensuring compliance with data privacy regulations, and promoting transparency in DeFi operations. The Trust Facilitator plays a crucial role in enhancing the credibility and adoption of DeFi protocols and platforms. ### Key ..."
-  },
-  {
-    "id": "social_integrator",
-    "name": "Social Integrator",
-    "emoji": "\ud83d\udc54",
-    "description": "The Social Integrator in the DeFi sector is responsible for bridging the gap between decentralized finance protocols and their user communities. This role involves facilitating user engagement, building trust, and promoting social adoption of DeFi platforms. The Social Integrator plays a crucial role in enhancing user experience, community growth, and the overall success of DeFi projects. ### Key Responsibilities - Develop and impl..."
-  },
-  {
-    "id": "diversification_specialist",
-    "name": "Diversification Specialist",
-    "emoji": "\ud83d\udc54",
-    "description": "The Diversification Specialist in the DeFi sector is responsible for developing and implementing strategies to diversify investment portfolios and risk across various DeFi protocols and platforms. This role involves analyzing market trends, assessing risks, and creating innovative solutions to maximize returns while minimizing exposure in the volatile DeFi landscape. ### Key Responsibilities - Develop and implement diversi..."
-  },
-  {
-    "id": "operations_strategist",
-    "name": "Operations Strategist",
-    "emoji": "\ud83d\udc54",
-    "description": "The Operations Strategist in the DeFi sector is responsible for developing and implementing strategic operational plans to optimize the efficiency, scalability, and performance of decentralized finance platforms. This role involves analyzing current operations, identifying areas for improvement, and implementing innovative solutions to enhance the overall effectiveness of DeFi protocols and services. ### Key Responsibilities - ..."
-  },
-  {
-    "id": "community_builder",
-    "name": "Community Builder",
-    "emoji": "\ud83d\udc54",
-    "description": "The Community Builder in the DeFi sector is responsible for creating, nurturing, and growing a vibrant and engaged community around decentralized finance projects and platforms. This role involves developing and implementing strategies to increase user engagement, foster trust, and promote adoption of DeFi products and services. ### Key Responsibilities - Develop and execute comprehensive community engagement strategies for DeFi pr..."
-  },
-  {
-    "id": "compliance_manager",
-    "name": "Compliance Manager",
-    "emoji": "\ud83d\udc54",
-    "description": "The Compliance Manager in the DeFi sector is responsible for ensuring that decentralized finance protocols and platforms adhere to regulatory requirements and industry best practices. This role involves developing and implementing compliance programs, conducting risk assessments, and collaborating with various stakeholders to maintain a secure and compliant DeFi ecosystem. ### Key Responsibilities - Develop and implement comprehen..."
-  },
-  {
-    "id": "executive",
-    "name": "Executive",
-    "emoji": "\ud83d\udc54",
-    "description": "A senior business executive responsible for strategic decision-making and achieving high-level business impact. The Executive drives organizational goals, manages company performance, and collaborates with stakeholders to ensure sustainable growth. This role involves setting the strategic direction, fostering leadership across teams, and ensuring alignment with industry trends. Executives play a critical role in overseeing finances, human resources, and operations, while acting as ambassadors for the organization's mission."
-  },
-  {
-    "id": "engineer",
-    "name": "Engineer",
-    "emoji": "\ud83d\udc68\u200d\ud83d\udcbb",
-    "description": "A technical professional with expertise in designing, implementing, and maintaining complex systems and solutions. Engineers work across various disciplines such as software development, hardware design, and process optimization, ensuring high-quality results. They apply their knowledge to solve technical challenges, improve efficiency, and drive innovation. In addition, engineers collaborate with cross-functional teams to align technical implementations with business objectives."
-  },
-  {
-    "id": "creative",
-    "name": "Creative Director",
-    "emoji": "\ud83c\udfa8",
-    "description": "A visionary professional responsible for shaping the creative strategy, design, and storytelling of an organization. The Creative Director oversees the development of visual content, branding, and campaigns to resonate with audiences. They lead creative teams, ensuring the delivery of innovative and impactful work that aligns with brand values and market trends. This role combines artistic vision with leadership skills to produce compelling narratives across various platforms."
-  },
-  {
-    "id": "analyst",
-    "name": "Data Analyst",
-    "emoji": "\ud83d\udcca",
-    "description": "An analytical expert focused on deriving actionable insights from data to support business decision-making. Data Analysts collect, process, and analyze large datasets to identify trends, patterns, and opportunities. They create detailed reports, dashboards, and visualizations to communicate findings effectively to stakeholders. This role is essential in guiding strategic planning, optimizing operations, and measuring the success of business initiatives."
-  },
-  {
-    "id": "marketer",
-    "name": "Marketing Manager",
-    "emoji": "\ud83d\udce2",
-    "description": "A dynamic professional responsible for planning, executing, and analyzing marketing strategies to engage target audiences. The Marketing Manager develops campaigns, manages budgets, and tracks key performance metrics to drive brand awareness and sales. They collaborate with creative and sales teams to align messaging and ensure consistent brand representation. This role is pivotal in understanding customer needs, market trends, and competitive landscapes to deliver impactful marketing solutions."
-  }
-];
-
-        // Voronoi Background Component
-        const VoronoiBackground = () => {
-            React.useEffect(() => {
-                const canvas = document.getElementById('voronoi-canvas');
-                const context = canvas.getContext('2d');
-                const numPoints = 100;
-                const points = [];
-                let width = window.innerWidth;
-                let height = window.innerHeight;
-                let animationFrameId;
-
-                class Point {
-                    constructor() {
-                        this.x = Math.random() * width;
-                        this.y = Math.random() * height;
-                        this.vx = (Math.random() - 0.5) * 2;
-                        this.vy = (Math.random() - 0.5) * 2;
-                    }
-
-                    update() {
-                        this.x += this.vx;
-                        this.y += this.vy;
-
-                        if (this.x < 0 || this.x > width) this.vx *= -1;
-                        if (this.y < 0 || this.y > height) this.vy *= -1;
-                    }
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#e29863' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { 
+                    enable: true, 
+                    distance: 150, 
+                    color: '#e29863', 
+                    opacity: 0.4, 
+                    width: 1 
+                },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'grab' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
                 }
-
-                function resizeCanvas() {
-                    width = window.innerWidth;
-                    height = window.innerHeight;
-                    canvas.width = width;
-                    canvas.height = height;
-                }
-
-                function initPoints() {
-                    points.length = 0;
-                    for (let i = 0; i < numPoints; i++) {
-                        points.push(new Point());
-                    }
-                }
-
-                function drawVoronoi() {
-                    context.clearRect(0, 0, width, height);
-
-                    // Update points
-                    points.forEach(point => point.update());
-
-                    // Create Voronoi diagram
-                    const delaunay = d3.Delaunay.from(points.map(p => [p.x, p.y]));
-                    const voronoi = delaunay.voronoi([0, 0, width, height]);
-
-                    // Draw cells
-                    context.beginPath();
-                    context.strokeStyle = "rgba(90, 125, 154, 0.2)";
-                    voronoi.render(context);
-                    context.stroke();
-                }
-
-                function animate() {
-                    drawVoronoi();
-                    animationFrameId = requestAnimationFrame(animate);
-                }
-
-                // Initialize
-                resizeCanvas();
-                initPoints();
-
-                // Event listeners
-                window.addEventListener('resize', () => {
-                    resizeCanvas();
-                    initPoints();
-                });
-
-                // Start animation
-                animate();
-
-                // Cleanup
-                return () => {
-                    cancelAnimationFrame(animationFrameId);
-                    window.removeEventListener('resize', resizeCanvas);
-                };
-            }, []);
-
-            return null;
-        };
+            },
+            retina_detect: true
+        });
 
         // File Processing Utility
         const FileProcessor = {
@@ -900,7 +1423,6 @@
                 }
             }
         };
-
         // React Components
         const CopyButton = ({ text }) => {
             const [copied, setCopied] = React.useState(false);
@@ -942,50 +1464,6 @@
             </div>
         );
 
-        const LoginScreen = ({ onLogin }) => {
-            const [password, setPassword] = React.useState('');
-            const [apiKey, setApiKey] = React.useState('');
-            const [error, setError] = React.useState('');
-
-            const handleLogin = () => {
-                if (password === 'wowsona' && apiKey) {
-                    onLogin(apiKey);
-                } else {
-                    setError('Incorrect password or missing API key');
-                }
-            };
-
-            return (
-                <div className="login-screen">
-                    <div className="login-box">
-                        <h2 style={{ marginBottom: '1rem', color: 'var(--deep-blue)' }}>Login Required</h2>
-                        <input
-                            type="password"
-                            placeholder="Enter password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="password-input"
-                            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Enter OpenAI API Key"
-                            value={apiKey}
-                            onChange={(e) => setApiKey(e.target.value)}
-                            className="api-key-input"
-                            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                        />
-                        <button 
-                            onClick={handleLogin}
-                            className="btn btn-primary"
-                        >
-                            Login
-                        </button>
-                        {error && <div className="error">{error}</div>}
-                    </div>
-                </div>
-            );
-        };
         const PersonaCard = ({ persona, onUpdate, onDelete }) => {
             return (
                 <div className="persona-card">
@@ -997,15 +1475,6 @@
                             className="persona-name" 
                             value={persona.name} 
                             onChange={(e) => onUpdate(persona.cardId, { name: e.target.value })}
-                            style={{ 
-                                border: '1px solid var(--deep-blue)',
-                                background: '#f0f8ff',
-                                borderRadius: '0.75rem',
-                                padding: '0.5rem',
-                                fontFamily: 'inherit',
-                                fontSize: 'inherit',
-                                outline: 'none'
-                            }}
                         />
                     </div>
                     
@@ -1052,7 +1521,7 @@
             };
 
             return (
-                <div className="persona-tray" style={{ marginBottom: '1rem' }}>
+                <div className="persona-tray">
                     <div className="persona-selector-container">
                         <select 
                             value={selectedPersona}
@@ -1077,12 +1546,31 @@
                 </div>
             );
         };
+        const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun, uploadedImages, uploadedDocuments }) => {
+            // When the component mounts or when prompt.id changes, set a default title if none exists
+            React.useEffect(() => {
+                if (!prompt.title || prompt.title === `${prompt.id}`) {
+                    onUpdate(prompt.id, { title: `PROMPT${prompt.id}` });
+                }
+            }, [prompt.id]);
 
-        const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun, uploadedImages }) => {
             const isImageMode = prompt.sourceType === 'image';
 
             return (
                 <div className={`prompt-card ${isImageMode ? 'image-mode' : ''}`}>
+                    <div className="prompt-header">
+                        <span className="prompt-emoji">📝</span>
+                        <span className="prompt-title">PROMPT CARD</span>
+                        <input
+                            type="text"
+                            className="prompt-title-input"
+                            value={prompt.title || `PROMPT${prompt.id}`}
+                            onChange={(e) => onUpdate(prompt.id, { title: e.target.value })}
+                            placeholder={`PROMPT${prompt.id}`}
+                        />
+                    </div>
+            
+                    <div className="source-label">Select Source</div>
                     <div className="source-type-selector">
                         <button 
                             className={`source-type-button ${!isImageMode ? 'active' : ''}`}
@@ -1099,33 +1587,42 @@
                     </div>
 
                     {isImageMode ? (
-                        <select
+                        <select 
                             value={prompt.selectedImage || ''}
-                            onChange={(e) => onUpdate(prompt.id, { selectedImage: parseInt(e.target.value) })}
+                            onChange={(e) => onUpdate(prompt.id, { selectedImage: parseFloat(e.target.value) })}
                             className="source-selector"
                         >
                             <option value="">Select an image...</option>
                             {uploadedImages.map(img => (
                                 <option key={img.id} value={img.id}>
-                                    {img.name || `Image ${img.id}`}
+                                    {img.name}
                                 </option>
                             ))}
                         </select>
                     ) : (
                         <select 
-                            value={prompt.source}
-                            onChange={(e) => onUpdate(prompt.id, { source: e.target.value })}
-                            className="source-selector"
+                            multiple
+                            value={Array.isArray(prompt.sources) ? prompt.sources : [prompt.source]}
+                            onChange={(e) => {
+                                const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+                                onUpdate(prompt.id, { sources: selectedOptions });
+                            }}
+                            className="source-selector multiple"
                         >
                             <option value="SOURCE">SOURCE</option>
+                            {uploadedDocuments.map(doc => (
+                                <option key={`doc-${doc.id}`} value={`DOC-${doc.id}`}>
+                                    {doc.name}
+                                </option>
+                            ))}
                             {sourceOptions.map(option => (
-                                <option key={option.id} value={`RESULT${option.id}`}>
+                                <option key={`result-${option.id}`} value={`RESULT${option.id}`}>
                                     RESULT{option.id}
                                 </option>
                             ))}
                         </select>
                     )}
-                    
+            
                     <textarea
                         value={prompt.text}
                         onChange={(e) => onUpdate(prompt.id, { text: e.target.value })}
@@ -1135,9 +1632,9 @@
                         autoComplete="off"
                         rows="6"
                     />
-                    
+            
                     <div className="result-label">RESULT{prompt.id}</div>
-                    
+            
                     <div className="result-container">
                         <textarea
                             value={prompt.result}
@@ -1149,7 +1646,7 @@
                         />
                         <CopyButton text={prompt.result} />
                     </div>
-                    
+            
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button 
                             onClick={() => onRun(prompt.id)} 
@@ -1173,11 +1670,168 @@
             );
         };
 
+        const ImageTray = ({ uploadedImages, onDeleteImage }) => (
+            <div className="image-tray">
+                <div className="image-tray-title">Uploaded Images</div>
+                <div className="image-preview-list">
+                    {uploadedImages.map(image => (
+                        <div key={image.id} className="image-preview-item">
+                            <img src={image.url} alt={image.name} />
+                            <button 
+                                className="delete-button"
+                                onClick={() => onDeleteImage(image.id)}
+                            >
+                                ×
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const DocumentTray = ({ uploadedDocuments, onDeleteDocument, onSelectDocument }) => {
+            const [expandedDoc, setExpandedDoc] = React.useState(null);
+
+            return (
+                <div className="document-tray">
+                    <div className="document-tray-title">Uploaded Documents</div>
+                    <div className="document-preview-list">
+                        {uploadedDocuments.map(doc => (
+                            <div key={doc.id} className="document-preview-item">
+                                <div className="document-preview-content">
+                                    <span className="document-icon">📄</span>
+                                    <span className="document-name" onClick={() => onSelectDocument(doc.content)}>
+                                        {doc.name}
+                                    </span>
+                                </div>
+                                <div className="document-actions">
+                                    <button 
+                                        className="preview-button"
+                                        onClick={() => setExpandedDoc(expandedDoc === doc.id ? null : doc.id)}
+                                    >
+                                        {expandedDoc === doc.id ? 'Hide' : 'Preview'}
+                                    </button>
+                                    <button 
+                                        className="use-button"
+                                        onClick={() => onSelectDocument(doc.content)}
+                                    >
+                                        Use
+                                    </button>
+                                    <button 
+                                        className="delete-button"
+                                        onClick={() => onDeleteDocument(doc.id)}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                {expandedDoc === doc.id && (
+                                    <div className="document-content">
+                                        <textarea
+                                            readOnly
+                                            value={doc.content}
+                                            className="document-content-preview"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // Add this constant at the top of your script, before any other code
+        const SCENARIOS = [
+            {
+                id: 'meeting',
+                name: 'Team Meeting',
+                description: 'A scenario focused on team collaboration and meeting outcomes.'
+            },
+            {
+                id: 'presentation',
+                name: 'Client Presentation',
+                description: 'A scenario for preparing and delivering client presentations.'
+            }
+        ];
+
+        // React Components
+        const ScenarioCard = ({ scenario, onUpdate, onDelete }) => {
+            return (
+                <div className="scenario-card">
+                    <div className="scenario-header">
+                        <span className="scenario-emoji">🎯</span>
+                        <span className="scenario-title">SCENARIO CARD</span>
+                        <input 
+                            type="text" 
+                            className="scenario-name" 
+                            value={scenario.name} 
+                            onChange={(e) => onUpdate(scenario.cardId, { name: e.target.value })}
+                        />
+                    </div>
+                    
+                    <textarea
+                        value={scenario.description}
+                        onChange={(e) => onUpdate(scenario.cardId, { description: e.target.value })}
+                        className="scenario-textarea"
+                        spellCheck="true"
+                        rows="6"
+                    />
+                    
+                    <button 
+                        onClick={() => onDelete(scenario.cardId)}
+                        className="btn btn-danger"
+                    >
+                        Delete
+                    </button>
+                </div>
+            );
+        };
+
+        const ScenarioTray = ({ onAddScenario }) => {
+            const [selectedScenario, setSelectedScenario] = React.useState('');
+
+            const handleAddScenario = () => {
+                if (selectedScenario) {
+                    const scenario = SCENARIOS.find(s => s.id === selectedScenario);
+                    onAddScenario({
+                        ...scenario,
+                        cardId: Date.now()
+                    });
+                    setSelectedScenario('');
+                }
+            };
+
+            return (
+                <div className="scenario-tray">
+                    <div className="scenario-selector-container">
+                        <select 
+                            value={selectedScenario}
+                            onChange={(e) => setSelectedScenario(e.target.value)}
+                            className="scenario-selector"
+                        >
+                            <option value="">Select Scenario...</option>
+                            {SCENARIOS.map(scenario => (
+                                <option key={scenario.id} value={scenario.id}>
+                                    {scenario.name}
+                                </option>
+                            ))}
+                        </select>
+                        <button 
+                            onClick={handleAddScenario}
+                            className="add-scenario-btn"
+                            disabled={!selectedScenario}
+                        >
+                            +
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
         // Main App Component
         function App() {
-            const [isLoggedIn, setIsLoggedIn] = React.useState(false);
             const [apiKey, setApiKey] = React.useState('');
-            const [model, setModel] = React.useState(OPENAI_MODELS[0]);
+            const [model, setModel] = React.useState(OPENAI_MODELS[0]);  // Will now default to gpt-4-turbo-preview
             const [sourceContent, setSourceContent] = React.useState('');
             const [uploadedImages, setUploadedImages] = React.useState([]);
             const [agencyName, setAgencyName] = React.useState('');
@@ -1185,45 +1839,47 @@
             const [personaCards, setPersonaCards] = React.useState([]);
             const [prompts, setPrompts] = React.useState([{ 
                 id: 1, 
+                title: '',
                 text: '', 
                 result: '',
                 source: 'SOURCE',
+                sources: ['SOURCE'],
                 sourceType: 'text',
                 selectedImage: null
             }]);
             const [loading, setLoading] = React.useState({});
             const [error, setError] = React.useState('');
             const [isProcessingFile, setIsProcessingFile] = React.useState(false);
-
-            // Check if user is logged in
-            if (!isLoggedIn) {
-                return (
-                    <>
-                        <VoronoiBackground />
-                        <LoginScreen onLogin={(key) => { setApiKey(key); setIsLoggedIn(true); }} />
-                    </>
-                );
-            }
+            const [uploadedDocuments, setUploadedDocuments] = React.useState([]);
+            const [scenarioCards, setScenarioCards] = React.useState([]);
+            const [activeTab, setActiveTab] = React.useState('welcome');
 
             const handleFileUpload = async (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
+                const files = Array.from(event.target.files);
+                if (!files.length) return;
 
                 setIsProcessingFile(true);
                 setError('');
 
                 try {
-                    const content = await FileProcessor.processFile(file);
-                    
-                    if (SUPPORTED_IMAGE_TYPES.includes(file.type)) {
-                        const imageId = Date.now();
-                        setUploadedImages(current => [...current, {
-                            id: imageId,
-                            url: content,
-                            name: file.name
-                        }]);
-                    } else {
-                        setSourceContent(content);
+                    for (const file of files) {
+                        const content = await FileProcessor.processFile(file);
+                        
+                        if (SUPPORTED_IMAGE_TYPES.includes(file.type)) {
+                            const imageId = Date.now() + Math.random();
+                            setUploadedImages(current => [...current, {
+                                id: imageId,
+                                url: content,
+                                name: file.name
+                            }]);
+                        } else {
+                            const docId = Date.now() + Math.random();
+                            setUploadedDocuments(current => [...current, {
+                                id: docId,
+                                content: content,
+                                name: file.name
+                            }]);
+                        }
                     }
                 } catch (error) {
                     setError('Error processing file: ' + error.message);
@@ -1240,25 +1896,6 @@
                         : prompt
                 ));
             };
-
-            const ImageTray = () => (
-                <div className="image-tray">
-                    <div className="image-tray-title">Uploaded Images</div>
-                    <div className="image-preview-list">
-                        {uploadedImages.map(image => (
-                            <div key={image.id} className="image-preview-item">
-                                <img src={image.url} alt={image.name} />
-                                <button 
-                                    className="delete-button"
-                                    onClick={() => deleteImage(image.id)}
-                                >
-                                    ×
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
 
             const addPersonaCard = (persona) => {
                 setPersonaCards([...personaCards, persona]);
@@ -1277,9 +1914,11 @@
             const addPrompt = () => {
                 const newPrompt = {
                     id: Date.now(),
+                    title: '',
                     text: '',
                     result: '',
                     source: 'SOURCE',
+                    sources: ['SOURCE'],
                     sourceType: 'text',
                     selectedImage: null
                 };
@@ -1295,14 +1934,30 @@
                     p.id === id ? {...p, ...changes} : p
                 ));
             };
-
             const getPromptSource = (promptId) => {
                 const prompt = prompts.find(p => p.id === promptId);
-                if (!prompt || prompt.source === 'SOURCE') return sourceContent;
+                if (!prompt) return '';
                 
-                const sourcePromptId = parseInt(prompt.source.replace('RESULT', ''));
-                const sourcePrompt = prompts.find(p => p.id === sourcePromptId);
-                return sourcePrompt ? sourcePrompt.result : '';
+                // Ensure we're working with an array of sources
+                const sources = Array.isArray(prompt.sources) ? prompt.sources : [prompt.source];
+                
+                // Map each source to its content and filter out any empty sources
+                const sourceContents = sources.map(source => {
+                    if (source === 'SOURCE') {
+                        return sourceContent || '';
+                    }
+                    if (source.startsWith('DOC-')) {
+                        const docId = source.replace('DOC-', '');
+                        const document = uploadedDocuments.find(doc => doc.id === parseFloat(docId));
+                        return document ? document.content : '';
+                    }
+                    const sourcePromptId = parseInt(source.replace('RESULT', ''));
+                    const sourcePrompt = prompts.find(p => p.id === sourcePromptId);
+                    return sourcePrompt ? sourcePrompt.result : '';
+                }).filter(content => content.trim() !== '');
+
+                // Combine all source contents with clear separation
+                return sourceContents.join('\n\n=== SOURCE SEPARATOR ===\n\n');
             };
 
             const getPersonaContext = () => {
@@ -1325,6 +1980,11 @@
             };
 
             const runPrompt = async (id) => {
+                if (!apiKey) {
+                    setError('Please enter an OpenAI API key');
+                    return;
+                }
+
                 setLoading(prev => ({ ...prev, [id]: true }));
                 setError('');
 
@@ -1408,7 +2068,6 @@
                     await runPrompt(prompt.id);
                 }
             };
-
             const exportAgency = async () => {
                 try {
                     const exportData = {
@@ -1417,15 +2076,18 @@
                         sourceContent,
                         uploadedImages,
                         personaCards,
-                        prompts: prompts.map(({ id, text, result, source, sourceType, selectedImage }) => ({
+                        prompts: prompts.map(({ id, title, text, result, source, sources, sourceType, selectedImage }) => ({
                             id,
+                            title,
                             text,
                             result,
                             source,
+                            sources,
                             sourceType,
                             selectedImage
                         })),
-                        settings: { model }
+                        settings: { model },
+                        scenarioCards,
                     };
                     
                     const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
@@ -1435,20 +2097,20 @@
                     
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `agency-export-${Date.now()}.json`;
+                    a.download = `playground-export-${Date.now()}.json`;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                 } catch (error) {
-                    setError('Error exporting agency: ' + error.message);
+                    setError('Error exporting playground: ' + error.message);
                 }
             };
 
             const exportContent = () => {
                 try {
                     const content = prompts.map(prompt => {
-                        let promptContent = `PROMPT ${prompt.id}:\n${prompt.text}\n\n`;
+                        let promptContent = `PROMPT ${prompt.id}: ${prompt.title}\n${prompt.text}\n\n`;
                         if (prompt.sourceType === 'image') {
                             promptContent += `[Image Analysis]\n`;
                         }
@@ -1461,7 +2123,7 @@
                     
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `agency-content-${Date.now()}.txt`;
+                    a.download = `playground-content-${Date.now()}.txt`;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -1481,7 +2143,7 @@
                         const data = JSON.parse(e.target.result);
                         
                         if (!data.prompts || !data.settings) {
-                            throw new Error('Invalid agency file structure');
+                            throw new Error('Invalid playground file structure');
                         }
 
                         setSourceContent(data.sourceContent || '');
@@ -1491,140 +2153,279 @@
                         setAgencyDescription(data.agencyDescription || '');
                         setUploadedImages(data.uploadedImages || []);
                         setPersonaCards(data.personaCards || []);
+                        setScenarioCards(data.scenarioCards || []);
                     } catch (error) {
-                        setError('Error loading agency: ' + error.message);
+                        setError('Error loading playground: ' + error.message);
                     }
                 };
                 reader.readAsText(file);
             };
 
+            const handleDocumentSelect = (content) => {
+                setSourceContent(content);
+            };
+
+            const addScenarioCard = (scenario) => {
+                setScenarioCards([...scenarioCards, scenario]);
+            };
+
+            const updateScenarioCard = (id, changes) => {
+                setScenarioCards(scenarioCards.map(s => 
+                    s.cardId === id ? {...s, ...changes} : s
+                ));
+            };
+
+            const deleteScenarioCard = (id) => {
+                setScenarioCards(scenarioCards.filter(s => s.cardId !== id));
+            };
+
             return (
-                <>
-                    <VoronoiBackground />
-                    <div className="container">
-                        <ProcessingIndicator isVisible={isProcessingFile} />
-                        
-                        <div className="fixed-section">
-                            <input
-                                type="file"
-                                id="fileInput"
-                                className="hidden"
-                                accept=".pdf,.doc,.docx,.txt,.md,image/*"
-                                onChange={handleFileUpload}
-                            />
-                            <button 
-                                onClick={() => document.getElementById('fileInput').click()}
-                                className="btn btn-primary"
-                                style={{ marginBottom: '1rem' }}
-                            >
-                                Upload File or Image
-                            </button>
-
-                            <textarea
-                                value={sourceContent}
-                                onChange={(e) => setSourceContent(e.target.value)}
-                                placeholder="Enter or upload source content..."
-                                style={{ 
-                                    display: 'block',
-                                    width: '80%',
-                                    minHeight: '200px',
-                                    margin: '1rem auto',
-                                    padding: '0.75rem',
-                                    borderRadius: '0.75rem',
-                                    border: '1px solid var(--deep-blue)',
-                                    resize: 'vertical'
-                                }}
-                            />
-
-                            <ImageTray />
-                            <PersonaTray onAddPersona={addPersonaCard} />
-
-                            <div className="model-selector-wrapper">
-                                <select 
-                                    value={model}
-                                    onChange={(e) => setModel(e.target.value)}
-                                    className="model-selector"
+                <div className="container">
+                    <ProcessingIndicator isVisible={isProcessingFile} />
+                    
+                    <div className="fixed-section">
+                        <div className="tabs-container">
+                            <div className="tab-buttons">
+                                <button 
+                                    className={`tab-button ${activeTab === 'welcome' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('welcome')}
                                 >
-                                    {OPENAI_MODELS.map(model => (
-                                        <option key={model} value={model}>{model}</option>
-                                    ))}
-                                </select>
+                                    👋 Welcome
+                                </button>
+                                <button 
+                                    className={`tab-button ${activeTab === 'content' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('content')}
+                                >
+                                    🎮 Play
+                                </button>
+                                <button 
+                                    className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('settings')}
+                                >
+                                    ⚙️ Settings
+                                </button>
+                            </div>
+
+                            <div className="tab-content">
+                                {activeTab === 'settings' ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter OpenAI API Key"
+                                            value={apiKey}
+                                            onChange={(e) => setApiKey(e.target.value)}
+                                            className="api-key-input"
+                                        />
+
+                                        <div className="model-selector-wrapper">
+                                            <select 
+                                                value={model}
+                                                onChange={(e) => setModel(e.target.value)}
+                                                className="model-selector"
+                                            >
+                                                {OPENAI_MODELS.map(model => (
+                                                    <option key={model} value={model}>{model}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="agency-details">
+                                            <textarea
+                                                value={agencyName}
+                                                onChange={(e) => setAgencyName(e.target.value)}
+                                                placeholder="Enter Playground Name..."
+                                                className="agency-name-textarea"
+                                            />
+                                            <textarea
+                                                value={agencyDescription}
+                                                onChange={(e) => setAgencyDescription(e.target.value)}
+                                                placeholder="Enter Playground Description..."
+                                                className="agency-description-textarea"
+                                            />
+                                        </div>
+                                    </>
+                                ) : activeTab === 'content' ? (
+                                    <>
+                                        <input
+                                            type="file"
+                                            id="fileInput"
+                                            className="hidden"
+                                            accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                                            onChange={handleFileUpload}
+                                            multiple
+                                        />
+                                        <button 
+                                            onClick={() => document.getElementById('fileInput').click()}
+                                            className="btn btn-primary"
+                                            style={{ marginBottom: '1rem' }}
+                                        >
+                                            📎 Upload File or Image
+                                        </button>
+
+                                        <DocumentTray 
+                                            uploadedDocuments={uploadedDocuments} 
+                                            onDeleteDocument={(id) => {
+                                                setUploadedDocuments(current => current.filter(doc => doc.id !== id));
+                                            }}
+                                            onSelectDocument={(content) => setSourceContent(content)}
+                                        />
+
+                                        <textarea
+                                            value={sourceContent}
+                                            onChange={(e) => setSourceContent(e.target.value)}
+                                            placeholder="Enter or upload source content..."
+                                            style={{ 
+                                                display: 'block',
+                                                width: '100%',
+                                                minHeight: '200px',
+                                                margin: '1rem 0',
+                                                padding: '0.75rem',
+                                                borderRadius: '0',
+                                                border: '1px solid var(--border-color)',
+                                                background: 'var(--primary-bg)',
+                                                color: 'var(--text-primary)',
+                                                resize: 'vertical'
+                                            }}
+                                        />
+
+                                        <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
+                                        <PersonaTray onAddPersona={addPersonaCard} />
+                                        <ScenarioTray onAddScenario={addScenarioCard} />
+                                    </>
+                                ) : (
+                                    <div className="instructions-content">
+                                        <div className="instructions-section">
+                                            <h3> Getting Started</h3>
+                                            <p>Before using the playground, set up your environment in the Settings tab:</p>
+                                            <ul>
+                                                <li>Enter your OpenAI API key</li>
+                                                <li>Select your preferred model</li>
+                                                <li>Set your agency name and description</li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="instructions-section">
+                                            <h3>📄 Working with Content</h3>
+                                            <p>In the Content tab, you can:</p>
+                                            <ul>
+                                                <li>Upload documents (PDF, DOC, TXT) or images</li>
+                                                <li>Enter source content manually in the text area</li>
+                                                <li>Create and manage personas for different communication styles</li>
+                                                <li>Define scenarios for specific use cases</li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="instructions-section">
+                                            <h3>💡 Using Prompts</h3>
+                                            <p>Create and manage prompts in the main area:</p>
+                                            <ul>
+                                                <li>Click "Add Prompt" to create a new prompt card</li>
+                                                <li>Choose between text or image analysis</li>
+                                                <li>Select source content from uploaded files</li>
+                                                <li>Use previous results as sources for new prompts</li>
+                                                <li>Run prompts individually or all at once</li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="instructions-section">
+                                            <h3>👥 Personas & Scenarios</h3>
+                                            <p>Enhance your prompts with context:</p>
+                                            <ul>
+                                                <li>Add personas to define the voice (FROM) or audience (TO)</li>
+                                                <li>Create scenarios to set specific business contexts</li>
+                                                <li>Combine multiple personas and scenarios for complex use cases</li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="instructions-section">
+                                            <h3>💾 Saving Your Work</h3>
+                                            <p>Manage your playground setup:</p>
+                                            <ul>
+                                                <li>Export your entire playground configuration</li>
+                                                <li>Save just the content and results</li>
+                                                <li>Load previously saved configurations</li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="instructions-section">
+                                            <h3>⚡ Pro Tips</h3>
+                                            <ul>
+                                                <li>Use multiple personas to create more nuanced responses</li>
+                                                <li>Chain prompts together by using previous results as sources</li>
+                                                <li>Combine text and image analysis for comprehensive insights</li>
+                                                <li>Save different configurations for various use cases</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {error && <div className="error">{error}</div>}
-                        </div>
-
-                        <div className="content-area">
-                            <div className="agency-details">
-                                <textarea
-                                    value={agencyName}
-                                    onChange={(e) => setAgencyName(e.target.value)}
-                                    placeholder="Enter Agency Name..."
-                                    className="agency-name-textarea"
-                                    style={{ paddingRight: '1rem' }}
-                                />
-                                <textarea
-                                    value={agencyDescription}
-                                    onChange={(e) => setAgencyDescription(e.target.value)}
-                                    placeholder="Enter Agency Description..."
-                                    className="agency-description-textarea"
-                                    style={{ paddingRight: '1rem' }}
-                                />
-                            </div>
                             
-                            <div className="horizontal-scroll">
-                                {personaCards.map(persona => (
-                                    <PersonaCard
-                                        key={persona.cardId}
-                                        persona={persona}
-                                        onUpdate={updatePersonaCard}
-                                        onDelete={deletePersonaCard}
-                                    />
-                                ))}
-                                {prompts.map(prompt => (
-                                    <PromptCard
-                                        key={prompt.id}
-                                        prompt={prompt}
-                                        sourceOptions={prompts.filter(p => p.id < prompt.id)}
-                                        loading={loading[prompt.id]}
-                                        onUpdate={updatePrompt}
-                                        onDelete={deletePrompt}
-                                        onRun={runPrompt}
-                                        uploadedImages={uploadedImages}
-                                    />
-                                ))}
+                            <div className="button-bar">
+                                <button onClick={addPrompt} className="btn btn-agency">
+                                    ✨ Add Prompt
+                                </button>
+                                <button onClick={runAllPrompts} className="btn btn-agency">
+                                    🚀 Run All
+                                </button>
+                                <input
+                                    type="file"
+                                    id="loadAgencyInput"
+                                    className="hidden"
+                                    accept=".json"
+                                    onChange={loadAgency}
+                                />
+                                <button 
+                                    onClick={() => document.getElementById('loadAgencyInput').click()} 
+                                    className="btn btn-agency"
+                                >
+                                    📂 Load Playground
+                                </button>
+                                <button onClick={exportAgency} className="btn btn-agency">
+                                    💾 Export Playground
+                                </button>
+                                <button onClick={exportContent} className="btn btn-agency">
+                                    📤 Export Content
+                                </button>
                             </div>
-                        </div>
-
-                        <div className="footer">
-                            <button onClick={addPrompt} className="btn btn-agency">
-                                Add Prompt
-                            </button>
-                            <button onClick={runAllPrompts} className="btn btn-agency">
-                                Run All
-                            </button>
-                            <input
-                                type="file"
-                                id="loadAgencyInput"
-                                className="hidden"
-                                accept=".json"
-                                onChange={loadAgency}
-                            />
-                            <button 
-                                onClick={() => document.getElementById('loadAgencyInput').click()} 
-                                className="btn btn-agency"
-                            >
-                                Load Agency
-                            </button>
-                            <button onClick={exportAgency} className="btn btn-agency">
-                                Export Agency
-                            </button>
-                            <button onClick={exportContent} className="btn btn-agency">
-                                Export Content
-                            </button>
                         </div>
                     </div>
-                </>
+
+                    <div className="content-area">
+                        <div className="horizontal-scroll">
+                            {personaCards.map(persona => (
+                                <PersonaCard
+                                    key={persona.cardId}
+                                    persona={persona}
+                                    onUpdate={updatePersonaCard}
+                                    onDelete={deletePersonaCard}
+                                />
+                            ))}
+                            {scenarioCards.map(scenario => (
+                                <ScenarioCard
+                                    key={scenario.cardId}
+                                    scenario={scenario}
+                                    onUpdate={updateScenarioCard}
+                                    onDelete={deleteScenarioCard}
+                                />
+                            ))}
+                            {prompts.map(prompt => (
+                                <PromptCard
+                                    key={prompt.id}
+                                    prompt={prompt}
+                                    sourceOptions={prompts.filter(p => p.id < prompt.id)}
+                                    loading={loading[prompt.id]}
+                                    onUpdate={updatePrompt}
+                                    onDelete={deletePrompt}
+                                    onRun={runPrompt}
+                                    uploadedImages={uploadedImages}
+                                    uploadedDocuments={uploadedDocuments}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
             );
         }
 
