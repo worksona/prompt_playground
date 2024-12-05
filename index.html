@@ -102,15 +102,16 @@
         }
         /* Fixed section */
         .fixed-section {
-            width: 400px; /* Fixed width instead of percentage */
-            min-width: 400px;
-            max-width: 400px;
+            width: 320px; /* Reduced from 400px (20% less) */
+            min-width: 320px;
+            max-width: 320px;
             flex-shrink: 0;
             padding: 1.25rem;
             border-right: 1px solid var(--border-color);
             background: var(--secondary-bg);
             height: calc(100vh - 4rem);
             overflow-y: auto;
+            overflow-x: hidden; /* Prevent horizontal scroll */
             position: fixed;
             left: 2rem;
             top: 2rem;
@@ -350,41 +351,41 @@
         /* Content area */
         .content-area {
             flex: 1;
-            margin-left: calc(400px + 2rem); /* Fixed margin based on tray width plus padding */
+            margin-left: calc(320px + 2rem);
             min-width: 0;
             padding-bottom: 76px;
             padding-left: 2rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            overflow-x: auto; /* Enable horizontal scroll for entire content */
         }
 
-        /* Horizontal scroll */
         .horizontal-scroll {
             display: flex;
-            gap: 2rem; /* Fixed gap between cards */
-            overflow-x: auto;
+            gap: 2rem;
             padding: 1rem 0;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent-color) transparent;
+            min-width: min-content; /* Ensure content doesn't wrap */
         }
 
-        .horizontal-scroll::-webkit-scrollbar {
-            height: 8px;
-            border-radius: 0;
+        /* Add styles for card columns */
+        .card-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            min-width: 300px;
+            max-width: 400px;
+            flex-shrink: 0;
+            max-height: calc(100vh - 8rem); /* Account for padding and margins */
+            overflow-y: auto; /* Enable vertical scroll for columns */
         }
 
-        .horizontal-scroll::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 0;
+        .prompt-container {
+            display: flex;
+            gap: 2rem;
+            flex-shrink: 0;
         }
 
-        .horizontal-scroll::-webkit-scrollbar-thumb {
-            background-color: var(--accent-color);
-            border-radius: 0;
-        }
         /* Prompt card styles */
         .prompt-card {
             background: var(--secondary-bg);
@@ -652,6 +653,10 @@
             margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid var(--border-color);
+            background: var(--secondary-bg); /* Match background */
+            position: sticky;
+            bottom: 0;
+            width: 100%;
         }
 
         .button-bar .btn {
@@ -974,41 +979,53 @@
             padding-left: 0.25rem;
         }
 
+        /* Update the tabs-container and tab-content styles */
         .tabs-container {
             display: flex;
             flex-direction: column;
             height: 100%;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .tab-button {
-            flex: 1;
-            padding: 0.75rem 0.5rem;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .tab-button.active {
-            background: var(--accent-color);
-            color: var(--primary-bg);
-            border-color: var(--accent-color);
-        }
-
-        .tab-button emoji {
-            font-size: 1rem;
+            width: 100%;
+            overflow: hidden; /* Prevent container overflow */
         }
 
         .tab-content {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 0.5rem; /* Add some padding for scrollbar */
+            margin-right: -0.5rem; /* Offset padding to maintain alignment */
+            width: 100%;
+        }
+
+        /* Update the button-bar to ensure it stays at bottom */
+        .button-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--secondary-bg); /* Match background */
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Ensure all content within tabs doesn't cause horizontal scroll */
+        .tab-content > * {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Adjust input and textarea widths */
+        .api-key-input,
+        .model-selector,
+        .agency-name-textarea,
+        .agency-description-textarea {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .instructions-content {
@@ -1066,6 +1083,22 @@
             flex: 1;
             padding: 0.75rem 0.5rem;
             font-size: 0.875rem;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background: var(--primary-bg);
+            border-color: var(--accent-color);
+        }
+
+        .tab-button.active {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border-color: var(--accent-color);
         }
 
         /* In the App component, update the tab buttons and add instructions content */
@@ -1093,6 +1126,7 @@
         <div className="tab-content">
             {activeTab === 'settings' ? (
                 <>
+                    <h3 className="section-title"> Models</h3>
                     <input
                         type="text"
                         placeholder="Enter OpenAI API Key"
@@ -1112,6 +1146,11 @@
                             ))}
                         </select>
                     </div>
+
+                    <div className="section-separator"></div>
+
+                    <h3 className="section-title">📚 Playgrounds</h3>
+                    <PlaygroundTray onLoadPlayground={loadPlayground} />
 
                     <div className="agency-details">
                         <textarea
@@ -1267,6 +1306,115 @@
                 </div>
             )}
         </div>
+
+        /* Add these styles in the <style> section */
+
+        .playground-tray {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+        }
+
+        .playground-selector-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .playground-selector {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+        }
+
+        .add-playground-btn {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 0;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .add-playground-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .add-playground-btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .section-separator {
+            height: 1px;
+            background: var(--border-color);
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Add new styles for scenario fields */
+        .scenario-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-section-title {
+            font-weight: 500;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .scenario-field {
+            margin-bottom: 1rem;
+        }
+
+        .scenario-field-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            text-transform: capitalize;
+        }
+
+        .scenario-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            box-sizing: border-box;
+        }
+
+        .scenario-textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -1754,45 +1902,193 @@
             );
         };
 
-        // Add this constant at the top of your script, before any other code
+        // Update the SCENARIOS constant with populated fields
         const SCENARIOS = [
             {
-                id: 'meeting',
-                emoji: '🎯',
-                name: 'Team Meeting',
-                description: 'A scenario focused on team collaboration and meeting outcomes.'
+                id: 'content-strategy',
+                emoji: '📝',
+                name: 'Content Strategy',
+                scenario: {
+                    situation: 'Developing a comprehensive content strategy for a growing business',
+                    description: 'Business seeks to establish thought leadership and increase market presence through content',
+                    context: 'Competitive market with increasing demand for high-quality, authoritative content',
+                    challenges: 'Limited resources, need for consistent quality, content distribution challenges',
+                    opportunities: 'Growing audience interest, emerging content platforms, partnership possibilities'
+                },
+                objective: {
+                    description: 'Create and implement a scalable content strategy that positions the business as an industry authority',
+                    alignment: 'Align content with business goals, audience needs, and market opportunities',
+                    measurable_outcomes: 'Increased engagement metrics, lead generation, audience growth targets'
+                }
             },
             {
-                id: 'presentation',
-                emoji: '🎯',
-                name: 'Client Presentation',
-                description: 'A scenario for preparing and delivering client presentations.'
+                id: 'market-expansion',
+                emoji: '🌐',
+                name: 'Market Expansion',
+                scenario: {
+                    situation: 'Planning expansion into new market segments or geographical regions',
+                    description: 'Organization looking to capture new market opportunities and diversify revenue streams',
+                    context: 'Changing market dynamics, emerging opportunities in adjacent markets',
+                    challenges: 'Market entry barriers, resource allocation, competitive landscape',
+                    opportunities: 'Untapped customer segments, technological advantages, strategic partnerships'
+                },
+                objective: {
+                    description: 'Successfully enter and establish presence in new market segments',
+                    alignment: 'Strategic market positioning, resource optimization, risk management',
+                    measurable_outcomes: 'Market share targets, revenue goals, customer acquisition metrics'
+                }
+            },
+            {
+                id: 'digital-transformation',
+                emoji: '💻',
+                name: 'Digital Transformation',
+                scenario: {
+                    situation: 'Implementing digital transformation initiatives across organization',
+                    description: 'Business modernizing operations and customer experience through digital technologies',
+                    context: 'Industry-wide digital adoption, changing customer expectations',
+                    challenges: 'Technical complexity, change management, skill gaps',
+                    opportunities: 'Operational efficiency, enhanced customer experience, data-driven insights'
+                },
+                objective: {
+                    description: 'Transform key business processes through digital technologies',
+                    alignment: 'Technology adoption roadmap, stakeholder engagement, capability building',
+                    measurable_outcomes: 'Process efficiency metrics, digital adoption rates, ROI targets'
+                }
+            },
+            {
+                id: 'customer-experience',
+                emoji: '🤝',
+                name: 'Customer Experience',
+                scenario: {
+                    situation: 'Enhancing customer experience across all touchpoints',
+                    description: 'Organization focusing on improving customer satisfaction and loyalty',
+                    context: 'Increasing customer expectations, competitive service landscape',
+                    challenges: 'Consistency across channels, personalization needs, feedback integration',
+                    opportunities: 'Customer loyalty programs, personalized experiences, service innovation'
+                },
+                objective: {
+                    description: 'Deliver exceptional customer experience that drives loyalty and advocacy',
+                    alignment: 'Customer journey optimization, service excellence, feedback loops',
+                    measurable_outcomes: 'Customer satisfaction scores, retention rates, advocacy metrics'
+                }
+            },
+            {
+                id: 'innovation-initiative',
+                emoji: '💡',
+                name: 'Innovation Initiative',
+                scenario: {
+                    situation: 'Launching new innovation initiatives to drive growth',
+                    description: 'Organization implementing innovation programs to maintain competitive advantage',
+                    context: 'Rapid technological change, evolving market needs',
+                    challenges: 'Innovation culture, resource constraints, risk management',
+                    opportunities: 'New product development, process improvements, market differentiation'
+                },
+                objective: {
+                    description: 'Foster innovation culture and deliver breakthrough solutions',
+                    alignment: 'Innovation framework, cross-functional collaboration, rapid experimentation',
+                    measurable_outcomes: 'Innovation pipeline metrics, implementation success rates, impact assessment'
+                }
             }
         ];
 
         // React Components
         const ScenarioCard = ({ scenario, onUpdate, onDelete }) => {
+            const updateField = (section, field, value) => {
+                const updatedScenario = {
+                    ...scenario,
+                    [section]: {
+                        ...scenario[section],
+                        [field]: value
+                    }
+                };
+                onUpdate(scenario.cardId, updatedScenario);
+            };
+
             return (
                 <div className="scenario-card">
                     <div className="scenario-header">
                         <span className="scenario-emoji">🎯</span>
                         <span className="scenario-title">SCENARIO CARD</span>
-                        <input 
-                            type="text" 
-                            className="scenario-name" 
-                            value={scenario.name} 
-                            onChange={(e) => onUpdate(scenario.cardId, { name: e.target.value })}
-                        />
                     </div>
-                    
-                    <textarea
-                        value={scenario.description}
-                        onChange={(e) => onUpdate(scenario.cardId, { description: e.target.value })}
-                        className="scenario-textarea"
-                        spellCheck="true"
-                        rows="6"
-                    />
-                    
+
+                    <div className="scenario-section">
+                        <div className="scenario-section-title">Scenario</div>
+                        
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Situation</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.scenario?.situation || ''}
+                                onChange={(e) => updateField('scenario', 'situation', e.target.value)}
+                                placeholder="Describe the current environment and challenges..."
+                            />
+                        </div>
+
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Description</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.scenario?.description || ''}
+                                onChange={(e) => updateField('scenario', 'description', e.target.value)}
+                                placeholder="List factors or conditions influencing the scenario..."
+                            />
+                        </div>
+
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Context</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.scenario?.context || ''}
+                                onChange={(e) => updateField('scenario', 'context', e.target.value)}
+                                placeholder="Key challenges or obstacles faced..."
+                            />
+                        </div>
+
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Challenges</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.scenario?.challenges || ''}
+                                onChange={(e) => updateField('scenario', 'challenges', e.target.value)}
+                                placeholder="List specific challenges faced in the scenario..."
+                            />
+                        </div>
+                    </div>
+
+                    <div className="scenario-section">
+                        <div className="scenario-section-title">Objective</div>
+                        
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Description</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.objective?.description || ''}
+                                onChange={(e) => updateField('objective', 'description', e.target.value)}
+                                placeholder="Description of the strategies to achieve the objectives..."
+                            />
+                        </div>
+
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Alignment</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.objective?.alignment || ''}
+                                onChange={(e) => updateField('objective', 'alignment', e.target.value)}
+                                placeholder="Specific tactics or actions to be implemented..."
+                            />
+                        </div>
+
+                        <div className="scenario-field">
+                            <div className="scenario-field-label">Measurable Outcomes</div>
+                            <textarea
+                                className="scenario-textarea"
+                                value={scenario.objective?.measurable_outcomes || ''}
+                                onChange={(e) => updateField('objective', 'measurable_outcomes', e.target.value)}
+                                placeholder="Plans for addressing potential risks or obstacles..."
+                            />
+                        </div>
+                    </div>
+
                     <button 
                         onClick={() => onDelete(scenario.cardId)}
                         className="btn btn-danger"
@@ -1808,11 +2104,14 @@
 
             const handleAddScenario = () => {
                 if (selectedScenario) {
-                    const scenario = SCENARIOS.find(s => s.id === selectedScenario);
-                    onAddScenario({
-                        ...scenario,
-                        cardId: Date.now()
-                    });
+                    const baseScenario = SCENARIOS.find(s => s.id === selectedScenario);
+                    const newScenario = {
+                        ...baseScenario,
+                        cardId: Date.now(),
+                        scenario: { ...baseScenario.scenario },
+                        objective: { ...baseScenario.objective }
+                    };
+                    onAddScenario(newScenario);
                     setSelectedScenario('');
                 }
             };
@@ -2406,6 +2705,7 @@
                             <div className="tab-content">
                                 {activeTab === 'settings' ? (
                                     <>
+                                        <h3 className="section-title">✨  Models</h3>
                                         <input
                                             type="text"
                                             placeholder="Enter OpenAI API Key"
@@ -2426,6 +2726,9 @@
                                             </select>
                                         </div>
 
+                                        <div className="section-separator"></div>
+
+                                        <h3 className="section-title">📚 Playgrounds</h3>
                                         <PlaygroundTray onLoadPlayground={loadPlayground} />
 
                                         <div className="agency-details">
@@ -2604,35 +2907,45 @@
 
                     <div className="content-area">
                         <div className="horizontal-scroll">
-                            {personaCards.map(persona => (
-                                <PersonaCard
-                                    key={persona.cardId}
-                                    persona={persona}
-                                    onUpdate={updatePersonaCard}
-                                    onDelete={deletePersonaCard}
-                                />
-                            ))}
-                            {scenarioCards.map(scenario => (
-                                <ScenarioCard
-                                    key={scenario.cardId}
-                                    scenario={scenario}
-                                    onUpdate={updateScenarioCard}
-                                    onDelete={deleteScenarioCard}
-                                />
-                            ))}
-                            {prompts.map(prompt => (
-                                <PromptCard
-                                    key={prompt.id}
-                                    prompt={prompt}
-                                    sourceOptions={prompts.filter(p => p.id < prompt.id)}
-                                    loading={loading[prompt.id]}
-                                    onUpdate={updatePrompt}
-                                    onDelete={deletePrompt}
-                                    onRun={runPrompt}
-                                    uploadedImages={uploadedImages}
-                                    uploadedDocuments={uploadedDocuments}
-                                />
-                            ))}
+                            {scenarioCards.length > 0 && (
+                                <div className="card-column">
+                                    {scenarioCards.map(scenario => (
+                                        <ScenarioCard
+                                            key={scenario.cardId}
+                                            scenario={scenario}
+                                            onUpdate={updateScenarioCard}
+                                            onDelete={deleteScenarioCard}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                            {personaCards.length > 0 && (
+                                <div className="card-column">
+                                    {personaCards.map(persona => (
+                                        <PersonaCard
+                                            key={persona.cardId}
+                                            persona={persona}
+                                            onUpdate={updatePersonaCard}
+                                            onDelete={deletePersonaCard}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                            <div className="prompt-container">
+                                {prompts.map(prompt => (
+                                    <PromptCard
+                                        key={prompt.id}
+                                        prompt={prompt}
+                                        sourceOptions={prompts.filter(p => p.id < prompt.id)}
+                                        loading={loading[prompt.id]}
+                                        onUpdate={updatePrompt}
+                                        onDelete={deletePrompt}
+                                        onRun={runPrompt}
+                                        uploadedImages={uploadedImages}
+                                        uploadedDocuments={uploadedDocuments}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
