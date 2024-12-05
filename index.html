@@ -2394,7 +2394,13 @@
                         }
 
                         const result = data.choices[0].message.content;
-                        updatePrompt(id, { result });
+                        
+                        // Update prompts while preserving all existing results
+                        setPrompts(currentPrompts => 
+                            currentPrompts.map(p => 
+                                p.id === id ? { ...p, result } : p
+                            )
+                        );
 
                     } catch (fetchError) {
                         // Check if it's a network error
