@@ -527,10 +527,9 @@
         }
 
         /* API Key Input styles */
-        .api-key-input,
-        .model-selector {
+        .api-key-input {
             width: 100%;
-            height: 45px;  /* Explicit height to match */
+            height: 45px;
             padding: 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: 0;
@@ -541,17 +540,12 @@
             outline: none;
             margin: 0.5rem 0;
             box-sizing: border-box;
-            -webkit-appearance: none;  /* Remove default styling */
+            -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
 
-        .api-key-input {
-            type: password;  /* Make the input secure */
-        }
-
-        .api-key-input:focus,
-        .model-selector:focus {
+        .api-key-input:focus {
             border-color: var(--accent-color);
             box-shadow: 0 0 0 2px rgba(226, 152, 99, 0.1);
         }
@@ -1186,7 +1180,6 @@
             color: var(--primary-bg);
             border-color: var(--accent-color);
         }
-
         /* In the App component, update the tab buttons and add instructions content */
         <div className="tab-buttons">
             <button 
@@ -1214,7 +1207,7 @@
                 <>
                     <h3 className="section-title"> Models</h3>
                     <input
-                        type="text"
+                        type="password"
                         placeholder="Enter OpenAI API Key"
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
@@ -1278,7 +1271,7 @@
                     </div>
                 </>
             ) : activeTab === 'content' ? (
-                <>
+                <div className="content-tab" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                     <input
                         type="file"
                         id="fileInput"
@@ -1295,36 +1288,36 @@
                         📎 Upload File or Image
                     </button>
 
-                    <DocumentTray 
-                        uploadedDocuments={uploadedDocuments} 
-                        onDeleteDocument={(id) => {
-                            setUploadedDocuments(current => current.filter(doc => doc.id !== id));
-                        }}
-                        onSelectDocument={(content) => setSourceContent(content)}
-                    />
+                    <div className="tray-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <DocumentTray 
+                            uploadedDocuments={uploadedDocuments} 
+                            onDeleteDocument={(id) => {
+                                setUploadedDocuments(current => current.filter(doc => doc.id !== id));
+                            }}
+                            onSelectDocument={(content) => setSourceContent(content)}
+                        />
 
-                    <textarea
-                        value={sourceContent}
-                        onChange={(e) => setSourceContent(e.target.value)}
-                        placeholder="Enter or upload source content..."
-                        style={{ 
-                            display: 'block',
-                            width: '100%',
-                            minHeight: '200px',
-                            margin: '1rem 0',
-                            padding: '0.75rem',
-                            borderRadius: '0',
-                            border: '1px solid var(--border-color)',
-                            background: 'var(--primary-bg)',
-                            color: 'var(--text-primary)',
-                            resize: 'vertical'
-                        }}
-                    />
+                        <textarea
+                            value={sourceContent}
+                            onChange={(e) => setSourceContent(e.target.value)}
+                            placeholder="Enter or upload source content..."
+                            style={{ 
+                                width: '100%',
+                                minHeight: '200px',
+                                padding: '0.75rem',
+                                borderRadius: '0',
+                                border: '1px solid var(--border-color)',
+                                background: 'var(--primary-bg)',
+                                color: 'var(--text-primary)',
+                                resize: 'vertical'
+                            }}
+                        />
 
-                    <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
-                    <PersonaTray onAddPersona={addPersonaCard} />
-                    <ScenarioTray onAddScenario={addScenarioCard} />
-                </>
+                        <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
+                        <PersonaTray onAddPersona={addPersonaCard} />
+                        <ScenarioTray onAddScenario={addScenarioCard} />
+                    </div>
+                </div>
             ) : (
                 <div className="instructions-content">
                     <div className="instructions-section">
@@ -1393,259 +1386,339 @@
             )}
         </div>
 
-        /* Add these styles in the <style> section */
+        {error && <div className="error">{error}</div>}
+        
+        {activeTab === 'content' && (
+            <div className="button-bar">
+                <button onClick={addPrompt} className="btn btn-agency">
+                    ✨ Add Prompt Card
+                </button>
+                <button onClick={runAllPrompts} className="btn btn-agency">
+                    🚀 Run All
+                </button>
+                <button onClick={exportContent} className="btn btn-agency">
+                    📤 Export Content
+                </button>
+            </div>
+        )}
+    </div>
 
-        .playground-tray {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 0;
-        }
+    {/* Add these styles in the <style> section */
 
-        .playground-selector-container {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
+    .playground-tray {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--secondary-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+    }
+    .playground-selector-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
 
-        .playground-selector {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0;
-            background: var(--primary-bg);
-            color: var(--text-primary);
-        }
+    .playground-selector {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        font-size: 0.875rem;
+    }
 
-        .add-playground-btn {
-            background: var(--accent-color);
-            color: var(--primary-bg);
-            border: none;
-            border-radius: 0;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
+    .add-playground-btn {
+        background: var(--accent-color);
+        color: var(--primary-bg);
+        border: none;
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 1.25rem;
+        line-height: 1;
+    }
 
-        .add-playground-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    .add-playground-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 
-        .add-playground-btn:hover:not(:disabled) {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
+    .add-playground-btn:hover:not(:disabled) {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
 
-        .section-separator {
-            height: 1px;
-            background: var(--border-color);
-            margin: 1.5rem 0;
-            width: 100%;
-        }
+    .section-separator {
+        height: 1px;
+        background: var(--border-color);
+        margin: 1.5rem 0;
+        width: 100%;
+    }
 
-        .section-title {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    .section-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-        /* Add new styles for scenario fields */
-        .scenario-section {
-            margin-bottom: 1.5rem;
-        }
+    /* Add new styles for scenario fields */
+    .scenario-section {
+        margin-bottom: 1.5rem;
+    }
 
-        .scenario-section-title {
-            font-weight: 500;
-            color: var(--accent-color);
-            margin-bottom: 0.75rem;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-        }
+    .scenario-section-title {
+        font-weight: 500;
+        color: var(--accent-color);
+        margin-bottom: 0.75rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+    }
 
-        .scenario-field {
-            margin-bottom: 1rem;
-        }
+    .scenario-field {
+        margin-bottom: 1rem;
+    }
 
-        .scenario-field-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-            text-transform: capitalize;
-        }
+    .scenario-field-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+        text-transform: capitalize;
+    }
 
-        .scenario-textarea {
-            width: 100%;
-            min-height: 60px;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0;
-            resize: vertical;
-            outline: none;
-            font-family: inherit;
-            background: var(--primary-bg);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            box-sizing: border-box;
-        }
+    .scenario-textarea {
+        width: 100%;
+        min-height: 60px;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+        resize: vertical;
+        outline: none;
+        font-family: inherit;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        font-size: 0.875rem;
+        box-sizing: border-box;
+    }
 
-        .scenario-textarea:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
-        }
+    .scenario-textarea:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
+    }
 
-        /* Add these styles for the slider toggle */
-        .source-mode-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            font-size: 0.65rem;  /* Reduced from 0.75rem */
-            margin-top: 0.25rem;  /* Reduced space from text area above */
-            margin-bottom: 1rem;  /* Space before next section */
-        }
+    /* Add these styles for the slider toggle */
+    .source-mode-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;  /* Reduced from 0.75rem */
+        font-size: 0.65rem;  /* Reduced from 0.75rem */
+        margin-top: 0.25rem;  /* Reduced space from text area above */
+        margin-bottom: 1rem;  /* Space before next section */
+    }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 20px;  /* Reduced from 28px */
-            height: 12px;  /* Reduced from 16px */
-        }
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 20px;  /* Reduced from 28px */
+        height: 12px;  /* Reduced from 16px */
+    }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--border-color);
-            transition: .4s;
-            border-radius: 34px;
-        }
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border-color);
+        transition: .4s;
+        border-radius: 34px;
+    }
 
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 8px;  /* Reduced from 12px */
-            width: 8px;   /* Reduced from 12px */
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 8px;  /* Reduced from 12px */
+        width: 8px;   /* Reduced from 12px */
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
 
-        .toggle-switch input:checked + .toggle-slider {
-            background-color: var(--accent-color);
-        }
+    .toggle-switch input:checked + .toggle-slider {
+        background-color: var(--accent-color);
+    }
 
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(8px);  /* Reduced from 12px */
-        }
+    .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(8px);  /* Reduced from 12px */
+    }
 
-        .toggle-switch:hover .toggle-slider {
-            background-color: var(--accent-color);
-            opacity: 0.8;
-        }
+    .toggle-switch:hover .toggle-slider {
+        background-color: var(--accent-color);
+        opacity: 0.8;
+    }
 
-        .toggle-switch input:checked:hover + .toggle-slider {
-            opacity: 0.8;
-        }
+    .toggle-switch input:checked:hover + .toggle-slider {
+        opacity: 0.8;
+    }
 
-        .source-mode-toggle span {
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }
+    .source-mode-toggle span {
+        font-size: 0.875rem;
+        color: var(--text-primary);
+    }
 
-        .source-mode-toggle span:first-child {
-            font-weight: 500;
-        }
+    .source-mode-toggle span:first-child {
+        font-weight: 500;
+    }
 
-        .source-selector {
-            margin-bottom: 1rem;
-        }
+    .source-selector {
+        margin-bottom: 1rem;
+    }
 
-        .source-selector option {
-            padding: 0.5rem 0.5rem 0.5rem 2rem;
-            cursor: pointer;
-            position: relative;
-        }
+    .source-selector option {
+        padding: 0.5rem 0.5rem 0.5rem 2rem;
+        cursor: pointer;
+        position: relative;
+    }
 
-        .source-selector option:checked,
-        .source-selector option:hover:checked,
-        .source-selector option[selected] {
-            background: var(--accent-color) !important;
-            color: white !important;
-            -webkit-appearance: none;
-            appearance: none;
-        }
+    .source-selector option:checked,
+    .source-selector option:hover:checked,
+    .source-selector option[selected] {
+        background: var(--accent-color) !important;
+        color: white !important;
+        -webkit-appearance: none;
+        appearance: none;
+    }
 
-        .source-selector option:checked::before,
-        .source-selector option[selected]::before {
-            content: "✓";
-            position: absolute;
-            left: 0.5rem;
-            color: white;
-            font-weight: bold;
-        }
+    .source-selector option:checked::before,
+    .source-selector option[selected]::before {
+        content: "✓";
+        position: absolute;
+        left: 0.5rem;
+        color: white;
+        font-weight: bold;
+    }
 
-        .source-selector option:hover {
-            background: rgba(226, 152, 99, 0.1);
-        }
+    .source-selector option:hover {
+        background: rgba(226, 152, 99, 0.1);
+    }
 
-        .persona-selector {
-            margin-bottom: 1rem;
-        }
+    .persona-selector {
+        margin-bottom: 1rem;
+    }
 
-        .persona-selector option {
-            padding: 0.5rem 0.5rem 0.5rem 2rem;
-            cursor: pointer;
-            position: relative;
-        }
+    .persona-selector option {
+        padding: 0.5rem 0.5rem 0.5rem 2rem;
+        cursor: pointer;
+        position: relative;
+    }
 
-        .persona-selector option:checked,
-        .persona-selector option:hover:checked,
-        .persona-selector option[selected] {
-            background: var(--accent-color) !important;
-            color: white !important;
-            -webkit-appearance: none;
-            appearance: none;
-        }
+    .persona-selector option:checked,
+    .persona-selector option:hover:checked,
+    .persona-selector option[selected] {
+        background: var(--accent-color) !important;
+        color: white !important;
+        -webkit-appearance: none;
+        appearance: none;
+    }
 
-        .persona-selector option:checked::before,
-        .persona-selector option[selected]::before {
-            content: "✓";
-            position: absolute;
-            left: 0.5rem;
-            color: white;
-            font-weight: bold;
-        }
+    .persona-selector option:checked::before,
+    .persona-selector option[selected]::before {
+        content: "✓";
+        position: absolute;
+        left: 0.5rem;
+        color: white;
+        font-weight: bold;
+    }
 
-        .persona-selector option:hover {
-            background: rgba(226, 152, 99, 0.1);
-        }
+    .persona-selector option:hover {
+        background: rgba(226, 152, 99, 0.1);
+    }
 
-        .component-divider {
-            height: 1px;
-            background-color: var(--border-color);
-            margin: 1rem 0;
-            opacity: 0.5;
-        }
-    </style>
+    .component-divider {
+        height: 1px;
+        background-color: var(--border-color);
+        margin: 1rem 0;
+        opacity: 0.5;
+    }
+
+    /* Prompt Selector styles */
+    .prompt-tray {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--secondary-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+    }
+
+    .prompt-selector-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .prompt-selector {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+    }
+
+    .add-prompt-btn {
+        background: var(--accent-color);
+        color: var(--primary-bg);
+        border: none;
+        border-radius: 0;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .add-prompt-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .add-prompt-btn:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    /* Example of a properly formatted CSS rule */
+    .example-class {
+        color: red; /* Ensure each property ends with a semicolon */
+    }
+
+    /* Remove any empty rulesets like this */
+    /* .empty-class { } */
+
+    /* Ensure all rules have opening and closing curly braces */
+    .another-class {
+        background-color: blue;
+    }
+
+    /* Check for any misplaced or missing curly braces */
+    .yet-another-class {
+        margin: 10px;
+    }
+</style>
 </head>
 <body>
     <div id="particles-js"></div>
@@ -2063,21 +2136,6 @@
                                 ))}
                             </select>
 
-                            <div className="source-mode-toggle">
-                                <label className="toggle-switch">
-                                    <input
-                                        type="checkbox"
-                                        checked={prompt.separateResults}
-                                        onChange={(e) => onUpdate(prompt.id, { 
-                                            separateResults: e.target.checked,
-                                            results: {} 
-                                        })}
-                                    />
-                                    <span className="toggle-slider"></span>
-                                </label>
-                                <span>{prompt.separateResults ? 'Separate Results' : 'Combined Results'}</span>
-                            </div>
-                            
                             <div className="persona-label">SELECT PERSONAS</div>
                             <select 
                                 multiple
@@ -2100,21 +2158,6 @@
                                     </option>
                                 ))}
                             </select>
-
-                            <div className="source-mode-toggle">
-                                <label className="toggle-switch">
-                                    <input
-                                        type="checkbox"
-                                        checked={prompt.separatePersonas}
-                                        onChange={(e) => onUpdate(prompt.id, { 
-                                            separatePersonas: e.target.checked,
-                                            personaResults: {} 
-                                        })}
-                                    />
-                                    <span className="toggle-slider"></span>
-                                </label>
-                                <span>{prompt.separatePersonas ? 'Separate Personas' : 'Combined Personas'}</span>
-                            </div>
                         </>
                     )}
             
@@ -2530,13 +2573,11 @@
                 title: '',
                 text: '', 
                 result: '',
-                results: {}, // Add this for separate results
                 source: 'SOURCE',
                 sources: ['SOURCE'],
                 sourceType: 'text',
                 selectedImage: null,
-                separateResults: false, // Add this for the toggle state
-                selectedPersonas: [] // Add this for persona selection
+                selectedPersonas: []
             }]);
             const [loading, setLoading] = React.useState({});
             const [error, setError] = React.useState('');
@@ -2608,12 +2649,10 @@
                     title: '',
                     text: '',
                     result: '',
-                    results: {},
                     source: 'SOURCE',
                     sources: ['SOURCE'],
                     sourceType: 'text',
                     selectedImage: null,
-                    separateResults: false,
                     selectedPersonas: []
                 };
                 setPrompts([...prompts, newPrompt]);
@@ -2628,12 +2667,11 @@
                     p.id === id ? {...p, ...changes} : p
                 ));
             };
-            const getPromptSource = (promptId, singleSource = null) => {
+            const getPromptSource = (promptId) => {
                 const prompt = prompts.find(p => p.id === promptId);
                 if (!prompt) return '';
                 
-                const sources = singleSource ? [singleSource] : 
-                    (Array.isArray(prompt.sources) ? prompt.sources : [prompt.source]);
+                const sources = Array.isArray(prompt.sources) ? prompt.sources : [prompt.source];
                 
                 const sourceContents = sources.map(source => {
                     if (!source) return '';
@@ -2656,9 +2694,21 @@
                 return sourceContents.join('\n\n=== SOURCE SEPARATOR ===\n\n');
             };
 
-            const getPersonaContext = () => {
-                const fromPersonas = personaCards.filter(p => p.direction === 'from');
-                const toPersonas = personaCards.filter(p => p.direction === 'to');
+            const getPersonaContext = (selectedPersonas) => {
+                if (!selectedPersonas || selectedPersonas.length === 0) {
+                    return '\nRespond in a professional, general audience-appropriate tone.';
+                }
+
+                const personas = selectedPersonas.map(id => 
+                    personaCards.find(p => p.cardId === parseInt(id))
+                ).filter(Boolean);
+
+                if (personas.length === 0) {
+                    return '\nRespond in a professional, general audience-appropriate tone.';
+                }
+
+                const fromPersonas = personas.filter(p => p.direction === 'from');
+                const toPersonas = personas.filter(p => p.direction === 'to');
                 
                 let context = '';
                 
@@ -2687,45 +2737,9 @@
                 try {
                     const prompt = prompts.find(p => p.id === id);
                     
-                    if (prompt.separateResults) {
-                        // Run prompt for each source separately
-                        const results = {};
-                        for (const source of prompt.sources) {
-                            const sourceText = getPromptSource(id, source);
-                            const result = await runSinglePrompt(prompt, sourceText);
-                            results[source] = result;
-                        }
-                        setPrompts(currentPrompts => 
-                            currentPrompts.map(p => 
-                                p.id === id ? { ...p, results } : p
-                            )
-                        );
-                    } else {
-                        // Run prompt with combined sources
-                        const sourceText = getPromptSource(id);
-                        const result = await runSinglePrompt(prompt, sourceText);
-                        setPrompts(currentPrompts => 
-                            currentPrompts.map(p => 
-                                p.id === id ? { ...p, result } : p
-                            )
-                        );
-                    }
-                } catch (err) {
-                    console.error('API Error:', err);
-                    setError(`Error: ${err.message}`);
-                } finally {
-                    setLoading(prev => ({ ...prev, [id]: false }));
-                }
-            };
-
-            // Helper function to run a single prompt
-            const runSinglePrompt = async (prompt, sourceText) => {
-                let requestBody;
-                if (prompt.sourceType === 'image') {
-                    // ... existing image prompt logic ...
-                } else {
-                    const personaContext = getPersonaContext();
-                    requestBody = {
+                    const sourceText = getPromptSource(id);
+                    const personaContext = getPersonaContext(prompt.selectedPersonas);
+                    const requestBody = {
                         model: model,
                         messages: [
                             {
@@ -2739,25 +2753,35 @@
                         ],
                         max_tokens: 1000
                     };
+
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey.trim()}`,
+                            'OpenAI-Beta': 'assistants=v1'
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const result = data.choices[0].message.content;
+                    setPrompts(currentPrompts => 
+                        currentPrompts.map(p => 
+                            p.id === id ? { ...p, result } : p
+                        )
+                    );
+                } catch (err) {
+                    console.error('API Error:', err);
+                    setError(`Error: ${err.message}`);
+                } finally {
+                    setLoading(prev => ({ ...prev, [id]: false }));
                 }
-
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey.trim()}`,
-                        'OpenAI-Beta': 'assistants=v1'
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                return data.choices[0].message.content;
             };
 
             const runAllPrompts = async () => {
@@ -2988,26 +3012,41 @@
                 };
 
                 return (
-                    <div className="playground-tray">
-                        <div className="playground-selector-container">
+                    <div className="persona-tray" style={{ width: '100%', boxSizing: 'border-box' }}>
+                        <div className="persona-selector-container" style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                             <select 
                                 value={selectedPlayground}
                                 onChange={(e) => setSelectedPlayground(e.target.value)}
-                                className="playground-selector"
+                                className="persona-selector"
+                                style={{ 
+                                    flex: '1',
+                                    maxWidth: 'calc(100% - 45px)', // Leave space for the button
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                }}
                             >
-                                <option value="">Select Playground Template...</option>
+                                <option value="">🎮 Select Playground...</option>
                                 {PLAYGROUNDS.map(playground => (
                                     <option key={playground.id} value={playground.id}>
-                                        {playground.name}
+                                        {playground.name} - {playground.description}
                                     </option>
                                 ))}
                             </select>
                             <button 
                                 onClick={handleLoadPlayground}
-                                className="add-playground-btn"
+                                className="add-persona-btn"
                                 disabled={!selectedPlayground}
+                                style={{ 
+                                    minWidth: '35px',
+                                    height: '35px',
+                                    padding: '0',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
                             >
-                                Load
+                                +
                             </button>
                         </div>
                     </div>
@@ -3024,7 +3063,6 @@
             return (
                 <div className="container">
                     <ProcessingIndicator isVisible={isProcessingFile} />
-                    
                     
                     <div className="fixed-section">
                         <div className="tabs-container">
@@ -3050,12 +3088,12 @@
 
                             </div>
 
-                            <div className="tab-content">
-                                {activeTab === 'settings' ? (
+                            <div className="tab-content" style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'auto' }}>
+                                {activeTab === 'settings' && (
                                     <>
                                         <h3 className="section-title">✨  Models</h3>
                                         <input
-                                            type="text"
+                                            type="password"
                                             placeholder="Enter OpenAI API Key"
                                             value={apiKey}
                                             onChange={(e) => setApiKey(e.target.value)}
@@ -3118,8 +3156,10 @@
                                             </button>
                                         </div>
                                     </>
-                                ) : activeTab === 'content' ? (
-                                    <>
+                                )}
+                                
+                                {activeTab === 'content' && (
+                                    <div className="content-tab" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                                         <input
                                             type="file"
                                             id="fileInput"
@@ -3136,37 +3176,39 @@
                                             📎 Upload File or Image
                                         </button>
 
-                                        <DocumentTray 
-                                            uploadedDocuments={uploadedDocuments} 
-                                            onDeleteDocument={(id) => {
-                                                setUploadedDocuments(current => current.filter(doc => doc.id !== id));
-                                            }}
-                                            onSelectDocument={(content) => setSourceContent(content)}
-                                        />
+                                        <div className="tray-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                            <DocumentTray 
+                                                uploadedDocuments={uploadedDocuments} 
+                                                onDeleteDocument={(id) => {
+                                                    setUploadedDocuments(current => current.filter(doc => doc.id !== id));
+                                                }}
+                                                onSelectDocument={(content) => setSourceContent(content)}
+                                            />
 
-                                        <textarea
-                                            value={sourceContent}
-                                            onChange={(e) => setSourceContent(e.target.value)}
-                                            placeholder="Enter or upload source content..."
-                                            style={{ 
-                                                display: 'block',
-                                                width: '100%',
-                                                minHeight: '200px',
-                                                margin: '1rem 0',
-                                                padding: '0.75rem',
-                                                borderRadius: '0',
-                                                border: '1px solid var(--border-color)',
-                                                background: 'var(--primary-bg)',
-                                                color: 'var(--text-primary)',
-                                                resize: 'vertical'
-                                            }}
-                                        />
+                                            <textarea
+                                                value={sourceContent}
+                                                onChange={(e) => setSourceContent(e.target.value)}
+                                                placeholder="Enter or upload source content..."
+                                                style={{ 
+                                                    width: '100%',
+                                                    minHeight: '200px',
+                                                    padding: '0.75rem',
+                                                    borderRadius: '0',
+                                                    border: '1px solid var(--border-color)',
+                                                    background: 'var(--primary-bg)',
+                                                    color: 'var(--text-primary)',
+                                                    resize: 'vertical'
+                                                }}
+                                            />
 
-                                        <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
-                                        <PersonaTray onAddPersona={addPersonaCard} />
-                                        <ScenarioTray onAddScenario={addScenarioCard} />
-                                    </>
-                                ) : (
+                                            <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
+                                            <PersonaTray onAddPersona={addPersonaCard} />
+                                            <ScenarioTray onAddScenario={addScenarioCard} />
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {activeTab === 'welcome' && (
                                     <div className="instructions-content">
                                         <div className="instructions-section">
                                             <h3> Getting Started</h3>
@@ -3232,24 +3274,23 @@
                                         </div>
                                     </div>
                                 )}
-                            </div>
 
-                            {error && <div className="error">{error}</div>}
-                            
-                            {/* Only show button bar in content/play tab */}
-                            {activeTab === 'content' && (
-                                <div className="button-bar">
-                                    <button onClick={addPrompt} className="btn btn-agency">
-                                        ✨ Add Prompt Card
-                                    </button>
-                                    <button onClick={runAllPrompts} className="btn btn-agency">
-                                        🚀 Run All
-                                    </button>
-                                    <button onClick={exportContent} className="btn btn-agency">
-                                        📤 Export Content
-                                    </button>
-                                </div>
-                            )}
+                                {error && <div className="error">{error}</div>}
+                                
+                                {activeTab === 'content' && (
+                                    <div className="button-bar">
+                                        <button onClick={addPrompt} className="btn btn-agency">
+                                            ✨ Add Prompt Card
+                                        </button>
+                                        <button onClick={runAllPrompts} className="btn btn-agency">
+                                            🚀 Run All
+                                        </button>
+                                        <button onClick={exportContent} className="btn btn-agency">
+                                            📤 Export Content
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
