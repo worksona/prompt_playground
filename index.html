@@ -1127,6 +1127,30 @@
                             className="agency-description-textarea"
                         />
                     </div>
+
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                        <input
+                            type="file"
+                            id="loadAgencyInput"
+                            className="hidden"
+                            accept=".json"
+                            onChange={loadAgency}
+                        />
+                        <button 
+                            onClick={() => document.getElementById('loadAgencyInput').click()} 
+                            className="btn btn-agency"
+                            style={{ flex: 1 }}
+                        >
+                            📂 Load Playground
+                        </button>
+                        <button 
+                            onClick={exportAgency} 
+                            className="btn btn-agency"
+                            style={{ flex: 1 }}
+                        >
+                            💾 Export Playground
+                        </button>
+                    </div>
                 </>
             ) : activeTab === 'content' ? (
                 <>
@@ -1469,7 +1493,7 @@
                 <div className="persona-card">
                     <div className="persona-header">
                         <span className="persona-emoji">{persona.emoji}</span>
-                        <span className="persona-title">PERSONA CARD</span>
+                        <span className="persona-title">AUDIENCE PERSONA</span>
                         <input 
                             type="text" 
                             className="persona-name" 
@@ -1477,15 +1501,6 @@
                             onChange={(e) => onUpdate(persona.cardId, { name: e.target.value })}
                         />
                     </div>
-                    
-                    <select 
-                        value={persona.direction}
-                        onChange={(e) => onUpdate(persona.cardId, { direction: e.target.value })}
-                        className="direction-selector"
-                    >
-                        <option value="from">AUTHOR</option>
-                        <option value="to">AUDIENCE</option>
-                    </select>
                     
                     <textarea
                         value={persona.description}
@@ -1513,8 +1528,7 @@
                     const persona = PERSONAS.find(p => p.id === selectedPersona);
                     onAddPersona({
                         ...persona,
-                        cardId: Date.now(),
-                        direction: 'from'
+                        cardId: Date.now()
                     });
                     setSelectedPersona('');
                 }
@@ -1528,7 +1542,7 @@
                             onChange={(e) => setSelectedPersona(e.target.value)}
                             className="persona-selector"
                         >
-                            <option value="">Select Persona...</option>
+                            <option value="">👥 Select Audience...</option>
                             {PERSONAS.map(persona => (
                                 <option key={persona.id} value={persona.id}>
                                     {persona.emoji} {persona.name}
@@ -1744,11 +1758,13 @@
         const SCENARIOS = [
             {
                 id: 'meeting',
+                emoji: '🎯',
                 name: 'Team Meeting',
                 description: 'A scenario focused on team collaboration and meeting outcomes.'
             },
             {
                 id: 'presentation',
+                emoji: '🎯',
                 name: 'Client Presentation',
                 description: 'A scenario for preparing and delivering client presentations.'
             }
@@ -1809,10 +1825,10 @@
                             onChange={(e) => setSelectedScenario(e.target.value)}
                             className="scenario-selector"
                         >
-                            <option value="">Select Scenario...</option>
+                            <option value="">🎯 Select Scenario...</option>
                             {SCENARIOS.map(scenario => (
                                 <option key={scenario.id} value={scenario.id}>
-                                    {scenario.name}
+                                    {scenario.emoji} {scenario.name}
                                 </option>
                             ))}
                         </select>
@@ -1943,18 +1959,27 @@
                 
                 // Map each source to its content and filter out any empty sources
                 const sourceContents = sources.map(source => {
+                    if (!source) return '';  // Handle undefined/null sources
+                    
                     if (source === 'SOURCE') {
                         return sourceContent || '';
                     }
+                    
                     if (source.startsWith('DOC-')) {
-                        const docId = source.replace('DOC-', '');
-                        const document = uploadedDocuments.find(doc => doc.id === parseFloat(docId));
+                        const docId = parseFloat(source.replace('DOC-', ''));
+                        const document = uploadedDocuments.find(doc => doc.id === docId);
                         return document ? document.content : '';
                     }
+                    
                     const sourcePromptId = parseInt(source.replace('RESULT', ''));
                     const sourcePrompt = prompts.find(p => p.id === sourcePromptId);
                     return sourcePrompt ? sourcePrompt.result : '';
                 }).filter(content => content.trim() !== '');
+
+                // If no valid sources found, return explicit message
+                if (sourceContents.length === 0) {
+                    return 'No source content provided. Please select a valid source.';
+                }
 
                 // Combine all source contents with clear separation
                 return sourceContents.join('\n\n=== SOURCE SEPARATOR ===\n\n');
@@ -1997,7 +2022,7 @@
                         if (!selectedImage) throw new Error('No image selected');
 
                         requestBody = {
-                            model: model,
+                            model: "gpt-4-vision-preview",
                             messages: [
                                 {
                                     role: "user",
@@ -2019,6 +2044,12 @@
                         };
                     } else {
                         const sourceText = getPromptSource(id);
+                        
+                        // Check if source is valid
+                        if (sourceText === 'No source content provided. Please select a valid source.') {
+                            throw new Error('Please select a valid source content before running the prompt.');
+                        }
+                        
                         const personaContext = getPersonaContext();
                         requestBody = {
                             model: model,
@@ -2031,33 +2062,52 @@
                                     role: "user", 
                                     content: prompt.text 
                                 }
-                            ]
+                            ],
+                            max_tokens: 1000
                         };
                     }
 
-                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify(requestBody)
-                    });
+                    try {
+                        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                            method: 'POST',
+                            mode: 'cors', // Add CORS mode
+                            cache: 'no-cache', // Disable caching
+                            credentials: 'same-origin',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${apiKey.trim()}`,
+                                'OpenAI-Beta': 'assistants=v1'
+                            },
+                            redirect: 'follow',
+                            referrerPolicy: 'no-referrer',
+                            body: JSON.stringify(requestBody)
+                        });
 
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        if (data.error.code === 'model_not_found' || data.error.message.includes('deprecated')) {
-                            throw new Error('This model has been deprecated. Please select a different model from the dropdown.');
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
                         }
-                        throw new Error(data.error.message);
+
+                        const data = await response.json();
+                        
+                        if (data.error) {
+                            throw new Error(data.error.message || 'Unknown error occurred');
+                        }
+
+                        const result = data.choices[0].message.content;
+                        updatePrompt(id, { result });
+
+                    } catch (fetchError) {
+                        // Check if it's a network error
+                        if (fetchError.name === 'TypeError' && fetchError.message === 'Failed to fetch') {
+                            throw new Error('Network error: Please check your internet connection or try using a VPN');
+                        }
+                        throw fetchError;
                     }
 
-                    const result = data.choices[0].message.content;
-                    updatePrompt(id, { result });
-
                 } catch (err) {
-                    setError(err.message || 'Error running prompt');
+                    console.error('API Error:', err);
+                    setError(`Error: ${err.message}`);
                 } finally {
                     setLoading(prev => ({ ...prev, [id]: false }));
                 }
@@ -2179,9 +2229,155 @@
                 setScenarioCards(scenarioCards.filter(s => s.cardId !== id));
             };
 
+            // Add this constant near your other constants (PERSONAS, SCENARIOS)
+            const PLAYGROUNDS = [
+                {
+                    id: 'content-analysis',
+                    name: 'Content Analysis',
+                    description: 'Analyze content tone, style, and audience targeting',
+                    config: {
+                        agencyName: 'Content Analysis Playground',
+                        agencyDescription: 'Analyze and optimize content for different platforms and audiences',
+                        prompts: [{
+                            id: 1,
+                            title: 'Content Analysis',
+                            text: 'Analyze this content and provide key insights about:\n1. Tone and style\n2. Target audience\n3. Key messages\n4. Areas for improvement',
+                            result: '',
+                            source: 'SOURCE',
+                            sources: ['SOURCE'],
+                            sourceType: 'text',
+                            selectedImage: null
+                        }]
+                    }
+                },
+                {
+                    id: 'social-media',
+                    name: 'Social Media',
+                    description: 'Create and optimize social media content',
+                    config: {
+                        agencyName: 'Social Media Playground',
+                        agencyDescription: 'Create engaging social media content across platforms',
+                        prompts: [{
+                            id: 2,
+                            title: 'Social Post Generator',
+                            text: 'Create a series of social media posts optimized for engagement. Include variations for:\n1. LinkedIn\n2. Twitter\n3. Instagram',
+                            result: '',
+                            source: 'SOURCE',
+                            sources: ['SOURCE'],
+                            sourceType: 'text',
+                            selectedImage: null
+                        }]
+                    }
+                },
+                {
+                    id: 'blog-writing',
+                    name: 'Blog Writing',
+                    description: 'Generate blog content and outlines',
+                    config: {
+                        agencyName: 'Blog Writing Playground',
+                        agencyDescription: 'Create engaging blog content and structured outlines',
+                        prompts: [{
+                            id: 3,
+                            title: 'Blog Outline',
+                            text: 'Create a detailed blog outline including:\n1. Title options\n2. Key sections\n3. Main points for each section\n4. Suggested examples or case studies',
+                            result: '',
+                            source: 'SOURCE',
+                            sources: ['SOURCE'],
+                            sourceType: 'text',
+                            selectedImage: null
+                        }]
+                    }
+                },
+                {
+                    id: 'email-marketing',
+                    name: 'Email Marketing',
+                    description: 'Create email marketing campaigns',
+                    config: {
+                        agencyName: 'Email Marketing Playground',
+                        agencyDescription: 'Design effective email marketing campaigns',
+                        prompts: [{
+                            id: 4,
+                            title: 'Email Sequence',
+                            text: 'Generate an email marketing sequence including:\n1. Subject lines\n2. Email body content\n3. Call-to-action suggestions\n4. Follow-up variations',
+                            result: '',
+                            source: 'SOURCE',
+                            sources: ['SOURCE'],
+                            sourceType: 'text',
+                            selectedImage: null
+                        }]
+                    }
+                },
+                {
+                    id: 'product-description',
+                    name: 'Product Description',
+                    description: 'Write compelling product descriptions',
+                    config: {
+                        agencyName: 'Product Description Playground',
+                        agencyDescription: 'Create engaging product descriptions and features',
+                        prompts: [{
+                            id: 5,
+                            title: 'Product Description',
+                            text: 'Create a compelling product description including:\n1. Main benefits\n2. Key features\n3. Technical specifications\n4. Use cases\n5. Target audience',
+                            result: '',
+                            source: 'SOURCE',
+                            sources: ['SOURCE'],
+                            sourceType: 'text',
+                            selectedImage: null
+                        }]
+                    }
+                }
+            ];
+
+            // Add the PlaygroundTray component
+            const PlaygroundTray = ({ onLoadPlayground }) => {
+                const [selectedPlayground, setSelectedPlayground] = React.useState('');
+
+                const handleLoadPlayground = () => {
+                    if (selectedPlayground) {
+                        const playground = PLAYGROUNDS.find(p => p.id === selectedPlayground);
+                        onLoadPlayground(playground.config);
+                        setSelectedPlayground('');
+                    }
+                };
+
+                return (
+                    <div className="playground-tray">
+                        <div className="playground-selector-container">
+                            <select 
+                                value={selectedPlayground}
+                                onChange={(e) => setSelectedPlayground(e.target.value)}
+                                className="playground-selector"
+                            >
+                                <option value="">Select Playground Template...</option>
+                                {PLAYGROUNDS.map(playground => (
+                                    <option key={playground.id} value={playground.id}>
+                                        {playground.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <button 
+                                onClick={handleLoadPlayground}
+                                className="add-playground-btn"
+                                disabled={!selectedPlayground}
+                            >
+                                Load
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            // In your App component, add the loadPlayground function
+            const loadPlayground = (config) => {
+                setAgencyName(config.agencyName);
+                setAgencyDescription(config.agencyDescription);
+                setPrompts(config.prompts);
+            };
+
             return (
                 <div className="container">
                     <ProcessingIndicator isVisible={isProcessingFile} />
+                    
                     
                     <div className="fixed-section">
                         <div className="tabs-container">
@@ -2192,18 +2388,19 @@
                                 >
                                     👋 Welcome
                                 </button>
+                                                                <button 
+                                    className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('settings')}
+                                >
+                                    ⚙️ Settings
+                                </button>
                                 <button 
                                     className={`tab-button ${activeTab === 'content' ? 'active' : ''}`}
                                     onClick={() => setActiveTab('content')}
                                 >
                                     🎮 Play
                                 </button>
-                                <button 
-                                    className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`}
-                                    onClick={() => setActiveTab('settings')}
-                                >
-                                    ⚙️ Settings
-                                </button>
+
                             </div>
 
                             <div className="tab-content">
@@ -2229,6 +2426,8 @@
                                             </select>
                                         </div>
 
+                                        <PlaygroundTray onLoadPlayground={loadPlayground} />
+
                                         <div className="agency-details">
                                             <textarea
                                                 value={agencyName}
@@ -2242,6 +2441,30 @@
                                                 placeholder="Enter Playground Description..."
                                                 className="agency-description-textarea"
                                             />
+                                        </div>
+
+                                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                                            <input
+                                                type="file"
+                                                id="loadAgencyInput"
+                                                className="hidden"
+                                                accept=".json"
+                                                onChange={loadAgency}
+                                            />
+                                            <button 
+                                                onClick={() => document.getElementById('loadAgencyInput').click()} 
+                                                className="btn btn-agency"
+                                                style={{ flex: 1 }}
+                                            >
+                                                📂 Import Playground
+                                            </button>
+                                            <button 
+                                                onClick={exportAgency} 
+                                                className="btn btn-agency"
+                                                style={{ flex: 1 }}
+                                            >
+                                                💾 Export Playground
+                                            </button>
                                         </div>
                                     </>
                                 ) : activeTab === 'content' ? (
@@ -2362,33 +2585,20 @@
 
                             {error && <div className="error">{error}</div>}
                             
-                            <div className="button-bar">
-                                <button onClick={addPrompt} className="btn btn-agency">
-                                    ✨ Add Prompt
-                                </button>
-                                <button onClick={runAllPrompts} className="btn btn-agency">
-                                    🚀 Run All
-                                </button>
-                                <input
-                                    type="file"
-                                    id="loadAgencyInput"
-                                    className="hidden"
-                                    accept=".json"
-                                    onChange={loadAgency}
-                                />
-                                <button 
-                                    onClick={() => document.getElementById('loadAgencyInput').click()} 
-                                    className="btn btn-agency"
-                                >
-                                    📂 Load Playground
-                                </button>
-                                <button onClick={exportAgency} className="btn btn-agency">
-                                    💾 Export Playground
-                                </button>
-                                <button onClick={exportContent} className="btn btn-agency">
-                                    📤 Export Content
-                                </button>
-                            </div>
+                            {/* Only show button bar in content/play tab */}
+                            {activeTab === 'content' && (
+                                <div className="button-bar">
+                                    <button onClick={addPrompt} className="btn btn-agency">
+                                        ✨ Add Prompt Card
+                                    </button>
+                                    <button onClick={runAllPrompts} className="btn btn-agency">
+                                        🚀 Run All
+                                    </button>
+                                    <button onClick={exportContent} className="btn btn-agency">
+                                        📤 Export Content
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
 
