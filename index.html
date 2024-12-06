@@ -1272,50 +1272,79 @@
                 </>
             ) : activeTab === 'content' ? (
                 <div className="content-tab" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <input
-                        type="file"
-                        id="fileInput"
-                        className="hidden"
-                        accept=".pdf,.doc,.docx,.txt,.md,image/*"
-                        onChange={handleFileUpload}
-                        multiple
-                    />
-                    <button 
-                        onClick={() => document.getElementById('fileInput').click()}
-                        className="btn btn-primary"
-                        style={{ marginBottom: '1rem' }}
-                    >
-                        📎 Upload File or Image
-                    </button>
-
-                    <div className="tray-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <DocumentTray 
-                            uploadedDocuments={uploadedDocuments} 
-                            onDeleteDocument={(id) => {
-                                setUploadedDocuments(current => current.filter(doc => doc.id !== id));
-                            }}
-                            onSelectDocument={(content) => setSourceContent(content)}
+                    {/* Upload Components Group */}
+                    <div className="upload-content-group">
+                        <div className="document-tray-title" style={{ color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                            🎴 Upload Content
+                        </div>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            className="hidden"
+                            accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                            onChange={handleFileUpload}
+                            multiple
                         />
+                        <button 
+                            onClick={() => document.getElementById('fileInput').click()}
+                            className="btn btn-primary"
+                            style={{ marginBottom: '1rem' }}
+                        >
+                            📎 Upload File or Image
+                        </button>
 
-                        <textarea
-                            value={sourceContent}
-                            onChange={(e) => setSourceContent(e.target.value)}
-                            placeholder="Enter or upload source content..."
-                            style={{ 
-                                width: '100%',
-                                minHeight: '200px',
-                                padding: '0.75rem',
-                                borderRadius: '0',
-                                border: '1px solid var(--border-color)',
-                                background: 'var(--primary-bg)',
-                                color: 'var(--text-primary)',
-                                resize: 'vertical'
-                            }}
-                        />
+                        <div className="tray-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+                            <DocumentTray 
+                                uploadedDocuments={uploadedDocuments} 
+                                onDeleteDocument={(id) => {
+                                    setUploadedDocuments(current => current.filter(doc => doc.id !== id));
+                                }}
+                                onSelectDocument={(content) => setSourceContent(content)}
+                            />
 
-                        <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
-                        <PersonaTray onAddPersona={addPersonaCard} />
+                            <div className="document-tray-title" style={{ color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                                🎴 Select Sources
+                            </div>
+                            <textarea
+                                value={sourceContent}
+                                onChange={(e) => setSourceContent(e.target.value)}
+                                placeholder="Enter or upload source content..."
+                                style={{ 
+                                    width: '100%',
+                                    minHeight: '200px',
+                                    padding: '0.75rem',
+                                    borderRadius: '0',
+                                    border: '1px solid var(--border-color)',
+                                    background: 'var(--primary-bg)',
+                                    color: 'var(--text-primary)',
+                                    resize: 'vertical'
+                                }}
+                            />
+
+                            <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
+                        </div>
+                    </div>
+
+                    {/* Card Selection Group */}
+                    <div className="document-tray-title" style={{ color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                        🎴 Card Selection
+                    </div>
+                    <div className="selection-trays" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1rem' }}>
                         <ScenarioTray onAddScenario={addScenarioCard} />
+                        <PersonaTray onAddPersona={addPersonaCard} />
+                        <PromptTray onAddPrompt={(template) => {
+                            const newPrompt = {
+                                ...template,
+                                id: Date.now(),
+                                result: '',
+                                source: 'SOURCE',
+                                sources: ['SOURCE'],
+                                sourceType: 'text',
+                                selectedImage: null,
+                                selectedPersonas: []
+                            };
+                            setPrompts([...prompts, newPrompt]);
+                        }} />
                     </div>
                 </div>
             ) : (
@@ -1391,7 +1420,7 @@
         {activeTab === 'content' && (
             <div className="button-bar">
                 <button onClick={addPrompt} className="btn btn-agency">
-                    ✨ Add Prompt Card
+                    📝 Add Prompt Card
                 </button>
                 <button onClick={runAllPrompts} className="btn btn-agency">
                     🚀 Run All
@@ -1675,11 +1704,32 @@
 
     .prompt-selector {
         flex: 1;
-        padding: 0.5rem;
+        padding: 0.75rem;  /* Increased from 0.5rem */
         border: 1px solid var(--border-color);
         border-radius: 0;
         background: var(--primary-bg);
         color: var(--text-primary);
+        font-size: 0.875rem;  /* Added to match persona selector */
+        transition: all 0.2s ease;  /* Added transition */
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1em;
+        padding-right: 2.5rem;
+    }
+
+    .prompt-selector:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 2px rgba(226, 152, 99, 0.1);
+        outline: none;
+    }
+
+    .prompt-selector option {
+        padding: 0.5rem;
+        font-size: 0.875rem;
     }
 
     .add-prompt-btn {
@@ -1689,6 +1739,9 @@
         border-radius: 0;
         padding: 0.5rem 1rem;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.3s ease;
     }
 
@@ -1701,23 +1754,7 @@
         opacity: 0.9;
     }
 
-    /* Example of a properly formatted CSS rule */
-    .example-class {
-        color: red; /* Ensure each property ends with a semicolon */
-    }
-
-    /* Remove any empty rulesets like this */
-    /* .empty-class { } */
-
-    /* Ensure all rules have opening and closing curly braces */
-    .another-class {
-        background-color: blue;
-    }
-
-    /* Check for any misplaced or missing curly braces */
-    .yet-another-class {
-        margin: 10px;
-    }
+    
 </style>
 </head>
 <body>
@@ -2090,76 +2127,75 @@
             
                     <div className="source-type-selector">
                         <button 
-                            className={`source-type-button ${!isImageMode ? 'active' : ''}`}
-                            onClick={() => onUpdate(prompt.id, { sourceType: 'text', selectedImage: null })}
+                            className={`source-type-button ${prompt.sourceType === 'text' ? 'active' : ''}`}
+                            onClick={() => onUpdate(prompt.id, { sourceType: 'text' })}
                         >
                             Text
                         </button>
                         <button 
-                            className={`source-type-button ${isImageMode ? 'active' : ''}`}
+                            className={`source-type-button ${prompt.sourceType === 'image' ? 'active' : ''}`}
                             onClick={() => onUpdate(prompt.id, { sourceType: 'image' })}
                         >
                             Image
                         </button>
                     </div>
 
-                    {!isImageMode && (
+                    {prompt.sourceType === 'image' ? (
+                        <select
+                            value={prompt.selectedImage || ''}
+                            onChange={(e) => onUpdate(prompt.id, { selectedImage: e.target.value })}
+                            className="source-selector"
+                        >
+                            <option value="">Select Image...</option>
+                            {uploadedImages.map(img => (
+                                <option key={img.id} value={img.id}>
+                                    {img.name}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
                         <>
-                            <div className="source-label">SELECT SOURCES</div>
+                            <div className="persona-label">SELECT SOURCES</div>
                             <select 
                                 multiple
+                                value={prompt.sources || ['SOURCE']}
+                                onChange={(e) => {
+                                    const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+                                    onUpdate(prompt.id, { ...prompt, sources: selectedOptions });
+                                }}
                                 className="source-selector"
-                                value={prompt.sources}
-                                onChange={(e) => {
-                                    const options = [...e.target.options];
-                                    const values = options
-                                        .filter(option => option.selected)
-                                        .map(option => option.value);
-                                    onUpdate(prompt.id, { sources: values });
-                                }}
                             >
+                                <option value="SOURCE" selected>SOURCE</option>
                                 {uploadedDocuments.map(doc => (
-                                    <option 
-                                        key={`doc-${doc.id}`} 
-                                        value={`DOC-${doc.id}`}
-                                    >
-                                        {doc.name}
+                                    <option key={doc.id} value={`DOC-${doc.id}`}>
+                                        📄 {doc.name}
                                     </option>
                                 ))}
-                                {sourceOptions.map(option => (
-                                    <option 
-                                        key={`result-${option.id}`} 
-                                        value={`RESULT${option.id}`}
-                                    >
-                                        RESULT{option.id}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <div className="persona-label">SELECT PERSONAS</div>
-                            <select 
-                                multiple
-                                className="persona-selector"
-                                value={prompt.selectedPersonas || []}
-                                onChange={(e) => {
-                                    const options = [...e.target.options];
-                                    const values = options
-                                        .filter(option => option.selected)
-                                        .map(option => option.value);
-                                    onUpdate(prompt.id, { selectedPersonas: values });
-                                }}
-                            >
-                                {personaCards.map(persona => (
-                                    <option 
-                                        key={persona.cardId} 
-                                        value={persona.cardId}
-                                    >
-                                        {persona.emoji} {persona.name} ({persona.direction === 'from' ? 'FROM' : 'TO'})
+                                {sourceOptions.map(p => (
+                                    <option key={p.id} value={`RESULT${p.id}`}>
+                                        💬 Result from Prompt {p.id}
                                     </option>
                                 ))}
                             </select>
                         </>
                     )}
+
+                    <div className="persona-label">SELECT PERSONAS</div>
+                    <select
+                        multiple
+                        value={prompt.selectedPersonas || []}
+                        onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+                            onUpdate(prompt.id, { ...prompt, selectedPersonas: selectedOptions });
+                        }}
+                        className="source-selector"
+                    >
+                        {personaCards.map(persona => (
+                            <option key={persona.cardId} value={persona.cardId}>
+                                {persona.direction === 'from' ? '🗣️ FROM: ' : '👥 TO: '} {persona.name}
+                            </option>
+                        ))}
+                    </select>
             
                     <div className="prompt-label">PROMPT</div>
                     <textarea
@@ -2549,11 +2585,98 @@
                         </select>
                         <button 
                             onClick={handleAddScenario}
-                            className="add-scenario-btn"
+                            className="add-persona-btn"
                             disabled={!selectedScenario}
                         >
                             +
                         </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Add this constant near the other constants at the top of the script
+        const PROMPT_TEMPLATES = [
+            {
+                id: 'empty',
+                name: 'Empty Prompt Card',
+                emoji: '✨',
+                text: ''
+            },
+            {
+                id: 'summary',
+                name: 'Content Summary',
+                emoji: '📝',
+                text: 'Please provide a comprehensive summary of the following content, highlighting the key points and main ideas:\n\n{{content}}'
+            },
+            {
+                id: 'analysis',
+                name: 'Detailed Analysis',
+                emoji: '🔍',
+                text: 'Please perform a detailed analysis of the following content, including:\n1. Main themes and concepts\n2. Key arguments or positions\n3. Supporting evidence\n4. Potential implications\n\n{{content}}'
+            },
+            {
+                id: 'actionItems',
+                name: 'Action Items',
+                emoji: '✅',
+                text: 'Based on the following content, please identify and list specific, actionable items that should be addressed:\n\n{{content}}'
+            },
+            {
+                id: 'keyInsights',
+                name: 'Key Insights',
+                emoji: '💡',
+                text: 'Extract and explain the most important insights from the following content:\n\n{{content}}'
+            }
+        ];
+
+        // Add the PromptTray component
+        const PromptTray = ({ onAddPrompt }) => {
+            const [selectedTemplate, setSelectedTemplate] = React.useState('');
+
+            const handleAddPrompt = () => {
+                if (selectedTemplate) {
+                    const template = PROMPT_TEMPLATES.find(t => t.id === selectedTemplate);
+                    if (template) {
+                        onAddPrompt({
+                            id: Date.now(),
+                            title: template.name,
+                            text: template.text,
+                            result: '',
+                            source: 'SOURCE',
+                            sources: ['SOURCE'],
+                            sourceType: 'text',
+                            selectedImage: null,
+                            selectedPersonas: []
+                        });
+                        setSelectedTemplate('');
+                    }
+                }
+            };
+
+            return (
+                <div className="persona-tray">
+                    <div className="persona-selector-container">
+                        <select 
+                            value={selectedTemplate}
+                            onChange={(e) => setSelectedTemplate(e.target.value)}
+                            className="persona-selector"
+                        >
+                            <option value="">✨ Select Prompt... </option>
+                            {PROMPT_TEMPLATES.map(template => (
+                                <option key={template.id} value={template.id}>
+                                    {template.emoji} {template.name}
+                                </option>
+                            ))}
+                        </select>
+                        <button 
+                            onClick={handleAddPrompt}
+                            className="add-persona-btn"
+                            disabled={!selectedTemplate}
+                        >
+                            +
+                        </button>
+
+                        
                     </div>
                 </div>
             );
@@ -3160,50 +3283,79 @@
                                 
                                 {activeTab === 'content' && (
                                     <div className="content-tab" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                                        <input
-                                            type="file"
-                                            id="fileInput"
-                                            className="hidden"
-                                            accept=".pdf,.doc,.docx,.txt,.md,image/*"
-                                            onChange={handleFileUpload}
-                                            multiple
-                                        />
-                                        <button 
-                                            onClick={() => document.getElementById('fileInput').click()}
-                                            className="btn btn-primary"
-                                            style={{ marginBottom: '1rem' }}
-                                        >
-                                            📎 Upload File or Image
-                                        </button>
-
-                                        <div className="tray-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                            <DocumentTray 
-                                                uploadedDocuments={uploadedDocuments} 
-                                                onDeleteDocument={(id) => {
-                                                    setUploadedDocuments(current => current.filter(doc => doc.id !== id));
-                                                }}
-                                                onSelectDocument={(content) => setSourceContent(content)}
+                                        {/* Upload Components Group */}
+                                        <div className="upload-content-group">
+                                            <div className="document-tray-title" style={{ color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                                                📚 Upload Content
+                                            </div>
+                                            <input
+                                                type="file"
+                                                id="fileInput"
+                                                className="hidden"
+                                                accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                                                onChange={handleFileUpload}
+                                                multiple
                                             />
+                                            <button 
+                                                onClick={() => document.getElementById('fileInput').click()}
+                                                className="btn btn-primary"
+                                                style={{ marginBottom: '1rem' }}
+                                            >
+                                                📎 Upload File or Image
+                                            </button>
 
-                                            <textarea
-                                                value={sourceContent}
-                                                onChange={(e) => setSourceContent(e.target.value)}
-                                                placeholder="Enter or upload source content..."
-                                                style={{ 
-                                                    width: '100%',
-                                                    minHeight: '200px',
-                                                    padding: '0.75rem',
-                                                    borderRadius: '0',
-                                                    border: '1px solid var(--border-color)',
-                                                    background: 'var(--primary-bg)',
-                                                    color: 'var(--text-primary)',
-                                                    resize: 'vertical'
-                                                }}
-                                            />
+                                            <div className="tray-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+                                                <DocumentTray 
+                                                    uploadedDocuments={uploadedDocuments} 
+                                                    onDeleteDocument={(id) => {
+                                                        setUploadedDocuments(current => current.filter(doc => doc.id !== id));
+                                                    }}
+                                                    onSelectDocument={(content) => setSourceContent(content)}
+                                                />
 
-                                            <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
-                                            <PersonaTray onAddPersona={addPersonaCard} />
+                                                <div className="document-tray-title" style={{ color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                                                Source
+                                                </div>
+                                                <textarea
+                                                    value={sourceContent}
+                                                    onChange={(e) => setSourceContent(e.target.value)}
+                                                    placeholder="Enter or upload source content..."
+                                                    style={{ 
+                                                        width: '100%',
+                                                        minHeight: '200px',
+                                                        padding: '0.75rem',
+                                                        borderRadius: '0',
+                                                        border: '1px solid var(--border-color)',
+                                                        background: 'var(--primary-bg)',
+                                                        color: 'var(--text-primary)',
+                                                        resize: 'vertical'
+                                                    }}
+                                                />
+
+                                                <ImageTray uploadedImages={uploadedImages} onDeleteImage={deleteImage} />
+                                            </div>
+                                        </div>
+
+                                        {/* Card Selection Group */}
+                                        <div className="document-tray-title" style={{ color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                                            🎴 Card Selection
+                                        </div>
+                                        <div className="selection-trays" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1rem' }}>
                                             <ScenarioTray onAddScenario={addScenarioCard} />
+                                            <PersonaTray onAddPersona={addPersonaCard} />
+                                            <PromptTray onAddPrompt={(template) => {
+                                                const newPrompt = {
+                                                    ...template,
+                                                    id: Date.now(),
+                                                    result: '',
+                                                    source: 'SOURCE',
+                                                    sources: ['SOURCE'],
+                                                    sourceType: 'text',
+                                                    selectedImage: null,
+                                                    selectedPersonas: []
+                                                };
+                                                setPrompts([...prompts, newPrompt]);
+                                            }} />
                                         </div>
                                     </div>
                                 )}
@@ -3278,10 +3430,7 @@
                                 {error && <div className="error">{error}</div>}
                                 
                                 {activeTab === 'content' && (
-                                    <div className="button-bar">
-                                        <button onClick={addPrompt} className="btn btn-agency">
-                                            ✨ Add Prompt Card
-                                        </button>
+                                    <div className="button-bar">                
                                         <button onClick={runAllPrompts} className="btn btn-agency">
                                             🚀 Run All
                                         </button>
