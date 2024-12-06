@@ -2048,7 +2048,7 @@
                 </div>
             );
         };
-        const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun, uploadedImages, uploadedDocuments, apiKey, personaCards }) => {
+        const PromptCard = ({ prompt, sourceOptions, loading, onUpdate, onDelete, onRun, uploadedImages, uploadedDocuments, apiKey, personaCards, sourceContent, onSourceSelect }) => {
             const [enhancing, setEnhancing] = React.useState(false);
             const [enhanceStatus, setEnhanceStatus] = React.useState('');
 
@@ -2161,7 +2161,14 @@
                                 value={prompt.sources || ['SOURCE']}
                                 onChange={(e) => {
                                     const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
-                                    onUpdate(prompt.id, { ...prompt, sources: selectedOptions });
+                                    if (selectedOptions.includes('SOURCE')) {
+                                        onSourceSelect(sourceContent); // Update the source textarea
+                                    }
+                                    onUpdate(prompt.id, { 
+                                        ...prompt, 
+                                        sources: selectedOptions,
+                                        source: selectedOptions.includes('SOURCE') ? sourceContent : prompt.source
+                                    });
                                 }}
                                 className="source-selector"
                             >
@@ -2607,25 +2614,25 @@
                 id: 'summary',
                 name: 'Content Summary',
                 emoji: '📝',
-                text: 'Please provide a comprehensive summary of the following content, highlighting the key points and main ideas:\n\n{{content}}'
+                text: 'Please provide a comprehensive summary, highlighting the key points and main ideas'
             },
             {
                 id: 'analysis',
                 name: 'Detailed Analysis',
                 emoji: '🔍',
-                text: 'Please perform a detailed analysis of the following content, including:\n1. Main themes and concepts\n2. Key arguments or positions\n3. Supporting evidence\n4. Potential implications\n\n{{content}}'
+                text: 'Please perform a detailed analysis, including:\n1. Main themes and concepts\n2. Key arguments or positions\n3. Supporting evidence\n4. Potential implications'
             },
             {
                 id: 'actionItems',
                 name: 'Action Items',
                 emoji: '✅',
-                text: 'Based on the following content, please identify and list specific, actionable items that should be addressed:\n\n{{content}}'
+                text: 'Identify and list specific, actionable items that should be addressed'
             },
             {
                 id: 'keyInsights',
                 name: 'Key Insights',
                 emoji: '💡',
-                text: 'Extract and explain the most important insights from the following content:\n\n{{content}}'
+                text: 'Extract and explain the most important insights'
             }
         ];
 
@@ -3480,6 +3487,8 @@
                                         uploadedDocuments={uploadedDocuments}
                                         apiKey={apiKey}
                                         personaCards={personaCards}
+                                        sourceContent={sourceContent}
+                                        onSourceSelect={(content) => setSourceContent(content)}
                                     />
                                 ))}
                             </div>
