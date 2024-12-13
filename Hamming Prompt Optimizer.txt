@@ -1,0 +1,18 @@
+Hamming Prompt Optimizer
+
+
+Step 1: Describe your task
+We use LLMs to generate optimized, structured prompts for tasks with clear inputs and outputs. In this step, describe basic details about your task. We'll infer the input and outputs of the task.
+
+Step 2: Define inputs and outputs
+We inferred the task's inputs and outputs. In this step, feel free to correct the field names or descriptions. Getting this right is important for generating useful examples in the next step.
+
+Step 3: Add examples
+We need 10 - 20 good examples to learn what the prompt should optimize for. Click "Generate Examples" to bootstrap an initial set automagically. Definitions: train = used to generate few-shot examples; dev = used with an eval function to determine "goodness".
+
+
+Step 4: Optimize prompts
+This is the optimization step. We use your task description and examples from the previous steps to generate new prompts. For each prompt, we'll compute accuracy. We use these results to generate new prompts that should outperform previous iterations. We'll surface the best performing prompt at the end.
+
+
+https://app.hamming.ai/prompt-optimizer?page=1

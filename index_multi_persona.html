@@ -1906,14 +1906,7 @@
 
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
-                    reader.onload = (e) => {
-                        // Return an object with both base64 and original file info
-                        resolve({
-                            base64: e.target.result,
-                            type: file.type,
-                            name: file.name
-                        });
-                    };
+                    reader.onload = (e) => resolve(e.target.result);
                     reader.onerror = () => reject(new Error('Error reading image'));
                     reader.readAsDataURL(file);
                 });
@@ -2064,16 +2057,8 @@
                 
                 setEnhancing(true);
                 try {
-                    const selectedImage = uploadedImages.find(img => img.id === prompt.selectedImage);
-                    if (!selectedImage) {
-                        throw new Error('Selected image not found');
-                    }
-
-                    setEnhanceStatus('Sending analysis request...');
+                    setEnhanceStatus('Sending enhancement request...');
                     
-                    // Ensure the image URL is base64
-                    const imageUrl = selectedImage.url; // This should already be base64 from our upload process
-
                     const response = await fetch('https://api.openai.com/v1/chat/completions', {
                         method: 'POST',
                         headers: {
@@ -2081,48 +2066,35 @@
                             'Authorization': `Bearer ${apiKey}`,
                         },
                         body: JSON.stringify({
-                            model: "gpt-4-vision-preview",
+                            model: "gpt-4-turbo-preview",
                             messages: [
                                 {
+                                    role: "system",
+                                    content: "You are an expert content enhancer."
+                                },
+                                {
                                     role: "user",
-                                    content: [
-                                        { 
-                                            type: "text", 
-                                            text: prompt.text 
-                                        },
-                                        {
-                                            type: "image_url",
-                                            image_url: {
-                                                url: imageUrl,
-                                                detail: "high" // Changed from "auto" to "high" for better analysis
-                                            }
-                                        }
-                                    ]
+                                    content: "Enhance this content, making it more robust and intriguing:\n\n" + prompt.result
                                 }
                             ],
-                            max_tokens: 1000 // Increased from 500 for more detailed responses
+                            max_tokens: 1000
                         })
                     });
 
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
-                    }
+                    setEnhanceStatus('Processing enhancement...');
 
-                    setEnhanceStatus('Processing response...');
                     const data = await response.json();
+                    if (data.error) throw new Error(data.error.message);
                     
-                    if (data.error) {
-                        throw new Error(data.error.message);
-                    }
+                    setEnhanceStatus('Applying enhancements...');
                     
                     const enhancedResult = data.choices[0].message.content;
                     onUpdate(prompt.id, { result: enhancedResult });
                     
-                    setEnhanceStatus('Analysis complete!');
+                    setEnhanceStatus('Enhancement complete!');
                     setTimeout(() => setEnhanceStatus(''), 2000);
                 } catch (error) {
-                    console.error('Analysis error:', error);
+                    console.error('Enhancement error:', error);
                     setEnhanceStatus(`Error: ${error.message}`);
                     setTimeout(() => setEnhanceStatus(''), 3000);
                 } finally {
@@ -2717,36 +2689,10 @@
             );
         };
 
-        // Add these constants near the top of your script
-        const LOCAL_STORAGE_KEYS = {
-            API_KEY: 'worksona_api_key',
-            MODEL: 'worksona_model'
-        };
-
         // Main App Component
         function App() {
-            const [apiKey, setApiKey] = React.useState(() => {
-                return localStorage.getItem(LOCAL_STORAGE_KEYS.API_KEY) || '';
-            });
-
-            const [model, setModel] = React.useState(() => {
-                return localStorage.getItem(LOCAL_STORAGE_KEYS.MODEL) || OPENAI_MODELS[0];
-            });
-
-            // Update the API key handler
-            const handleApiKeyChange = (e) => {
-                const newKey = e.target.value;
-                setApiKey(newKey);
-                localStorage.setItem(LOCAL_STORAGE_KEYS.API_KEY, newKey);
-            };
-
-            // Update the model handler
-            const handleModelChange = (e) => {
-                const newModel = e.target.value;
-                setModel(newModel);
-                localStorage.setItem(LOCAL_STORAGE_KEYS.MODEL, newModel);
-            };
-
+            const [apiKey, setApiKey] = React.useState('');
+            const [model, setModel] = React.useState(OPENAI_MODELS[0]);  // Will now default to gpt-4-turbo-preview
             const [sourceContent, setSourceContent] = React.useState('');
             const [uploadedImages, setUploadedImages] = React.useState([]);
             const [agencyName, setAgencyName] = React.useState('');
@@ -2783,18 +2729,10 @@
                         
                         if (SUPPORTED_IMAGE_TYPES.includes(file.type)) {
                             const imageId = Date.now() + Math.random();
-                            console.log('Processed image:', {
-                                id: imageId,
-                                type: file.type,
-                                name: file.name,
-                                urlStart: content.base64.substring(0, 50) + '...' // Debug log
-                            });
-                            
                             setUploadedImages(current => [...current, {
                                 id: imageId,
-                                url: content.base64,
-                                name: file.name,
-                                type: file.type
+                                url: content,
+                                name: file.name
                             }]);
                         } else {
                             const docId = Date.now() + Math.random();
@@ -2806,7 +2744,6 @@
                         }
                     }
                 } catch (error) {
-                    console.error('File processing error:', error);
                     setError('Error processing file: ' + error.message);
                 } finally {
                     setIsProcessingFile(false);
@@ -3289,14 +3226,14 @@
                                             type="password"
                                             placeholder="Enter OpenAI API Key"
                                             value={apiKey}
-                                            onChange={handleApiKeyChange}
+                                            onChange={(e) => setApiKey(e.target.value)}
                                             className="api-key-input"
                                         />
 
                                         <div className="model-selector-wrapper">
                                             <select 
                                                 value={model}
-                                                onChange={handleModelChange}
+                                                onChange={(e) => setModel(e.target.value)}
                                                 className="model-selector"
                                             >
                                                 {OPENAI_MODELS.map(model => (
