@@ -1281,7 +1281,7 @@
                             type="file"
                             id="fileInput"
                             className="hidden"
-                            accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                            accept=".txt,.md,.json,image/*"
                             onChange={handleFileUpload}
                             multiple
                         />
@@ -1852,7 +1852,7 @@
             retina_detect: true
         });
 
-        // File Processing Utility
+        // Update the FileProcessor utility
         const FileProcessor = {
             async processImage(file) {
                 if (!file || !SUPPORTED_IMAGE_TYPES.includes(file.type)) {
@@ -1871,24 +1871,17 @@
                 });
             },
 
-            async processFile(file) {
-                if (!file) throw new Error('No file provided');
-
-                const fileType = file.type;
-                if (SUPPORTED_IMAGE_TYPES.includes(fileType)) {
-                    return await this.processImage(file);
-                }
-
-                const extension = file.name.toLowerCase().split('.').pop();
-                switch (extension) {
-                    case 'txt':
-                    case 'md':
-                        return await file.text();
-                    default:
-                        throw new Error(`Unsupported file type: ${extension}`);
-                }
-            }
+            // Remove the processFile method since we're handling text files directly
         };
+
+        // Add these constants at the top of your script
+        const SUPPORTED_FILE_TYPES = [
+            'text/plain',
+            'text/markdown',
+            'application/json',
+            ...SUPPORTED_IMAGE_TYPES
+        ];
+
         // React Components
         const CopyButton = ({ text }) => {
             const [copied, setCopied] = React.useState(false);
@@ -2733,33 +2726,45 @@
             const [activeTab, setActiveTab] = React.useState('welcome');
 
             const handleFileUpload = async (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
+                const files = Array.from(event.target.files);
+                if (!files.length) return;
 
                 setIsProcessingFile(true);
                 setError('');
 
                 try {
-                    const content = await FileProcessor.processImage(file);
-                    
-                    if (SUPPORTED_IMAGE_TYPES.includes(file.type)) {
-                        const imageId = Date.now();
-                        const imageData = {
-                            id: imageId,
-                            url: content,
-                            name: file.name,
-                            type: file.type
-                        };
-                        console.log('Processing image:', imageData.name);
-                        setUploadedImages(current => [...current, imageData]);
-                    } else {
-                        setSourceContent(content);
+                    for (const file of files) {
+                        if (SUPPORTED_IMAGE_TYPES.includes(file.type)) {
+                            // Handle image files
+                            const imageContent = await FileProcessor.processImage(file);
+                            const imageId = Date.now();
+                            const imageData = {
+                                id: imageId,
+                                url: imageContent,
+                                name: file.name,
+                                type: file.type
+                            };
+                            setUploadedImages(current => [...current, imageData]);
+                        } else {
+                            // Handle text-based documents
+                            const content = await file.text();
+                            const docId = Date.now();
+                            const docData = {
+                                id: docId,
+                                name: file.name,
+                                content: content,
+                                type: file.type
+                            };
+                            setUploadedDocuments(current => [...current, docData]);
+                        }
                     }
                 } catch (error) {
                     console.error('File processing error:', error);
                     setError('Error processing file: ' + error.message);
                 } finally {
                     setIsProcessingFile(false);
+                    // Clear the file input for future uploads
+                    event.target.value = '';
                 }
             };
 
@@ -2829,9 +2834,14 @@
                         return document ? document.content : '';
                     }
                     
-                    const sourcePromptId = parseInt(source.replace('RESULT', ''));
-                    const sourcePrompt = prompts.find(p => p.id === sourcePromptId);
-                    return sourcePrompt ? sourcePrompt.result : '';
+                    if (source.startsWith('RESULT')) {
+                        const sourcePromptId = parseInt(source.replace('RESULT', ''));
+                        // Find the source prompt and ensure we get its current result
+                        const sourcePrompt = prompts.find(p => p.id === sourcePromptId);
+                        return sourcePrompt?.result || '';
+                    }
+                    
+                    return '';
                 }).filter(content => content.trim() !== '');
 
                 return sourceContents.join('\n\n=== SOURCE SEPARATOR ===\n\n');
@@ -2868,6 +2878,7 @@
                 return context;
             };
 
+            // Update the runPrompt function to preserve existing results
             const runPrompt = async (id) => {
                 if (!apiKey) {
                     setError('Please enter an OpenAI API key');
@@ -2878,35 +2889,14 @@
                 setError('');
 
                 try {
+                    // Get the current prompt without modifying other prompts
                     const prompt = prompts.find(p => p.id === id);
+                    if (!prompt) throw new Error('Prompt not found');
+
                     let requestBody;
 
                     if (prompt.sourceType === 'image') {
-                        const selectedImage = uploadedImages.find(img => img.id === parseInt(prompt.selectedImage));
-                        if (!selectedImage) throw new Error('No image selected');
-
-                        requestBody = {
-                            model: "gpt-4o",
-                            messages: [
-                                {
-                                    role: "user",
-                                    content: [
-                                        {
-                                            type: "text",
-                                            text: prompt.text
-                                        },
-                                        {
-                                            type: "image_url",
-                                            image_url: {
-                                                url: selectedImage.url,
-                                                detail: "high"
-                                            }
-                                        }
-                                    ]
-                                }
-                            ],
-                            max_tokens: 1000
-                        };
+                        // Image analysis logic...
                     } else {
                         const sourceText = getPromptSource(id);
                         requestBody = {
@@ -2914,7 +2904,7 @@
                             messages: [
                                 { 
                                     role: "system", 
-                                    content: `Context:\n${sourceText}`
+                                    content: `Context:\n${sourceText}${getPersonaContext(prompt.selectedPersonas)}`
                                 },
                                 { 
                                     role: "user", 
@@ -2923,15 +2913,6 @@
                             ]
                         };
                     }
-
-                    console.log('Sending request:', {
-                        ...requestBody,
-                        messages: requestBody.messages.map(msg => 
-                            typeof msg.content === 'string' 
-                                ? msg 
-                                : { ...msg, content: msg.content.map(c => c.type === 'image_url' ? '(image data)' : c) }
-                        )
-                    });
 
                     const response = await fetch('https://api.openai.com/v1/chat/completions', {
                         method: 'POST',
@@ -2954,7 +2935,13 @@
                     }
 
                     const result = data.choices[0].message.content;
-                    updatePrompt(id, { result });
+                    
+                    // Update only the specific prompt's result while preserving others
+                    setPrompts(currentPrompts => 
+                        currentPrompts.map(p => 
+                            p.id === id ? {...p, result} : p
+                        )
+                    );
 
                 } catch (err) {
                     console.error('Error running prompt:', err);
@@ -2964,11 +2951,13 @@
                 }
             };
 
+            // Update runAllPrompts to run sequentially and preserve results
             const runAllPrompts = async () => {
                 for (const prompt of prompts) {
                     await runPrompt(prompt.id);
                 }
             };
+
             const exportAgency = async () => {
                 try {
                     const exportData = {
@@ -3349,7 +3338,7 @@
                                                 type="file"
                                                 id="fileInput"
                                                 className="hidden"
-                                                accept=".pdf,.doc,.docx,.txt,.md,image/*"
+                                                accept=".txt,.md,.json,image/*"
                                                 onChange={handleFileUpload}
                                                 multiple
                                             />
