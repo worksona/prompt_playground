@@ -2144,9 +2144,6 @@
                                 value={prompt.sources || ['SOURCE']}
                                 onChange={(e) => {
                                     const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
-                                    if (selectedOptions.includes('SOURCE')) {
-                                        onSourceSelect(sourceContent); // Update the source textarea
-                                    }
                                     onUpdate(prompt.id, { 
                                         ...prompt, 
                                         sources: selectedOptions,
@@ -2155,7 +2152,7 @@
                                 }}
                                 className="source-selector"
                             >
-                                <option value="SOURCE" selected>SOURCE</option>
+                                <option value="SOURCE">SOURCE</option>
                                 {uploadedDocuments.map(doc => (
                                     <option key={doc.id} value={`DOC-${doc.id}`}>
                                         📄 {doc.name}
@@ -2819,32 +2816,39 @@
                 const prompt = prompts.find(p => p.id === promptId);
                 if (!prompt) return '';
                 
+                // Ensure we're working with an array of sources and log for debugging
                 const sources = Array.isArray(prompt.sources) ? prompt.sources : [prompt.source];
+                console.log('Processing sources:', sources); // Debug log
                 
                 const sourceContents = sources.map(source => {
                     if (!source) return '';
                     
+                    let content = '';
                     if (source === 'SOURCE') {
-                        return sourceContent || '';
-                    }
-                    
-                    if (source.startsWith('DOC-')) {
-                        const docId = parseFloat(source.replace('DOC-', ''));
+                        content = sourceContent || '';
+                        console.log('SOURCE content length:', content.length); // Debug log
+                    } else if (source.startsWith('DOC-')) {
+                        const docId = parseInt(source.replace('DOC-', ''));
                         const document = uploadedDocuments.find(doc => doc.id === docId);
-                        return document ? document.content : '';
-                    }
-                    
-                    if (source.startsWith('RESULT')) {
+                        content = document ? `[Document: ${document.name}]\n${document.content}` : '';
+                        console.log('DOC content length:', content.length); // Debug log
+                    } else if (source.startsWith('RESULT')) {
                         const sourcePromptId = parseInt(source.replace('RESULT', ''));
-                        // Find the source prompt and ensure we get its current result
                         const sourcePrompt = prompts.find(p => p.id === sourcePromptId);
-                        return sourcePrompt?.result || '';
+                        content = sourcePrompt ? `[Result from Prompt ${sourcePromptId}]\n${sourcePrompt.result}` : '';
+                        console.log('RESULT content length:', content.length); // Debug log
                     }
                     
-                    return '';
+                    return content;
                 }).filter(content => content.trim() !== '');
 
-                return sourceContents.join('\n\n=== SOURCE SEPARATOR ===\n\n');
+                console.log('Number of source contents:', sourceContents.length); // Debug log
+                
+                // Join all sources with clear separators
+                const finalContent = sourceContents.join('\n\n=== SOURCE SEPARATOR ===\n\n');
+                console.log('Final content length:', finalContent.length); // Debug log
+                
+                return finalContent;
             };
 
             const getPersonaContext = (selectedPersonas) => {
