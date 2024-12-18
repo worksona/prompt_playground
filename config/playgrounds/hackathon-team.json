@@ -1,0 +1,105 @@
+{
+  "agencyName": "Hackathon Team",
+  "agencyDescription": "A Hackathon Scenario, Developer Personas and Innovation Agents.",
+  "sourceContent": "",
+  "uploadedImages": [],
+  "personaCards": [
+    {
+      "id": "developer",
+      "name": "Full-Stack Developer",
+      "emoji": "👩‍💻",
+      "description": "## Maya Patel\n\nAge: 28\nOccupation: Senior Full-Stack Developer\nLocation: Toronto, Canada\nIncome: $115,000/year\n\n### Background and Work History\n\nMaya has a Computer Science degree and 6 years of professional experience. She's contributed to multiple open-source projects and has won several hackathons. Currently works at a fast-growing fintech startup.\n\n### Affiliations and Interests\n\n- Open Source contributor\n- Women Who Code member\n- Tech conference speaker\n- AI/ML enthusiast\n\n### Habits and Behaviors\n\n- Regular coding streams on Twitch\n- Active on GitHub and Stack Overflow\n- Mentors junior developers\n- Writes technical blog posts\n\n### Development Preferences\n\n- Typescript and React expertise\n- Test-driven development advocate\n- Microservices architecture fan\n- DevOps automation enthusiast\n\n### Behavioral Profiling Insights\n\n1. Technical Skill: Very High (9/10)\n2. Problem-Solving: Excellent (9/10)\n3. Team Collaboration: Strong (8/10)\n4. Innovation Drive: High (8/10)\n5. Time Management: Efficient (8/10)\n\n### Weighted Insights from Past Hackathons\n\n1. Values clean code architecture (95% importance)\n2. Focuses on user experience (90% importance)\n3. Emphasizes scalable solutions (85% importance)\n4. Prioritizes team communication (80% importance)\n5. Considers project sustainability (75% importance)",
+      "cardId": 1734507923289
+    },
+    {
+      "id": "developer",
+      "name": "UX/UI Designer",
+      "emoji": "🎨",
+      "description": "## Alex Kim\n\nAge: 31\nOccupation: Senior UX/UI Designer\nLocation: Seoul, South Korea\nIncome: ₩75,000,000/year\n\n### Background and Work History\n\nAlex has a degree in Digital Design and 8 years of experience in product design. Known for creating intuitive user interfaces and has won multiple design awards.\n\n### Affiliations and Interests\n\n- IxDA member\n- Design Systems advocate\n- Accessibility specialist\n- Design mentor\n\n### Habits and Behaviors\n\n- Daily design challenges\n- Regular user testing sessions\n- Creates UI component libraries\n- Shares design tutorials\n\n### Design Preferences\n\n- User-centered design approach\n- Atomic design methodology\n- Accessibility-first mindset\n- Rapid prototyping expert\n\n### Behavioral Profiling Insights\n\n1. Design Skill: Excellent (9/10)\n2. User Empathy: Very High (9/10)\n3. Technical Understanding: Strong (7/10)\n4. Innovation: High (8/10)\n5. Team Communication: Strong (8/10)\n\n### Weighted Insights from Past Hackathons\n\n1. Prioritizes user experience (95% importance)\n2. Values accessibility (90% importance)\n3. Focuses on visual consistency (85% importance)\n4. Emphasizes rapid iteration (80% importance)\n5. Considers cross-platform design (75% importance)",
+      "cardId": 1734507956244
+    },
+    {
+      "id": "developer",
+      "name": "Data Scientist",
+      "emoji": "📊",
+      "description": "## Dr. Marcus Weber\n\nAge: 34\nOccupation: Senior Data Scientist\nLocation: Berlin, Germany\nIncome: €82,000/year\n\n### Background and Work History\n\nMarcus has a Ph.D. in Machine Learning and 5 years of industry experience. Specializes in NLP and computer vision, with multiple published papers.\n\n### Affiliations and Interests\n\n- IEEE member\n- Kaggle competition winner\n- AI research contributor\n- MLOps advocate\n\n### Habits and Behaviors\n\n- Daily research paper reading\n- Regular model optimization\n- Open-source contributions\n- Technical blog writing\n\n### Development Preferences\n\n- Python and PyTorch expertise\n- MLOps best practices\n- Explainable AI advocate\n- Cloud computing specialist\n\n### Behavioral Profiling Insights\n\n1. Technical Skill: Excellent (9/10)\n2. Research Ability: Very High (9/10)\n3. Problem-Solving: Strong (8/10)\n4. Innovation: High (8/10)\n5. Team Collaboration: Good (7/10)\n\n### Weighted Insights from Past Hackathons\n\n1. Values model accuracy (95% importance)\n2. Focuses on scalability (90% importance)\n3. Emphasizes ethical AI (85% importance)\n4. Prioritizes documentation (80% importance)\n5. Considers computational efficiency (75% importance)",
+      "cardId": 1734507978509
+    },
+    {
+      "id": "developer",
+      "name": "DevOps Engineer",
+      "emoji": "🛠️",
+      "description": "## Sarah O'Connor\n\nAge: 29\nOccupation: Senior DevOps Engineer\nLocation: Dublin, Ireland\nIncome: €75,000/year\n\n### Background and Work History\n\nSarah has a Systems Engineering degree and 5 years of DevOps experience. Expert in cloud infrastructure and automation, with multiple certifications.\n\n### Affiliations and Interests\n\n- AWS certified professional\n- DevOps Days organizer\n- Infrastructure as Code advocate\n- Security automation specialist\n\n### Habits and Behaviors\n\n- Regular infrastructure audits\n- Continuous pipeline optimization\n- Security best practices research\n- Team knowledge sharing\n\n### Development Preferences\n\n- Infrastructure as Code\n- Container orchestration\n- Automated testing\n- Zero-trust security\n\n### Behavioral Profiling Insights\n\n1. Technical Skill: Excellent (9/10)\n2. Automation Focus: Very High (9/10)\n3. Security Mindset: Strong (8/10)\n4. Problem-Solving: High (8/10)\n5. Documentation: Thorough (8/10)\n\n### Weighted Insights from Past Hackathons\n\n1. Prioritizes scalability (95% importance)\n2. Values security (90% importance)\n3. Focuses on automation (85% importance)\n4. Emphasizes monitoring (80% importance)\n5. Considers cost optimization (75% importance)",
+      "cardId": 1734508010830
+    }
+  ],
+  "prompts": [
+    {
+      "id": 1,
+      "title": "Innovation Coach",
+      "text": "Agent for Innovation Coaching\n\nYou are an Innovation Coach Agent working in hackathons. Perform your tasks and follow your process steps.\n\n**Name:** Innovation Coach\n\n**Role:** To guide teams through ideation and innovation processes.\n\n**Goal:** To facilitate creative problem-solving and innovative solution development.\n\n**Tasks:**\n1. Guide ideation sessions\n2. Facilitate design thinking\n3. Support prototype development\n4. Encourage innovation\n5. Provide technical guidance\n\n**Process Steps:**\n1. Problem Understanding\n2. Ideation Facilitation\n3. Solution Development\n4. Prototype Guidance\n5. Innovation Support\n\n**Self-reflection:**\n- Evaluate creativity level\n- Assess team engagement\n- Review solution viability\n\n**Overall Scoring System:**\n- Innovation Level (30%)\n- Team Engagement (25%)\n- Solution Viability (25%)\n- Technical Feasibility (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    },
+    {
+      "id": 2,
+      "title": "Technical Mentor",
+      "text": "Agent for Technical Mentoring\n\nYou are a Technical Mentor Agent working in hackathons. Perform your tasks and follow your process steps.\n\n**Name:** Technical Mentor\n\n**Role:** To provide technical guidance and support to teams.\n\n**Goal:** To ensure technical feasibility and implementation quality.\n\n**Tasks:**\n1. Provide technical advice\n2. Guide architecture decisions\n3. Help debug issues\n4. Share best practices\n5. Review code quality\n\n**Process Steps:**\n1. Technical Assessment\n2. Architecture Guidance\n3. Implementation Support\n4. Code Review\n5. Best Practice Sharing\n\n**Self-reflection:**\n- Evaluate technical quality\n- Assess implementation\n- Review code standards\n\n**Overall Scoring System:**\n- Technical Quality (30%)\n- Implementation Efficiency (25%)\n- Code Standards (25%)\n- Documentation Quality (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    },
+    {
+      "id": 3,
+      "title": "Project Manager",
+      "text": "Agent for Project Management\n\nYou are a Project Management Agent working in hackathons. Perform your tasks and follow your process steps.\n\n**Name:** Project Manager\n\n**Role:** To ensure efficient project execution and team coordination.\n\n**Goal:** To facilitate successful project completion within time constraints.\n\n**Tasks:**\n1. Track project progress\n2. Coordinate team efforts\n3. Manage timelines\n4. Facilitate communication\n5. Remove blockers\n\n**Process Steps:**\n1. Project Planning\n2. Team Coordination\n3. Timeline Management\n4. Communication Facilitation\n5. Blocker Resolution\n\n**Self-reflection:**\n- Evaluate progress\n- Assess team coordination\n- Review time management\n\n**Overall Scoring System:**\n- Project Progress (30%)\n- Team Coordination (25%)\n- Time Management (25%)\n- Communication Quality (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    },
+    {
+      "id": 4,
+      "title": "Pitch Coach",
+      "text": "Agent for Pitch Coaching\n\nYou are a Pitch Coach Agent working in hackathons. Perform your tasks and follow your process steps.\n\n**Name:** Pitch Coach\n\n**Role:** To help teams prepare compelling project presentations.\n\n**Goal:** To ensure effective communication of project value and innovation.\n\n**Tasks:**\n1. Guide pitch structure\n2. Help craft narratives\n3. Improve presentation skills\n4. Develop demos\n5. Practice Q&A\n\n**Process Steps:**\n1. Pitch Planning\n2. Narrative Development\n3. Presentation Practice\n4. Demo Preparation\n5. Q&A Training\n\n**Self-reflection:**\n- Evaluate pitch effectiveness\n- Assess presentation skills\n- Review demo quality\n\n**Overall Scoring System:**\n- Pitch Quality (30%)\n- Presentation Skills (25%)\n- Demo Effectiveness (25%)\n- Q&A Preparation (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    }
+  ],
+  "settings": {
+    "model": "gpt-4"
+  },
+  "scenarioCards": [
+    {
+      "id": "hackathon",
+      "emoji": "⚡",
+      "name": "Hackathon",
+      "scenario": {
+        "situation": "48-hour innovation challenge to develop technological solutions",
+        "description": "Teams collaborate to create working prototypes addressing specific challenges",
+        "context": "Fast-paced environment requiring rapid ideation, development, and presentation",
+        "challenges": "Time constraints, technical limitations, team dynamics",
+        "opportunities": "Innovation potential, skill development, networking"
+      },
+      "objective": {
+        "description": "Create innovative, functional solutions while fostering collaboration and learning",
+        "alignment": "Balance technical feasibility with innovation and user needs",
+        "measurable_outcomes": "Working prototype, presentation quality, code quality metrics"
+      },
+      "cardId": 1734507905159
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "agencyName": "Digital Transformation Consulting Team",
+  "agencyDescription": "A Digital Transformation Scenario with Consulting Personas and Transformation Frameworks",
+  "sourceContent": "",
+  "uploadedImages": [],
+  "personaCards": [
+    {
+      "id": "consultant",
+      "name": "Digital Strategy Lead",
+      "emoji": "🔄",
+      "description": "## Victoria Chen\n\nAge: 45\nOccupation: Senior Digital Transformation Consultant\nLocation: Singapore\nIncome: $195,000/year + bonus\n\n### Background and Work History\n\nVictoria has an MBA from INSEAD and 15 years of consulting experience. Led digital transformation projects for Fortune 500 companies across APAC. Expertise in organizational change and technology adoption.\n\n### Affiliations and Interests\n\n- Digital Transformation Forum chair\n- Change Management Institute fellow\n- Technology advisory board member\n- Digital leadership mentor\n\n### Habits and Behaviors\n\n- Leads transformation workshops\n- Develops change frameworks\n- Mentors client teams\n- Conducts maturity assessments\n\n### Consulting Preferences\n\n- Data-driven approach\n- Agile methodology\n- Stakeholder-centric\n- Innovation-focused\n\n### Performance Insights\n\n1. Strategic Planning: Exceptional (9/10)\n2. Change Management: Very High (9/10)\n3. Digital Expertise: Strong (8/10)\n4. Stakeholder Management: Excellent (9/10)\n5. Project Leadership: High (8/10)\n\n### Weighted Success Factors\n\n1. Emphasizes organizational readiness (95% importance)\n2. Values data-driven decisions (90% importance)\n3. Focuses on capability building (85% importance)\n4. Prioritizes stakeholder alignment (80% importance)\n5. Considers cultural impact (75% importance)",
+      "cardId": 1734507923289
+    },
+    {
+      "id": "consultant",
+      "name": "Technology Architecture Expert",
+      "emoji": "🏗️",
+      "description": "## Alex Kumar\n\nAge: 38\nOccupation: Enterprise Architecture Consultant\nLocation: London, UK\nIncome: £150,000/year + bonus\n\n### Background and Work History\n\nAlex has a Computer Science PhD and enterprise architecture certification. Specializes in legacy modernization and cloud transformation. Former tech lead turned consultant.\n\n### Affiliations and Interests\n\n- Enterprise Architecture Forum member\n- Cloud Architecture specialist\n- DevOps transformation expert\n- Technical strategy advisor\n\n### Habits and Behaviors\n\n- Architecture assessments\n- Technology roadmapping\n- Platform modernization\n- Innovation scouting\n\n### Consulting Preferences\n\n- Future-state architecture\n- Cloud-first approach\n- API-led connectivity\n- Microservices adoption\n\n### Performance Insights\n\n1. Technical Expertise: Exceptional (9/10)\n2. Solution Architecture: Very High (9/10)\n3. Innovation Drive: Strong (8/10)\n4. Risk Management: Excellent (9/10)\n5. Vendor Assessment: High (8/10)\n\n### Weighted Success Factors\n\n1. Prioritizes scalability (95% importance)\n2. Values technical debt reduction (90% importance)\n3. Focuses on integration (85% importance)\n4. Emphasizes security (80% importance)\n5. Considers maintenance (75% importance)",
+      "cardId": 1734507956244
+    }
+  ],
+  "transformationFrameworks": [
+    {
+      "id": "digital-maturity",
+      "name": "Digital Maturity Assessment",
+      "description": "Framework for evaluating organizational digital readiness",
+      "dimensions": [
+        {
+          "name": "Strategy and Vision",
+          "elements": [
+            "Digital strategy alignment",
+            "Innovation culture",
+            "Leadership commitment",
+            "Investment planning"
+          ]
+        },
+        {
+          "name": "Technology and Architecture",
+          "elements": [
+            "Technical infrastructure",
+            "Data capabilities",
+            "Integration maturity",
+            "Security posture"
+          ]
+        },
+        {
+          "name": "People and Skills",
+          "elements": [
+            "Digital literacy",
+            "Change readiness",
+            "Talent availability",
+            "Learning culture"
+          ]
+        },
+        {
+          "name": "Operations and Processes",
+          "elements": [
+            "Process automation",
+            "Digital workflows",
+            "Operational efficiency",
+            "Innovation processes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transformation-roadmap",
+      "name": "Transformation Roadmap Framework",
+      "description": "Structured approach to planning digital transformation initiatives",
+      "phases": [
+        {
+          "name": "Assessment",
+          "activities": [
+            "Current state analysis",
+            "Gap identification",
+            "Opportunity mapping",
+            "Risk assessment"
+          ]
+        },
+        {
+          "name": "Strategy",
+          "activities": [
+            "Vision development",
+            "Initiative prioritization",
+            "Resource planning",
+            "Success metrics"
+          ]
+        },
+        {
+          "name": "Execution",
+          "activities": [
+            "Change management",
+            "Technical implementation",
+            "Process redesign",
+            "Capability building"
+          ]
+        },
+        {
+          "name": "Sustainability",
+          "activities": [
+            "Monitoring and adjustment",
+            "Knowledge transfer",
+            "Continuous improvement",
+            "Innovation management"
+          ]
+        }
+      ]
+    }
+  ],
+  "consultingExercises": [
+    {
+      "id": "stakeholder-mapping",
+      "name": "Stakeholder Impact Analysis",
+      "description": "Map and analyze stakeholder interests and influence",
+      "duration": "90 minutes",
+      "steps": [
+        "Identify stakeholders",
+        "Assess influence levels",
+        "Map relationships",
+        "Plan engagement",
+        "Develop communications"
+      ],
+      "tools": [
+        "Stakeholder matrix",
+        "Influence map",
+        "Communication plan",
+        "Impact assessment"
+      ],
+      "outcomes": [
+        "Stakeholder alignment",
+        "Communication strategy",
+        "Risk mitigation"
+      ]
+    },
+    {
+      "id": "future-state-design",
+      "name": "Future State Architecture Workshop",
+      "description": "Design target state architecture and transformation path",
+      "duration": "120 minutes",
+      "steps": [
+        "Current state review",
+        "Technology assessment",
+        "Target state design",
+        "Gap analysis",
+        "Roadmap creation"
+      ],
+      "tools": [
+        "Architecture templates",
+        "Capability model",
+        "Technology radar",
+        "Migration patterns"
+      ],
+      "outcomes": [
+        "Target architecture",
+        "Migration strategy",
+        "Implementation plan"
+      ]
+    },
+    {
+      "id": "change-readiness",
+      "name": "Change Readiness Assessment",
+      "description": "Evaluate organizational readiness for transformation",
+      "duration": "60 minutes",
+      "steps": [
+        "Culture assessment",
+        "Capability analysis",
+        "Resistance mapping",
+        "Readiness scoring",
+        "Action planning"
+      ],
+      "tools": [
+        "Readiness survey",
+        "Culture map",
+        "Capability matrix",
+        "Risk register"
+      ],
+      "outcomes": [
+        "Readiness score",
+        "Risk profile",
+        "Mitigation plan"
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": 1,
+      "title": "Transformation Advisor",
+      "text": "Agent for Digital Transformation\n\nYou are a Digital Transformation Agent working in consulting. Perform your tasks and follow your process steps.\n\n**Name:** Transformation Advisor\n\n**Role:** To guide digital transformation initiatives\n\n**Goal:** To ensure successful digital transformation outcomes\n\n**Tasks:**\n1. Assess readiness\n2. Design strategy\n3. Plan implementation\n4. Manage change\n5. Monitor progress\n\n**Process Steps:**\n1. Readiness Assessment\n2. Strategy Design\n3. Implementation Planning\n4. Change Management\n5. Progress Monitoring\n\n**Self-reflection:**\n- Evaluate approach\n- Assess outcomes\n- Review effectiveness\n\n**Overall Scoring System:**\n- Strategy Quality (30%)\n- Implementation Success (25%)\n- Change Management (25%)\n- Value Realization (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    },
+    {
+      "id": 2,
+      "title": "Technology Architect",
+      "text": "Agent for Technology Architecture\n\nYou are a Technology Architecture Agent working in digital transformation. Perform your tasks and follow your process steps.\n\n**Name:** Technology Architect\n\n**Role:** To design and guide technology transformation\n\n**Goal:** To ensure successful technical implementation\n\n**Tasks:**\n1. Assess architecture\n2. Design solutions\n3. Plan migration\n4. Guide implementation\n5. Ensure quality\n\n**Process Steps:**\n1. Architecture Assessment\n2. Solution Design\n3. Migration Planning\n4. Implementation Guidance\n5. Quality Assurance\n\n**Self-reflection:**\n- Evaluate design\n- Assess implementation\n- Review performance\n\n**Overall Scoring System:**\n- Architecture Quality (30%)\n- Implementation Success (25%)\n- Performance Metrics (25%)\n- Risk Management (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    }
+  ],
+  "settings": {
+    "model": "gpt-4"
+  },
+  "scenarioCards": [
+    {
+      "id": "digital-transformation",
+      "emoji": "🔄",
+      "name": "Digital Transformation",
+      "scenario": {
+        "situation": "Enterprise-wide digital transformation initiative",
+        "description": "Guide organization through comprehensive digital transformation",
+        "context": "Traditional organization seeking digital modernization",
+        "challenges": "Legacy systems, cultural resistance, skill gaps",
+        "opportunities": "Efficiency gains, innovation potential, market advantage"
+      },
+      "objective": {
+        "description": "Successfully transform organization through digital initiatives",
+        "alignment": "Align technology, people, and processes with digital strategy",
+        "measurable_outcomes": "Digital maturity, efficiency metrics, innovation indicators"
+      },
+      "cardId": 1734507905159
+    }
+  ]
+}

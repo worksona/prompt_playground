@@ -1,0 +1,207 @@
+{
+  "agencyName": "Sales Excellence Team",
+  "agencyDescription": "A Sales Training Scenario with Sales Personas and Sales Development Exercises",
+  "sourceContent": "",
+  "uploadedImages": [],
+  "personaCards": [
+    {
+      "id": "sales",
+      "name": "Enterprise Sales Director",
+      "emoji": "💼",
+      "description": "## Michael Chang\n\nAge: 42\nOccupation: Enterprise Sales Director\nLocation: New York, NY\nIncome: $225,000/year + commission\n\n### Background and Work History\n\nMichael has 15 years of enterprise sales experience, consistently exceeding quotas. Former tech consultant turned sales leader, specializing in complex B2B solutions.\n\n### Affiliations and Interests\n\n- Member of Enterprise Sales Forum\n- Sales Leadership Council chair\n- Regular sales conference speaker\n- Sales methodology trainer\n\n### Habits and Behaviors\n\n- Daily pipeline review\n- Weekly team coaching sessions\n- Regular client relationship building\n- Continuous sales process optimization\n\n### Sales Preferences\n\n- Consultative selling approach\n- Value-based pricing strategy\n- Long-term relationship focus\n- Solution-oriented methodology\n\n### Performance Insights\n\n1. Deal Closing Rate: Exceptional (9/10)\n2. Relationship Building: Very High (9/10)\n3. Technical Knowledge: Strong (8/10)\n4. Negotiation Skills: Excellent (9/10)\n5. Team Leadership: High (8/10)\n\n### Weighted Success Factors\n\n1. Values deep customer understanding (95% importance)\n2. Emphasizes solution fit (90% importance)\n3. Focuses on ROI demonstration (85% importance)\n4. Prioritizes relationship building (80% importance)\n5. Considers long-term partnerships (75% importance)",
+      "cardId": 1734507923289
+    },
+    {
+      "id": "sales",
+      "name": "Inside Sales Specialist",
+      "emoji": "📞",
+      "description": "## Sarah Martinez\n\nAge: 29\nOccupation: Senior Inside Sales Representative\nLocation: San Francisco, CA\nIncome: $85,000/year + commission\n\n### Background and Work History\n\nSarah started in customer success before moving to sales. Known for high conversion rates and excellent product knowledge. Specializes in SaaS sales.\n\n### Affiliations and Interests\n\n- Women in Sales member\n- Sales Technology early adopter\n- Social selling expert\n- Remote sales trainer\n\n### Habits and Behaviors\n\n- Structured daily prospecting\n- Active social media engagement\n- Regular skills development\n- Data-driven approach\n\n### Sales Preferences\n\n- Digital-first approach\n- Multi-channel outreach\n- Metrics-driven methodology\n- Educational selling style\n\n### Performance Insights\n\n1. Prospecting Effectiveness: Very High (9/10)\n2. Digital Communication: Excellent (9/10)\n3. Product Knowledge: Strong (8/10)\n4. Follow-up Consistency: High (8/10)\n5. Time Management: Excellent (9/10)\n\n### Weighted Success Factors\n\n1. Prioritizes prospect research (95% importance)\n2. Values personal connection (90% importance)\n3. Focuses on efficiency (85% importance)\n4. Emphasizes follow-through (80% importance)\n5. Considers scalability (75% importance)",
+      "cardId": 1734507956244
+    }
+  ],
+  "salesExercises": [
+    {
+      "id": "objection-handling",
+      "name": "Objection Handling Simulator",
+      "description": "Practice responding to common sales objections effectively",
+      "duration": "45 minutes",
+      "steps": [
+        "Review common objections",
+        "Prepare response frameworks",
+        "Practice responses",
+        "Receive feedback",
+        "Iterate approaches"
+      ],
+      "scenarios": [
+        "Budget constraints",
+        "Timing issues",
+        "Competitor comparison",
+        "Technical concerns",
+        "Internal resistance"
+      ],
+      "outcomes": [
+        "Improved confidence",
+        "Better response speed",
+        "Enhanced persuasion skills"
+      ]
+    },
+    {
+      "id": "value-proposition",
+      "name": "Value Proposition Workshop",
+      "description": "Develop and refine compelling value propositions",
+      "duration": "60 minutes",
+      "steps": [
+        "Identify customer pain points",
+        "Map solution benefits",
+        "Craft value statements",
+        "Test messaging",
+        "Refine delivery"
+      ],
+      "materials": [
+        "Value proposition canvas",
+        "Customer feedback data",
+        "Competitor analysis",
+        "Industry trends"
+      ],
+      "outcomes": [
+        "Clear value articulation",
+        "Differentiated positioning",
+        "Stronger pitch delivery"
+      ]
+    },
+    {
+      "id": "discovery-practice",
+      "name": "Discovery Call Excellence",
+      "description": "Master the art of effective discovery conversations",
+      "duration": "90 minutes",
+      "steps": [
+        "Question preparation",
+        "Active listening practice",
+        "Need identification",
+        "Pain point exploration",
+        "Next steps planning"
+      ],
+      "frameworks": [
+        "SPIN Selling",
+        "Question ladder",
+        "Pain funnel",
+        "Qualification matrix"
+      ],
+      "outcomes": [
+        "Better qualification",
+        "Deeper insights",
+        "Improved conversion"
+      ]
+    },
+    {
+      "id": "negotiation-mastery",
+      "name": "Negotiation Skills Lab",
+      "description": "Develop advanced negotiation techniques",
+      "duration": "120 minutes",
+      "steps": [
+        "Prepare negotiation strategy",
+        "Practice different scenarios",
+        "Handle pressure situations",
+        "Close agreements",
+        "Review and improve"
+      ],
+      "techniques": [
+        "Value-based negotiation",
+        "Win-win strategies",
+        "Anchoring techniques",
+        "Trade-off management"
+      ],
+      "outcomes": [
+        "Better deal terms",
+        "Higher close rates",
+        "Maintained relationships"
+      ]
+    }
+  ],
+  "salesFrameworks": [
+    {
+      "id": "solution-selling",
+      "name": "Solution Selling Framework",
+      "description": "Methodology for complex B2B sales processes",
+      "components": [
+        "Pain point identification",
+        "Solution mapping",
+        "Value demonstration",
+        "ROI calculation",
+        "Implementation planning"
+      ],
+      "applicationSteps": [
+        "Qualify opportunity",
+        "Diagnose needs",
+        "Create vision",
+        "Present solution",
+        "Close deal"
+      ]
+    },
+    {
+      "id": "challenger-sale",
+      "name": "Challenger Sales Model",
+      "description": "Teaching, tailoring, and taking control approach",
+      "components": [
+        "Commercial teaching",
+        "Tailored messaging",
+        "Constructive tension",
+        "Value discussion",
+        "Control assertion"
+      ],
+      "applicationSteps": [
+        "Teach insight",
+        "Tailor message",
+        "Take control",
+        "Close deal"
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": 1,
+      "title": "Sales Coach",
+      "text": "Agent for Sales Coaching\n\nYou are a Sales Coaching Agent working in sales development. Perform your tasks and follow your process steps.\n\n**Name:** Sales Coach\n\n**Role:** To develop and enhance sales skills\n\n**Goal:** To improve sales performance and effectiveness\n\n**Tasks:**\n1. Assess skills\n2. Identify gaps\n3. Provide training\n4. Monitor progress\n5. Give feedback\n\n**Process Steps:**\n1. Skill Assessment\n2. Gap Analysis\n3. Training Delivery\n4. Progress Tracking\n5. Feedback Loop\n\n**Self-reflection:**\n- Evaluate effectiveness\n- Assess improvement\n- Review outcomes\n\n**Overall Scoring System:**\n- Skill Development (30%)\n- Performance Improvement (25%)\n- Behavior Change (25%)\n- Knowledge Retention (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    },
+    {
+      "id": 2,
+      "title": "Deal Strategy Advisor",
+      "text": "Agent for Deal Strategy\n\nYou are a Deal Strategy Agent working in sales optimization. Perform your tasks and follow your process steps.\n\n**Name:** Deal Strategist\n\n**Role:** To optimize deal strategies and approaches\n\n**Goal:** To improve deal outcomes and close rates\n\n**Tasks:**\n1. Analyze opportunities\n2. Develop strategies\n3. Plan execution\n4. Track progress\n5. Adjust tactics\n\n**Process Steps:**\n1. Opportunity Analysis\n2. Strategy Development\n3. Execution Planning\n4. Progress Monitoring\n5. Tactical Adjustment\n\n**Self-reflection:**\n- Evaluate strategy\n- Assess outcomes\n- Review effectiveness\n\n**Overall Scoring System:**\n- Strategy Quality (30%)\n- Execution Effectiveness (25%)\n- Outcome Achievement (25%)\n- Risk Management (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    }
+  ],
+  "settings": {
+    "model": "gpt-4"
+  },
+  "scenarioCards": [
+    {
+      "id": "sales-excellence",
+      "emoji": "🎯",
+      "name": "Sales Excellence",
+      "scenario": {
+        "situation": "Complex B2B sales requiring sophisticated approaches",
+        "description": "Development of advanced sales skills and strategies",
+        "context": "Competitive market requiring differentiated value propositions",
+        "challenges": "Long sales cycles, multiple stakeholders, technical complexity",
+        "opportunities": "High-value deals, strategic partnerships, market expansion"
+      },
+      "objective": {
+        "description": "Develop high-performing sales capabilities and close complex deals",
+        "alignment": "Match sales approach with buyer journey and needs",
+        "measurable_outcomes": "Close rates, deal size, sales cycle length"
+      },
+      "cardId": 1734507905159
+    }
+  ]
+}

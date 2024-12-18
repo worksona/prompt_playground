@@ -2198,93 +2198,181 @@
         height: 40px;
     }
 
+    /* Add this style in the <style> section */
+    .source-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        resize: vertical;
+        outline: none;
+        font-family: inherit;
+        box-sizing: border-box;
+        margin-bottom: 1rem;
+    }
+
+    .source-textarea:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
+    }
+
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
         // Add this constant at the top of your script, before any other code
-        const PERSONAS = [
-
-            {
-                id: 'customer',
-                name: 'Customer Experience Leader',
-                emoji: '🤝',
-                description: 'A customer-centric strategist who has revolutionized service delivery standards. Your innovative approaches have transformed customer satisfaction metrics and established industry-leading loyalty programs.'
-            },
-            {
-                id: 'analyst',
-                name: 'Data Analytics Expert',
-                emoji: '📊',
-                description: 'A sophisticated data scientist with expertise in predictive modeling and business intelligence. Your analytical insights have driven strategic decisions and uncovered valuable market opportunities.'
-            },
-            {
-                id: 'trainer',
-                name: 'Learning Development Expert',
-                emoji: '📚',
-                description: 'An innovative education strategist who has designed transformative learning programs. Your methodologies have significantly improved organizational capabilities and employee development outcomes.'
-            },
-            {
-                id: 'hr',
-                name: 'HR Strategic Leader',
-                emoji: '👥',
-                description: 'A progressive HR leader who has shaped organizational culture and talent strategies. Your initiatives have enhanced employee engagement and established best-in-class talent management practices.'
-            },
-            {
-                id: 'marketing-manager',
-                name: 'Marketing Manager',
-                emoji: '🎯',
-                description: 'A strategic marketer with a creative edge, you\'ve launched campaigns that have significantly boosted brand visibility and customer engagement. Your strategies have consistently delivered high returns on investment.'
-            },
-            {
-                id: 'social-media',
-                name: 'Social Media Manager',
-                emoji: '💬',
-                description: 'A social media maven, you\'ve grown online communities into thriving hubs of engagement. Your ability to connect with audiences has turned casual followers into loyal brand advocates.'
-            },
-            {
-                id: 'advertising',
-                name: 'Advertising/Media Manager',
-                emoji: '📺',
-                description: 'You have orchestrated high-impact media campaigns that have reached millions. With a keen understanding of media dynamics, you ensure that every ad dollar spent generates maximum visibility and engagement.'
-            },
-            {
-                id: 'creative-director',
-                name: 'Creative Director',
-                emoji: '🎨',
-                description: 'A visionary with a keen eye for detail, you have brought brands to life with stunning creative work. Your leadership in creative projects has consistently resulted in award-winning campaigns and iconic brand imagery.'
-            },
-            {
-                id: 'ceo',
-                name: 'Chief Executive Officer',
-                emoji: '👑',
-                description: 'As a seasoned leader, you\'ve successfully steered companies through growth and transformation. Your strategic vision and decisive leadership have been key to achieving long-term success and market leadership.'
-            },
-            {
-                id: 'cfo',
-                name: 'Chief Financial Officer',
-                emoji: '💰',
-                description: 'With a sharp financial acumen, you\'ve navigated complex financial landscapes to keep projects profitable. Your strategic financial management has been instrumental in sustaining growth and maximizing returns.'
-            },
-            {
-                id: 'cmo',
-                name: 'Chief Marketing Officer',
-                emoji: '📈',
-                description: 'A marketing powerhouse, you have successfully led branding and marketing initiatives that have positioned products as market leaders. Your ability to craft and execute winning strategies has driven significant market share growth.'
-            },
-            {
-                id: 'cto',
-                name: 'Chief Technology Officer',
-                emoji: '💻',
-                description: 'A technology visionary, you\'ve pioneered innovative solutions that have kept companies at the forefront of their industries. Your leadership in technology has driven sustainable growth and competitive advantage.'
-            },
-            {
-                id: 'cxo',
-                name: 'Chief Experience Officer',
-                emoji: '🌟',
-                description: 'A champion of customer experience, you have transformed customer interactions into memorable experiences. Your strategies have consistently improved customer satisfaction and loyalty, setting new standards in the industry.'
-            }
-        ];
+        const PERSONAS = {
+            'Customers': [
+                {
+                    id: 'value-seeker',
+                    name: 'Value-Conscious Shopper',
+                    emoji: '💰',
+                    description: 'Price-sensitive consumer who prioritizes deals and discounts. Carefully researches purchases, compares prices, and seeks the best value for money. Loyal to brands that offer consistent value and rewards programs.'
+                },
+                {
+                    id: 'luxury-buyer',
+                    name: 'Luxury Lifestyle Consumer',
+                    emoji: '✨',
+                    description: 'High-end shopper who values premium quality and exclusive brands. Willing to pay more for superior products and experiences. Appreciates personalized service and unique offerings.'
+                },
+                {
+                    id: 'eco-conscious',
+                    name: 'Eco-Conscious Consumer',
+                    emoji: '🌱',
+                    description: 'Environmentally aware shopper who prioritizes sustainable and ethical products. Seeks brands with strong environmental commitments and transparent practices. Values eco-friendly packaging and materials.'
+                },
+                {
+                    id: 'tech-savvy',
+                    name: 'Digital-First Shopper',
+                    emoji: '📱',
+                    description: 'Tech-savvy consumer who prefers online shopping and digital experiences. Comfortable with new technologies, values convenience, and expects seamless omnichannel experiences.'
+                },
+                {
+                    id: 'traditional',
+                    name: 'Traditional Retail Shopper',
+                    emoji: '🏪',
+                    description: 'Prefers in-store shopping experiences and values personal interaction. Appreciates hands-on product examination and face-to-face customer service. Values established retail relationships.'
+                }
+            ],
+            'Service Types': [
+                {
+                    id: 'convenience',
+                    name: 'Convenience Services',
+                    emoji: '⚡',
+                    description: 'Focuses on quick, efficient solutions for busy consumers. Offers time-saving options and streamlined processes. Values accessibility and ease of use above all.'
+                },
+                {
+                    id: 'premium',
+                    name: 'Premium Services',
+                    emoji: '👑',
+                    description: 'Delivers high-end, personalized experiences. Emphasizes quality, exclusivity, and exceptional customer care. Caters to discerning clients who expect the best.'
+                },
+                {
+                    id: 'specialized',
+                    name: 'Specialized Services',
+                    emoji: '🎯',
+                    description: 'Provides expert solutions in specific niches. Offers deep knowledge and customized approaches. Values expertise and targeted problem-solving.'
+                },
+                {
+                    id: 'digital',
+                    name: 'Digital Services',
+                    emoji: '💻',
+                    description: 'Delivers solutions through digital platforms and technology. Emphasizes automation, scalability, and data-driven approaches. Values innovation and technological advancement.'
+                },
+                {
+                    id: 'consultative',
+                    name: 'Consultative Services',
+                    emoji: '🤝',
+                    description: 'Focuses on advisory and relationship-based solutions. Emphasizes understanding client needs and providing strategic guidance. Values long-term partnerships and continuous improvement.'
+                }
+            ],
+            'C-Suite': [
+                {
+                    id: 'ceo',
+                    name: 'Chief Executive Officer',
+                    emoji: '👑',
+                    description: 'As a seasoned leader, you\'ve successfully steered companies through growth and transformation. Your strategic vision and decisive leadership have been key to achieving long-term success and market leadership.'
+                },
+                {
+                    id: 'cfo',
+                    name: 'Chief Financial Officer',
+                    emoji: '💰',
+                    description: 'With a sharp financial acumen, you\'ve navigated complex financial landscapes to keep projects profitable. Your strategic financial management has been instrumental in sustaining growth and maximizing returns.'
+                },
+                {
+                    id: 'cmo',
+                    name: 'Chief Marketing Officer',
+                    emoji: '📈',
+                    description: 'A marketing powerhouse, you have successfully led branding and marketing initiatives that have positioned products as market leaders. Your ability to craft and execute winning strategies has driven significant market share growth.'
+                },
+                {
+                    id: 'cto',
+                    name: 'Chief Technology Officer',
+                    emoji: '💻',
+                    description: 'A technology visionary, you\'ve pioneered innovative solutions that have kept companies at the forefront of their industries. Your leadership in technology has driven sustainable growth and competitive advantage.'
+                },
+                {
+                    id: 'cxo',
+                    name: 'Chief Experience Officer',
+                    emoji: '🌟',
+                    description: 'A champion of customer experience, you have transformed customer interactions into memorable experiences. Your strategies have consistently improved customer satisfaction and loyalty, setting new standards in the industry.'
+                }
+            ],
+            'Agency': [
+                {
+                    id: 'customer',
+                    name: 'Customer Experience Leader',
+                    emoji: '🤝',
+                    description: 'A customer-centric strategist who has revolutionized service delivery standards. Your innovative approaches have transformed customer satisfaction metrics and established industry-leading loyalty programs.'
+                },
+                {
+                    id: 'analyst',
+                    name: 'Data Analytics Expert',
+                    emoji: '📊',
+                    description: 'A sophisticated data scientist with expertise in predictive modeling and business intelligence. Your analytical insights have driven strategic decisions and uncovered valuable market opportunities.'
+                },
+                {
+                    id: 'trainer',
+                    name: 'Learning Development Expert',
+                    emoji: '📚',
+                    description: 'An innovative education strategist who has designed transformative learning programs. Your methodologies have significantly improved organizational capabilities and employee development outcomes.'
+                },
+                {
+                    id: 'hr',
+                    name: 'HR Strategic Leader',
+                    emoji: '👥',
+                    description: 'A progressive HR leader who has shaped organizational culture and talent strategies. Your initiatives have enhanced employee engagement and established best-in-class talent management practices.'
+                },
+                {
+                    id: 'marketing-manager',
+                    name: 'Marketing Manager',
+                    emoji: '🎯',
+                    description: 'A strategic marketer with a creative edge, you\'ve launched campaigns that have significantly boosted brand visibility and customer engagement. Your strategies have consistently delivered high returns on investment.'
+                },
+                {
+                    id: 'social-media',
+                    name: 'Social Media Manager',
+                    emoji: '💬',
+                    description: 'A social media maven, you\'ve grown online communities into thriving hubs of engagement. Your ability to connect with audiences has turned casual followers into loyal brand advocates.'
+                },
+                {
+                    id: 'advertising',
+                    name: 'Advertising/Media Manager',
+                    emoji: '📺',
+                    description: 'You have orchestrated high-impact media campaigns that have reached millions. With a keen understanding of media dynamics, you ensure that every ad dollar spent generates maximum visibility and engagement.'
+                },
+                {
+                    id: 'creative-director',
+                    name: 'Creative Director',
+                    emoji: '🎨',
+                    description: 'A visionary with a keen eye for detail, you have brought brands to life with stunning creative work. Your leadership in creative projects has consistently resulted in award-winning campaigns and iconic brand imagery.'
+                }
+            ]
+        };
 
         // Constants
         const OPENAI_MODELS = [
@@ -2404,13 +2492,30 @@
             const [selectedPersona, setSelectedPersona] = React.useState('');
 
             const handleAddPersona = () => {
-                if (selectedPersona) {
-                    const persona = PERSONAS.find(p => p.id === selectedPersona);
+                if (selectedPersona === 'empty') {
                     onAddPersona({
-                        ...persona,
-                        cardId: Date.now()
+                        cardId: Date.now(),
+                        id: 'empty',
+                        name: '',
+                        emoji: '👤',
+                        description: ''
                     });
                     setSelectedPersona('');
+                    return;
+                }
+
+                if (selectedPersona) {
+                    const persona = Object.values(PERSONAS)
+                        .flat()
+                        .find(p => p.id === selectedPersona);
+                    
+                    if (persona) {
+                        onAddPersona({
+                            ...persona,
+                            cardId: Date.now()
+                        });
+                        setSelectedPersona('');
+                    }
                 }
             };
 
@@ -2423,11 +2528,35 @@
                             className="persona-selector"
                         >
                             <option value="">👥 Select Audience...</option>
-                            {PERSONAS.map(persona => (
-                                <option key={persona.id} value={persona.id}>
-                                    {persona.emoji} {persona.name}
-                                </option>
-                            ))}
+                            <option value="empty">✨ Empty Audience Card</option>
+                            <optgroup label="Customer">
+                                {PERSONAS['Customers'].map(persona => (
+                                    <option key={persona.id} value={persona.id}>
+                                        {persona.emoji} {persona.name}
+                                    </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Service">
+                                {PERSONAS['Service Types'].map(persona => (
+                                    <option key={persona.id} value={persona.id}>
+                                        {persona.emoji} {persona.name}
+                                    </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="C-Suite">
+                                {PERSONAS['C-Suite'].map(persona => (
+                                    <option key={persona.id} value={persona.id}>
+                                        {persona.emoji} {persona.name}
+                                    </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Agency">
+                                {PERSONAS['Agency'].map(persona => (
+                                    <option key={persona.id} value={persona.id}>
+                                        {persona.emoji} {persona.name}
+                                    </option>
+                                ))}
+                            </optgroup>
                         </select>
                         <button 
                             onClick={handleAddPersona}
@@ -2831,7 +2960,7 @@
 
             return (
                 <div className="document-tray">
-                    <div className="document-tray-title">Uploaded Documents</div>
+                    <div className="document-tray-title">Uploaded Texts</div>
                     <div className="document-preview-list">
                         {uploadedDocuments.map(doc => (
                             <div key={doc.id} className="document-preview-item">
@@ -2877,8 +3006,76 @@
             );
         };
 
-        // Update the SCENARIOS constant with populated fields
+        // Update the SCENARIOS constant with new groups and small business scenarios
         const SCENARIOS = [
+            {
+                id: 'empty',
+                emoji: '✨',
+                name: 'Empty Scenario Card',
+                scenario: {
+                    name: '',
+                    contextDescription: '',
+                    challenges: '',
+                    opportunities: ''
+                }
+            },
+            // Small Business Group
+            {
+                id: 'retail-expansion',
+                emoji: '🏪',
+                name: 'Retail Store Expansion',
+                scenario: {
+                    name: 'Local Retail Growth Strategy',
+                    contextDescription: 'Successful local retail store with 5 years of operation, $1.2M annual revenue, looking to expand to second location. Current store has loyal customer base and strong community presence.',
+                    challenges: 'Limited capital resources, finding right location, maintaining quality across locations, staff recruitment and training, inventory management across stores, preserving brand identity and customer experience.',
+                    opportunities: 'Market expansion, economies of scale, increased brand recognition, cross-location customer flow, enhanced purchasing power, operational efficiency improvements.'
+                }
+            },
+            {
+                id: 'restaurant-digital',
+                emoji: '🍽️',
+                name: 'Restaurant Digital Transformation',
+                scenario: {
+                    name: 'Restaurant Tech Modernization',
+                    contextDescription: 'Family-owned restaurant with 15-year history, transitioning to digital operations. Currently uses basic POS system and paper-based processes. 50 seats, $800K annual revenue.',
+                    challenges: 'Staff technology adoption, customer acceptance of new systems, integration costs, maintaining personal touch, training requirements, data management compliance.',
+                    opportunities: 'Improved efficiency, better customer data insights, online ordering revenue, reduced errors, enhanced customer experience, competitive advantage.'
+                }
+            },
+            {
+                id: 'service-scaling',
+                emoji: '🔧',
+                name: 'Service Business Scaling',
+                scenario: {
+                    name: 'Professional Services Growth',
+                    contextDescription: 'Professional services firm (accounting/consulting) with 3 partners, 12 staff, $1.5M revenue. Looking to scale operations while maintaining quality and client relationships.',
+                    challenges: 'Quality control at scale, knowledge transfer, client relationship management, process standardization, team expansion, technology infrastructure needs.',
+                    opportunities: 'Market share growth, service diversification, improved profitability, enhanced client services, talent attraction, operational excellence.'
+                }
+            },
+            {
+                id: 'ecommerce-launch',
+                emoji: '🛍️',
+                name: 'E-commerce Launch',
+                scenario: {
+                    name: 'Traditional to Online Retail',
+                    contextDescription: 'Traditional brick-and-mortar gift shop launching e-commerce platform. 10-year established business, $500K annual revenue, strong local reputation, unique product selection.',
+                    challenges: 'Online competition, shipping logistics, inventory synchronization, digital marketing expertise, customer service scaling, technology platform selection.',
+                    opportunities: 'Geographic market expansion, 24/7 sales potential, reduced overhead, data-driven insights, personalized marketing, automated operations.'
+                }
+            },
+            {
+                id: 'wellness-hybrid',
+                emoji: '🧘',
+                name: 'Wellness Center Hybrid',
+                scenario: {
+                    name: 'Hybrid Wellness Services',
+                    contextDescription: 'Local wellness center transitioning to hybrid service model. Currently offers in-person yoga, fitness, and wellness services. 300 active members, $400K annual revenue.',
+                    challenges: 'Technology infrastructure needs, maintaining community feel, pricing strategy, content creation, instructor training, service quality consistency.',
+                    opportunities: 'Expanded client reach, new revenue streams, reduced facility constraints, enhanced client convenience, service personalization, data-driven programming.'
+                }
+            },
+            // Enterprise Transformation Group
             {
                 id: 'digital-transformation',
                 emoji: '🚀',
@@ -3031,11 +3228,21 @@
                             className="scenario-selector"
                         >
                             <option value="">🎯 Select Scenario...</option>
-                            {SCENARIOS.map(scenario => (
-                                <option key={scenario.id} value={scenario.id}>
-                                    {scenario.emoji} {scenario.name}
-                                </option>
-                            ))}
+                            <option value="empty">✨ Empty Scenario Card</option>
+                            <optgroup label="Small Business">
+                                {SCENARIOS.slice(1, 6).map(scenario => (
+                                    <option key={scenario.id} value={scenario.id}>
+                                        {scenario.emoji} {scenario.name}
+                                    </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Enterprise Transformation">
+                                {SCENARIOS.slice(6).map(scenario => (
+                                    <option key={scenario.id} value={scenario.id}>
+                                        {scenario.emoji} {scenario.name}
+                                    </option>
+                                ))}
+                            </optgroup>
                         </select>
                         <button 
                             onClick={handleAddScenario}
@@ -3050,6 +3257,70 @@
         };
 
         // Add this constant near the other constants at the top of the script
+        const EXPERT_PROMPTS = [
+            {
+                id: 'concept-architect',
+                name: 'The Concept Architect',
+                emoji: '🏛️',
+                text: 'As a visionary innovator who sees potential connections and applications that others miss, analyze this through Pattern Layer (mapping recurring elements), Recombination Layer (creating novel combinations), and Evolution Layer (projecting evolution). Use vivid analogies and create conceptual prototypes to test ideas.'
+            },
+            {
+                id: 'narrative-synthesist',
+                name: 'The Narrative Synthesist',
+                emoji: '📚',
+                text: 'As a master of finding and crafting stories that make complex information compelling, analyze this through Story Structure (mapping narrative elements), Information Architecture (creating multi-layered experiences), and Meaning-Making (surfacing implicit assumptions). Create nested narratives that reward deeper exploration.'
+            },
+            {
+                id: 'system-cartographer',
+                name: 'The System Cartographer',
+                emoji: '🗺️',
+                text: 'As an explorer of complex systems, analyze this through Topology (mapping structures), Dynamics (tracking feedback loops), and Evolution (projecting trajectories). Use visual metaphors to make complex systems graspable and highlight counterintuitive relationships.'
+            },
+            {
+                id: 'integration-architect',
+                name: 'The Integration Architect',
+                emoji: '🔄',
+                text: 'As a master of synthesis, analyze this through Boundary (mapping interface points), Synthesis (creating unifying frameworks), and Emergence (projecting integration outcomes). Create clear frameworks showing how pieces fit together and highlight unique value created through combination.'
+            },
+            {
+                id: 'future-cartographer',
+                name: 'The Future Cartographer',
+                emoji: '🔮',
+                text: 'As an explorer of possible futures, analyze this through Signal (identifying emerging changes), Scenario (mapping decision spaces), and Implication (tracking consequences). Create vivid but plausible future scenarios and highlight present-day implications.'
+            },
+            {
+                id: 'collaborative-catalyst',
+                name: 'The Collaborative Catalyst',
+                emoji: '🤝',
+                text: 'As a master of group dynamics, analyze this through Group Dynamics (mapping interactions), Process Architecture (designing frameworks), and Knowledge Flow (tracking learning). Use inclusive language and highlight collective insights.'
+            },
+            {
+                id: 'strategy-weaver',
+                name: 'The Strategy Weaver',
+                emoji: '🎯',
+                text: 'As a strategic thinker, analyze this through Environmental (mapping external dynamics), Capability (assessing internal strengths), and Implementation (creating execution plans). Use strategic frameworks and highlight key decision points.'
+            },
+            {
+                id: 'knowledge-architect',
+                name: 'The Knowledge Architect',
+                emoji: '📚',
+                text: 'As a curator and connector of knowledge, analyze this through Content (mapping domains), Structure (designing systems), and Evolution (tracking growth). Use clear taxonomies and create multiple entry points for different users.'
+            },
+            {
+                id: 'process-optimizer',
+                name: 'The Process Optimizer',
+                emoji: '⚙️',
+                text: 'As an efficiency expert, analyze this through Efficiency (mapping flows), Quality (assessing consistency), and Innovation (identifying improvements). Use clear process visualizations and highlight both quick wins and strategic improvements.'
+            },
+            {
+                id: 'solution-architect',
+                name: 'The Solution Architect',
+                emoji: '🔧',
+                text: 'As a master problem solver, analyze this through Problem (mapping root causes), Design (creating frameworks), and Implementation (planning deployment). Use clear problem-solution mapping and highlight key decision points.'
+            }
+        ];
+
+        // Update the PROMPT_TEMPLATES constant to include both basic and expert prompts
         const PROMPT_TEMPLATES = [
             {
                 id: 'empty',
@@ -3058,28 +3329,98 @@
                 text: ''
             },
             {
-                id: 'summary',
-                name: 'Content Summary',
-                emoji: '��',
-                text: 'Please provide a comprehensive summary, highlighting the key points and main ideas'
-            },
-            {
-                id: 'analysis',
-                name: 'Detailed Analysis',
+                id: 'comprehensive-analysis',
+                name: 'Comprehensive Analysis',
                 emoji: '🔍',
-                text: 'Please perform a detailed analysis, including:\n1. Main themes and concepts\n2. Key arguments or positions\n3. Supporting evidence\n4. Potential implications'
+                text: 'Please provide a comprehensive analysis of the content, including:\n\n1. Executive Summary\n- Key findings and insights\n- Critical implications\n- Recommended actions\n\n2. Content Analysis\n- Main themes and concepts\n- Key arguments and positions\n- Supporting evidence quality\n- Gaps or limitations\n\n3. Context Integration\n- Industry/market relevance\n- Historical context\n- Current trends alignment\n- Future implications\n\n4. Stakeholder Impact\n- Primary stakeholder considerations\n- Potential benefits and risks\n- Implementation challenges\n- Success metrics\n\n5. Strategic Recommendations\n- Short-term actions\n- Long-term strategies\n- Resource requirements\n- Risk mitigation approaches'
+        },
+        {
+            id: 'data-insights',
+            name: 'Data & Metrics Analysis',
+            emoji: '📊',
+            text: 'Analyze the data and metrics presented in the content:\n\n1. Key Metrics Review\n- Identify and explain critical metrics\n- Analyze trends and patterns\n- Compare against industry standards\n- Highlight anomalies or concerns\n\n2. Performance Analysis\n- Success indicators\n- Areas for improvement\n- Bottlenecks and constraints\n- Optimization opportunities\n\n3. Predictive Insights\n- Future trend projections\n- Potential scenarios\n- Risk factors\n- Growth opportunities\n\n4. Actionable Recommendations\n- Data-driven decisions\n- Measurement improvements\n- Monitoring strategies\n- Success metrics'
+        },
+        {
+            id: 'strategic-planning',
+            name: 'Strategic Planning',
+            emoji: '🎯',
+            text: 'Develop a strategic analysis and planning framework:\n\n1. Situation Analysis\n- Current state assessment\n- Market position\n- Competitive landscape\n- Core capabilities\n\n2. Strategic Options\n- Potential directions\n- Growth opportunities\n- Innovation possibilities\n- Partnership potential\n\n3. Implementation Framework\n- Key initiatives\n- Resource requirements\n- Timeline considerations\n- Success metrics\n\n4. Risk Assessment\n- Potential obstacles\n- Mitigation strategies\n- Contingency plans\n- Monitoring approach'
+        },
+        {
+            id: 'innovation-opportunities',
+            name: 'Innovation Opportunities',
+            emoji: '💡',
+            text: 'Identify and analyze innovation opportunities:\n\n1. Innovation Landscape\n- Current trends\n- Emerging technologies\n- Market gaps\n- Customer needs\n\n2. Opportunity Analysis\n- Potential solutions\n- Value proposition\n- Market fit\n- Implementation feasibility\n\n3. Development Framework\n- Resource requirements\n- Timeline considerations\n- Technical requirements\n- Success criteria\n\n4. Risk and Impact\n- Implementation challenges\n- Market adoption factors\n- Competition response\n- Success metrics'
+        },
+        {
+            id: 'market-analysis',
+            name: 'Market Analysis',
+            emoji: '🌐',
+            text: 'Conduct a comprehensive market analysis:\n\n1. Market Overview\n- Size and growth\n- Key segments\n- Trends and drivers\n- Regulatory factors\n\n2. Competitive Analysis\n- Key players\n- Market shares\n- Competitive advantages\n- Strategic positions\n\n3. Customer Analysis\n- Needs and preferences\n- Behavior patterns\n- Decision factors\n- Value perceptions\n\n4. Opportunity Assessment\n- Market gaps\n- Growth potential\n- Entry barriers\n- Success factors'
+        }
+    ];
+
+        // Add the CURIOSITY_AGENCY prompts as a separate constant
+        const CURIOSITY_AGENCY = [
+            {
+                id: 'concept-architect',
+                name: 'The Concept Architect',
+                emoji: '🏛️',
+                text: 'As a visionary innovator who sees potential connections and applications that others miss, analyze this through Pattern Layer (mapping recurring elements), Recombination Layer (creating novel combinations), and Evolution Layer (projecting evolution). Use vivid analogies and create conceptual prototypes to test ideas.'
             },
             {
-                id: 'actionItems',
-                name: 'Action Items',
-                emoji: '✅',
-                text: 'Identify and list specific, actionable items that should be addressed'
+                id: 'narrative-synthesist',
+                name: 'The Narrative Synthesist',
+                emoji: '📚',
+                text: 'As a master of finding and crafting stories that make complex information compelling, analyze this through Story Structure (mapping narrative elements), Information Architecture (creating multi-layered experiences), and Meaning-Making (surfacing implicit assumptions). Create nested narratives that reward deeper exploration.'
             },
             {
-                id: 'keyInsights',
-                name: 'Key Insights',
-                emoji: '💡',
-                text: 'Extract and explain the most important insights'
+                id: 'system-cartographer',
+                name: 'The System Cartographer',
+                emoji: '🗺️',
+                text: 'As an explorer of complex systems, analyze this through Topology (mapping structures), Dynamics (tracking feedback loops), and Evolution (projecting trajectories). Use visual metaphors to make complex systems graspable and highlight counterintuitive relationships.'
+            },
+            {
+                id: 'integration-architect',
+                name: 'The Integration Architect',
+                emoji: '🔄',
+                text: 'As a master of synthesis, analyze this through Boundary (mapping interface points), Synthesis (creating unifying frameworks), and Emergence (projecting integration outcomes). Create clear frameworks showing how pieces fit together and highlight unique value created through combination.'
+            },
+            {
+                id: 'future-cartographer',
+                name: 'The Future Cartographer',
+                emoji: '🔮',
+                text: 'As an explorer of possible futures, analyze this through Signal (identifying emerging changes), Scenario (mapping decision spaces), and Implication (tracking consequences). Create vivid but plausible future scenarios and highlight present-day implications.'
+            },
+            {
+                id: 'collaborative-catalyst',
+                name: 'The Collaborative Catalyst',
+                emoji: '🤝',
+                text: 'As a master of group dynamics, analyze this through Group Dynamics (mapping interactions), Process Architecture (designing frameworks), and Knowledge Flow (tracking learning). Use inclusive language and highlight collective insights.'
+            },
+            {
+                id: 'strategy-weaver',
+                name: 'The Strategy Weaver',
+                emoji: '🎯',
+                text: 'As a strategic thinker, analyze this through Environmental (mapping external dynamics), Capability (assessing internal strengths), and Implementation (creating execution plans). Use strategic frameworks and highlight key decision points.'
+            },
+            {
+                id: 'knowledge-architect',
+                name: 'The Knowledge Architect',
+                emoji: '📚',
+                text: 'As a curator and connector of knowledge, analyze this through Content (mapping domains), Structure (designing systems), and Evolution (tracking growth). Use clear taxonomies and create multiple entry points for different users.'
+            },
+            {
+                id: 'process-optimizer',
+                name: 'The Process Optimizer',
+                emoji: '⚙️',
+                text: 'As an efficiency expert, analyze this through Efficiency (mapping flows), Quality (assessing consistency), and Innovation (identifying improvements). Use clear process visualizations and highlight both quick wins and strategic improvements.'
+            },
+            {
+                id: 'solution-architect',
+                name: 'The Solution Architect',
+                emoji: '🔧',
+                text: 'As a master problem solver, analyze this through Problem (mapping root causes), Design (creating frameworks), and Implementation (planning deployment). Use clear problem-solution mapping and highlight key decision points.'
             }
         ];
 
@@ -3089,7 +3430,7 @@
 
             const handleAddPrompt = () => {
                 if (selectedTemplate) {
-                    const template = PROMPT_TEMPLATES.find(t => t.id === selectedTemplate);
+                    const template = [...PROMPT_TEMPLATES, ...CURIOSITY_AGENCY].find(t => t.id === selectedTemplate);
                     if (template) {
                         onAddPrompt({
                             id: Date.now(),
@@ -3116,11 +3457,20 @@
                             className="persona-selector"
                         >
                             <option value="">✨ Select Prompt... </option>
-                            {PROMPT_TEMPLATES.map(template => (
-                                <option key={template.id} value={template.id}>
-                                    {template.emoji} {template.name}
-                                </option>
-                            ))}
+                            <optgroup label="Basic Prompts">
+                                {PROMPT_TEMPLATES.map(template => (
+                                    <option key={template.id} value={template.id}>
+                                        {template.emoji} {template.name}
+                                    </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="Curiosity Agency">
+                                {CURIOSITY_AGENCY.map(template => (
+                                    <option key={template.id} value={template.id}>
+                                        {template.emoji} {template.name}
+                                    </option>
+                                ))}
+                            </optgroup>
                         </select>
                         <button 
                             onClick={handleAddPrompt}
@@ -3129,8 +3479,6 @@
                         >
                             +
                         </button>
-
-                        
                     </div>
                 </div>
             );
@@ -4097,15 +4445,119 @@
                 }
             ];
 
-            // Add the PlaygroundTray component
+            // Add this function to load playgrounds from the filesystem
+            const loadPlaygroundsFromFS = async () => {
+                try {
+                    console.log('Starting to load playgrounds...');
+                    
+                    // Get list of playground files
+                    const files = [
+                        'playground-product marketing team.json',
+                        'sales-playground.json',
+                        'product-ideation-team.json',
+                        'experts-playground.json',
+                        'hackathon-team.json',
+                        'corporate-roundtable-team.json',
+                        'strategic-planning-team.json'
+                    ];
+                    
+                    console.log('Found playground files:', files);
+                    
+                    // Load each playground file
+                    const loadedPlaygrounds = files.map(file => {
+                        try {
+                            // For the product marketing team playground, we'll use its actual content
+                            if (file === 'playground-product marketing team.json') {
+                                return {
+                                    id: file.replace('.json', ''),
+                                    name: 'Product Marketing Team',
+                                    description: 'A Marketing Scenario, Shopping Personas and Marketing Agents.',
+                                    config: {
+                                        agencyName: 'Product Marketing Team',
+                                        agencyDescription: 'A Marketing Scenario, Shopping Personas and Marketing Agents.',
+                                        personaCards: [
+                                            // ... persona cards would go here
+                                        ],
+                                        prompts: [
+                                            {
+                                                id: 1,
+                                                title: 'Product Describer',
+                                                text: 'Agent for Product Description...',
+                                                result: '',
+                                                source: 'SOURCE',
+                                                sources: ['SOURCE'],
+                                                sourceType: 'text',
+                                                selectedImage: null
+                                            },
+                                            // ... other prompts would go here
+                                        ]
+                                    }
+                                };
+                            }
+                            
+                            // For other files, create placeholder content
+                            const name = file.replace('.json', '').replace(/-/g, ' ');
+                            return {
+                                id: file.replace('.json', ''),
+                                name: name.charAt(0).toUpperCase() + name.slice(1),
+                                description: 'Custom playground',
+                                config: {
+                                    agencyName: name.charAt(0).toUpperCase() + name.slice(1),
+                                    agencyDescription: 'Custom playground',
+                                    personaCards: [],
+                                    prompts: []
+                                }
+                            };
+                        } catch (error) {
+                            console.error(`Error loading playground ${file}:`, error);
+                            return null;
+                        }
+                    });
+
+                    // Filter out any failed loads
+                    const validPlaygrounds = loadedPlaygrounds.filter(p => p !== null);
+                    console.log('Final loaded playgrounds:', validPlaygrounds);
+                    
+                    return validPlaygrounds;
+                } catch (error) {
+                    console.error('Error loading playgrounds:', error);
+                    throw error;
+                }
+            };
+
+            // Update the PlaygroundTray component to handle loading states
             const PlaygroundTray = ({ onLoadPlayground }) => {
                 const [selectedPlayground, setSelectedPlayground] = React.useState('');
+                const [loadedPlaygrounds, setLoadedPlaygrounds] = React.useState([]);
+                const [isLoading, setIsLoading] = React.useState(true);
+                const [loadError, setLoadError] = React.useState(null);
+
+                // Load playgrounds when component mounts
+                React.useEffect(() => {
+                    const loadPlaygrounds = async () => {
+                        try {
+                            setIsLoading(true);
+                            setLoadError(null);
+                            const playgrounds = await loadPlaygroundsFromFS();
+                            setLoadedPlaygrounds(playgrounds);
+                        } catch (error) {
+                            console.error('Error loading playgrounds:', error);
+                            setLoadError('Failed to load custom playgrounds');
+                        } finally {
+                            setIsLoading(false);
+                        }
+                    };
+
+                    loadPlaygrounds();
+                }, []);
 
                 const handleLoadPlayground = () => {
                     if (selectedPlayground) {
-                        const playground = PLAYGROUNDS.find(p => p.id === selectedPlayground);
-                        onLoadPlayground(playground.config);
-                        setSelectedPlayground('');
+                        const playground = [...PLAYGROUNDS, ...loadedPlaygrounds].find(p => p.id === selectedPlayground);
+                        if (playground && onLoadPlayground) {
+                            onLoadPlayground(playground.config);
+                            setSelectedPlayground('');
+                        }
                     }
                 };
 
@@ -4118,44 +4570,97 @@
                                 className="persona-selector"
                                 style={{ 
                                     flex: '1',
-                                    maxWidth: 'calc(100% - 45px)', // Leave space for the button
+                                    maxWidth: 'calc(100% - 45px)',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap'
                                 }}
+                                disabled={isLoading}
                             >
-                                <option value="">🎮 Select Playground...</option>
-                                {PLAYGROUNDS.map(playground => (
-                                    <option key={playground.id} value={playground.id}>
-                                        {playground.name} - {playground.description}
-                                    </option>
-                                ))}
+                                <option value="">
+                                    {isLoading ? '🔄 Loading playgrounds...' : '🎮 Select Playground...'}
+                                </option>
+                                <optgroup label="Default Playgrounds">
+                                    {PLAYGROUNDS.map(playground => (
+                                        <option key={playground.id} value={playground.id}>
+                                            {playground.name} - {playground.description}
+                                        </option>
+                                    ))}
+                                </optgroup>
+                                {loadedPlaygrounds.length > 0 && (
+                                    <optgroup label="Custom Playgrounds">
+                                        {loadedPlaygrounds.map(playground => (
+                                            <option key={playground.id} value={playground.id}>
+                                                {playground.name} - {playground.description}
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                )}
                             </select>
                             <button 
                                 onClick={handleLoadPlayground}
                                 className="add-persona-btn"
-                                disabled={!selectedPlayground}
+                                disabled={!selectedPlayground || isLoading}
                                 style={{ 
                                     minWidth: '35px',
                                     height: '35px',
                                     padding: '0',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    opacity: (!selectedPlayground || isLoading) ? 0.5 : 1
                                 }}
                             >
-                                +
+                                {isLoading ? '🔄' : '+'}
+                            </button>
+                        </div>
+                        {loadError && (
+                            <div style={{ 
+                                color: 'var(--error-color)', 
+                                fontSize: '0.75rem', 
+                                marginTop: '0.25rem' 
+                            }}>
+                                {loadError}
+                            </div>
+                        )}
+                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                            <input
+                                type="file"
+                                id="loadAgencyInput"
+                                className="hidden"
+                                accept=".json"
+                                onChange={loadAgency}
+                                disabled={isLoading}
+                            />
+                            <button 
+                                onClick={() => document.getElementById('loadAgencyInput').click()} 
+                                className="btn btn-agency"
+                                style={{ flex: 1, fontSize: '0.75rem', padding: '0.5rem' }}
+                                disabled={isLoading}
+                            >
+                                📂 Import Playground
+                            </button>
+                            <button 
+                                onClick={exportAgency} 
+                                className="btn btn-agency"
+                                style={{ flex: 1, fontSize: '0.75rem', padding: '0.5rem' }}
+                                disabled={isLoading}
+                            >
+                                💾 Export Playground
                             </button>
                         </div>
                     </div>
                 );
             };
 
-            // In your App component, add the loadPlayground function
+            // Update the loadPlayground function to handle all playground data
             const loadPlayground = (config) => {
-                setAgencyName(config.agencyName);
-                setAgencyDescription(config.agencyDescription);
-                setPrompts(config.prompts);
+                setAgencyName(config.agencyName || '');
+                setAgencyDescription(config.agencyDescription || '');
+                setPrompts(config.prompts || []);
+                setPersonaCards(config.personaCards || []);
+                setScenarioCards(config.scenarioCards || []);
+                setSourceContent(config.sourceContent || '');
             };
 
             // Add this debug log
@@ -4270,7 +4775,7 @@
                                     </button>
                                 </div>
 
-                                {/* LLM Settings Section */}
+                                {/* Only keep the LLM Settings Section */}
                                 <div style={{ marginBottom: '2rem' }}>
                                     <h4 style={{ marginBottom: '1rem' }}>LLM Settings</h4>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -4333,54 +4838,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Playground Management Section */}
-                                <div>
-                                    <h4 style={{ marginBottom: '1rem' }}>Playground Management</h4>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        <input
-                                            type="file"
-                                            id="loadPlayground"
-                                            accept=".json"
-                                            onChange={loadAgency}
-                                            style={{ display: 'none' }}
-                                        />
-                                        <button 
-                                            onClick={() => document.getElementById('loadPlayground').click()}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                background: 'var(--accent-color)',
-                                                border: 'none',
-                                                color: 'white',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '0.5rem'
-                                            }}
-                                        >
-                                            <span>📂</span> Import Playground
-                                        </button>
-                                        <button 
-                                            onClick={exportAgency}
-                                            style={{
-                                                width: '100%',
-                                                padding: '0.75rem',
-                                                background: 'var(--accent-color)',
-                                                border: 'none',
-                                                color: 'white',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '0.5rem'
-                                            }}
-                                        >
-                                            <span>💾</span> Export Playground
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         )}
 
@@ -4409,13 +4866,13 @@
                                         </div>
 
                                         {/* Playground Selection */}
-                                        <h3 className="section-title">📚 Playgrounds</h3>
+                                        <h3 className="section-title">📚PLAYGROUND</h3>
                                         <PlaygroundTray onLoadPlayground={loadPlayground} />
 
                                         {/* Upload Components Group */}
                                         <div className="upload-content-group">
                                             <div className="document-tray-title">
-                                                📚 Upload Content
+                                                <h3 className="section-title">📚 DATA</h3>
                                             </div>
                                             <input
                                                 type="file"
@@ -4430,7 +4887,7 @@
                                                 className="btn btn-primary"
                                                 style={{ marginBottom: '1rem' }}
                                             >
-                                                📎 Upload File or Image
+                                                📎 Upload Texts or Images
                                             </button>
 
                                             <div className="tray-container">
@@ -4443,7 +4900,7 @@
                                                 />
 
                                                 <div className="document-tray-title">
-                                                    Source
+                                                    Input Text
                                                 </div>
                                                 <textarea
                                                     value={sourceContent}
@@ -4458,7 +4915,7 @@
 
                                         {/* Card Selection Group */}
                                         <div className="document-tray-title">
-                                            🎴 Card Selection
+                                            <h3 className="section-title">🎴 CARDS</h3>
                                         </div>
                                         <div className="selection-trays">
                                             <ScenarioTray onAddScenario={addScenarioCard} />

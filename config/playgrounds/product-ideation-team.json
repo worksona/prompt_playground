@@ -1,0 +1,198 @@
+{
+  "agencyName": "Product Ideation Team",
+  "agencyDescription": "A Product Innovation Scenario with Creative Personas and Ideation Exercises",
+  "sourceContent": "",
+  "uploadedImages": [],
+  "personaCards": [
+    {
+      "id": "innovator",
+      "name": "Product Vision Lead",
+      "emoji": "💡",
+      "description": "## Rachel Patel\n\nAge: 36\nOccupation: Head of Product Innovation\nLocation: Seattle, WA\nIncome: $155,000/year\n\n### Background and Work History\n\nRachel has an MBA in Product Management and Design Thinking certification. Led product teams at various tech companies, launching multiple successful products.\n\n### Affiliations and Interests\n\n- Product Management Institute member\n- Design Thinking workshop facilitator\n- Innovation conference speaker\n- Tech startup mentor\n\n### Habits and Behaviors\n\n- Conducts daily innovation standups\n- Maintains idea journal\n- Practices rapid prototyping\n- Leads design sprints\n\n### Ideation Preferences\n\n- User-centered design approach\n- Rapid iteration methodology\n- Cross-functional collaboration\n- Data-informed decision making\n\n### Behavioral Profiling Insights\n\n1. Creative Thinking: Exceptional (10/10)\n2. User Empathy: Very High (9/10)\n3. Technical Understanding: Strong (8/10)\n4. Leadership: Excellent (9/10)\n5. Risk Tolerance: High (8/10)\n\n### Weighted Insights from Experience\n\n1. Values user feedback (95% importance)\n2. Emphasizes market fit (90% importance)\n3. Focuses on scalability (85% importance)\n4. Prioritizes innovation (80% importance)\n5. Considers sustainability (75% importance)",
+      "cardId": 1734507923289
+    },
+    {
+      "id": "innovator",
+      "name": "User Experience Researcher",
+      "emoji": "🔍",
+      "description": "## David Kim\n\nAge: 32\nOccupation: Senior UX Researcher\nLocation: Austin, TX\nIncome: $125,000/year\n\n### Background and Work History\n\nDavid has a Masters in Human-Computer Interaction and extensive experience in user research methodologies. Specializes in qualitative research and behavioral analysis.\n\n### Affiliations and Interests\n\n- UXPA member\n- Ethnographic research specialist\n- Usability testing expert\n- Behavioral psychology enthusiast\n\n### Habits and Behaviors\n\n- Conducts regular user interviews\n- Creates user journey maps\n- Develops personas\n- Analyzes user behavior patterns\n\n### Research Preferences\n\n- Mixed methods approach\n- In-context observation\n- Participatory design\n- Iterative testing\n\n### Behavioral Profiling Insights\n\n1. Research Skills: Exceptional (10/10)\n2. Analytical Thinking: Very High (9/10)\n3. Communication: Strong (8/10)\n4. Empathy: Excellent (9/10)\n5. Problem-Solving: High (8/10)\n\n### Weighted Insights from Research\n\n1. Prioritizes user needs (95% importance)\n2. Values contextual inquiry (90% importance)\n3. Focuses on accessibility (85% importance)\n4. Emphasizes usability (80% importance)\n5. Considers cultural factors (75% importance)",
+      "cardId": 1734507956244
+    }
+  ],
+  "ideationExercises": [
+    {
+      "id": "reverse-brainstorming",
+      "name": "Reverse Brainstorming",
+      "description": "Identify ways to cause the opposite of desired outcome, then reverse these ideas",
+      "duration": "45 minutes",
+      "steps": [
+        "State the problem in reverse",
+        "Generate ideas for causing the problem",
+        "Reverse these ideas into solutions",
+        "Evaluate and prioritize solutions"
+      ],
+      "materials": [
+        "Whiteboard",
+        "Sticky notes",
+        "Markers",
+        "Timer"
+      ],
+      "outcomes": [
+        "Novel problem perspectives",
+        "Unconventional solutions",
+        "Risk identification"
+      ]
+    },
+    {
+      "id": "future-backwards",
+      "name": "Future Backwards",
+      "description": "Envision ideal future state and work backwards to present actions",
+      "duration": "60 minutes",
+      "steps": [
+        "Define future success state",
+        "Identify key milestones",
+        "Map dependencies",
+        "Create action plan"
+      ],
+      "materials": [
+        "Large paper",
+        "Timeline template",
+        "Colored markers",
+        "Post-its"
+      ],
+      "outcomes": [
+        "Clear vision",
+        "Strategic roadmap",
+        "Action priorities"
+      ]
+    },
+    {
+      "id": "crazy-eights",
+      "name": "Crazy Eights",
+      "description": "Rapid sketching exercise to generate multiple solution concepts quickly",
+      "duration": "30 minutes",
+      "steps": [
+        "Fold paper into eight sections",
+        "Sketch one idea per section (1 minute each)",
+        "Share and discuss ideas",
+        "Vote on promising concepts"
+      ],
+      "materials": [
+        "Blank paper",
+        "Pencils/markers",
+        "Timer",
+        "Voting dots"
+      ],
+      "outcomes": [
+        "Multiple concepts",
+        "Quick iterations",
+        "Visual thinking"
+      ]
+    },
+    {
+      "id": "empathy-mapping",
+      "name": "Empathy Mapping",
+      "description": "Deep dive into user perspectives and experiences",
+      "duration": "90 minutes",
+      "steps": [
+        "Define user segment",
+        "Map what users think/feel/say/do",
+        "Identify pain points and gains",
+        "Generate insights"
+      ],
+      "materials": [
+        "Empathy map template",
+        "Research data",
+        "Sticky notes",
+        "Markers"
+      ],
+      "outcomes": [
+        "User insights",
+        "Pain points",
+        "Opportunity areas"
+      ]
+    }
+  ],
+  "productFrameworks": [
+    {
+      "id": "jobs-to-be-done",
+      "name": "Jobs to be Done",
+      "description": "Framework for understanding why customers 'hire' products",
+      "components": [
+        "Functional job aspects",
+        "Emotional job aspects",
+        "Social job aspects",
+        "Success criteria"
+      ],
+      "applicationSteps": [
+        "Identify key jobs",
+        "Map current solutions",
+        "Find unmet needs",
+        "Design solutions"
+      ]
+    },
+    {
+      "id": "value-proposition-canvas",
+      "name": "Value Proposition Canvas",
+      "description": "Tool for ensuring product-market fit",
+      "components": [
+        "Customer profile",
+        "Value map",
+        "Fit analysis"
+      ],
+      "applicationSteps": [
+        "Define customer profile",
+        "Map value creation",
+        "Identify fit",
+        "Iterate solution"
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": 1,
+      "title": "Idea Generator",
+      "text": "Agent for Idea Generation\n\nYou are an Idea Generation Agent working in product innovation. Perform your tasks and follow your process steps.\n\n**Name:** Idea Generator\n\n**Role:** To facilitate creative ideation sessions.\n\n**Goal:** To generate innovative product concepts and solutions.\n\n**Tasks:**\n1. Frame opportunity areas\n2. Generate creative concepts\n3. Evaluate feasibility\n4. Develop prototypes\n5. Test assumptions\n\n**Process Steps:**\n1. Opportunity Framing\n2. Ideation\n3. Concept Development\n4. Prototyping\n5. Testing\n\n**Self-reflection:**\n- Evaluate creativity\n- Assess feasibility\n- Review user value\n\n**Overall Scoring System:**\n- Innovation Level (30%)\n- Feasibility (25%)\n- User Value (25%)\n- Market Potential (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    },
+    {
+      "id": 2,
+      "title": "Concept Validator",
+      "text": "Agent for Concept Validation\n\nYou are a Concept Validation Agent working in product innovation. Perform your tasks and follow your process steps.\n\n**Name:** Concept Validator\n\n**Role:** To validate product concepts through user research and testing.\n\n**Goal:** To ensure product-market fit and user value.\n\n**Tasks:**\n1. Design validation tests\n2. Conduct user research\n3. Analyze feedback\n4. Identify improvements\n5. Iterate concepts\n\n**Process Steps:**\n1. Test Design\n2. Research Execution\n3. Feedback Analysis\n4. Improvement Planning\n5. Concept Iteration\n\n**Self-reflection:**\n- Evaluate methodology\n- Assess insights\n- Review recommendations\n\n**Overall Scoring System:**\n- Research Quality (30%)\n- Insight Value (25%)\n- Recommendation Quality (25%)\n- Implementation Feasibility (20%)",
+      "result": "",
+      "source": "SOURCE",
+      "sources": [
+        "SOURCE"
+      ],
+      "sourceType": "text"
+    }
+  ],
+  "settings": {
+    "model": "gpt-4"
+  },
+  "scenarioCards": [
+    {
+      "id": "product-ideation",
+      "emoji": "💡",
+      "name": "Product Ideation",
+      "scenario": {
+        "situation": "New product development requiring innovative solutions",
+        "description": "Team collaboration to generate and validate product concepts",
+        "context": "Competitive market requiring unique value propositions",
+        "challenges": "Market uncertainty, technical constraints, user needs",
+        "opportunities": "Innovation potential, market gaps, user pain points"
+      },
+      "objective": {
+        "description": "Create innovative product concepts with strong market fit",
+        "alignment": "Match user needs with technical feasibility and business viability",
+        "measurable_outcomes": "Concept validation metrics, user feedback, market potential"
+      },
+      "cardId": 1734507905159
+    }
+  ]
+}
