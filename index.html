@@ -138,10 +138,12 @@
             border-radius: 0;
         }
 
+        /* Update persona selector container styles */
         .persona-selector-container {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1rem;
+            width: 100%; /* Ensure full width */
         }
 
         .persona-selector {
@@ -151,19 +153,24 @@
             border-radius: 0;
             background: var(--primary-bg);
             color: var(--text-primary);
+            width: calc(100% - 35px); /* Account for add button width */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .add-persona-btn {
+            min-width: 35px;
+            height: 35px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: var(--accent-color);
             color: var(--primary-bg);
             border: none;
             border-radius: 0;
-            padding: 0.5rem 1rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
         }
 
         .persona-card {
@@ -344,7 +351,7 @@
         /* Content area */
         .content-area {
             flex: 1;
-            margin-left: 320px;
+            margin-left: 333px; /* 330px + 3px gap from left of screen */
             min-width: 0;
             padding: 0;
             display: flex;
@@ -868,14 +875,14 @@
             min-width: 300px;
             max-width: 400px;
             height: fit-content;
-            min-height: 320px; /* Match persona card initial height */
+            min-height: 720px; /* Increased from 520px to accommodate taller textareas */
             flex-shrink: 0;
             backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             border: 1px solid var(--border-color);
-            border-left: 4px solid #4CAF50; /* Green accent for scenarios */
+            border-left: 4px solid #4CAF50;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             box-sizing: border-box;
         }
@@ -916,10 +923,11 @@
             box-shadow: 0 0 0 2px rgba(99, 226, 183, 0.2);
         }
 
+        /* Update scenario textarea styles */
         .scenario-textarea {
             width: calc(100% - 1rem);
-            min-height: 150px;
-            height: 150px; /* Set initial height to match persona textarea */
+            min-height: 150px; /* Increased from 100px */
+            height: 150px; /* Increased from 100px */
             padding: 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: 0;
@@ -928,7 +936,7 @@
             font-family: inherit;
             background: var(--primary-bg);
             color: var(--text-primary);
-            margin: 0 0.5rem 1rem 0.5rem;
+            margin: 0 0.5rem 0.5rem 0.5rem;
             box-sizing: border-box;
         }
 
@@ -1457,7 +1465,7 @@
 
     .scenario-textarea {
         width: 100%;
-        min-height: 60px;
+        min-height: 150px; /* Increased from 60px */
         padding: 0.75rem;
         border: 1px solid var(--border-color);
         border-radius: 0;
@@ -2156,6 +2164,40 @@
         margin-bottom: 0.25rem;
     }
 
+    /* Add scenario-container styles */
+    .scenario-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        min-width: 300px;
+        max-width: 400px;
+        flex-shrink: 0;
+        margin-left: 20px; /* Add margin to fix horizontal positioning */
+    }
+
+    /* Update scenario card styles to have different heights for different fields */
+    .scenario-textarea {
+        width: calc(100% - 1rem);
+        min-height: 150px; /* Default height for most textareas */
+        height: 150px;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0;
+        resize: vertical;
+        outline: none;
+        font-family: inherit;
+        background: var(--primary-bg);
+        color: var(--text-primary);
+        margin: 0 0.5rem 0.5rem 0.5rem;
+        box-sizing: border-box;
+    }
+
+    /* Add specific style for the name textarea */
+    .scenario-field:first-of-type .scenario-textarea {
+        min-height: 40px; /* Reduced from 60px to fit 2 lines */
+        height: 40px;
+    }
+
     </style>
 </head>
 <body>
@@ -2163,53 +2205,84 @@
     <script type="text/babel">
         // Add this constant at the top of your script, before any other code
         const PERSONAS = [
-            {
-                id: 'executive',
-                name: 'Executive',
-                emoji: '👔',
-                description: 'Strategic, high-level communication focused on business impact and ROI'
-            },
-            {
-                id: 'technical',
-                name: 'Technical Expert',
-                emoji: '🔧',
-                description: 'Detailed, precise communication with technical specifications and implementation details'
-            },
-            {
-                id: 'creative',
-                name: 'Creative Director',
-                emoji: '🎨',
-                description: 'Visual and conceptual thinking with emphasis on design and innovation'
-            },
-            {
-                id: 'marketer',
-                name: 'Marketing Specialist',
-                emoji: '📢',
-                description: 'Persuasive communication focused on value proposition and audience engagement'
-            },
+
             {
                 id: 'customer',
-                name: 'Customer Service',
+                name: 'Customer Experience Leader',
                 emoji: '🤝',
-                description: 'Empathetic, solution-oriented communication focused on user satisfaction'
+                description: 'A customer-centric strategist who has revolutionized service delivery standards. Your innovative approaches have transformed customer satisfaction metrics and established industry-leading loyalty programs.'
             },
             {
                 id: 'analyst',
-                name: 'Data Analyst',
+                name: 'Data Analytics Expert',
                 emoji: '📊',
-                description: 'Analytical communication with focus on metrics, trends, and insights'
+                description: 'A sophisticated data scientist with expertise in predictive modeling and business intelligence. Your analytical insights have driven strategic decisions and uncovered valuable market opportunities.'
             },
             {
                 id: 'trainer',
-                name: 'Training Specialist',
+                name: 'Learning Development Expert',
                 emoji: '📚',
-                description: 'Educational communication focused on learning outcomes and skill development'
+                description: 'An innovative education strategist who has designed transformative learning programs. Your methodologies have significantly improved organizational capabilities and employee development outcomes.'
             },
             {
                 id: 'hr',
-                name: 'HR Professional',
+                name: 'HR Strategic Leader',
                 emoji: '👥',
-                description: 'People-focused communication emphasizing policies, culture, and employee relations'
+                description: 'A progressive HR leader who has shaped organizational culture and talent strategies. Your initiatives have enhanced employee engagement and established best-in-class talent management practices.'
+            },
+            {
+                id: 'marketing-manager',
+                name: 'Marketing Manager',
+                emoji: '🎯',
+                description: 'A strategic marketer with a creative edge, you\'ve launched campaigns that have significantly boosted brand visibility and customer engagement. Your strategies have consistently delivered high returns on investment.'
+            },
+            {
+                id: 'social-media',
+                name: 'Social Media Manager',
+                emoji: '💬',
+                description: 'A social media maven, you\'ve grown online communities into thriving hubs of engagement. Your ability to connect with audiences has turned casual followers into loyal brand advocates.'
+            },
+            {
+                id: 'advertising',
+                name: 'Advertising/Media Manager',
+                emoji: '📺',
+                description: 'You have orchestrated high-impact media campaigns that have reached millions. With a keen understanding of media dynamics, you ensure that every ad dollar spent generates maximum visibility and engagement.'
+            },
+            {
+                id: 'creative-director',
+                name: 'Creative Director',
+                emoji: '🎨',
+                description: 'A visionary with a keen eye for detail, you have brought brands to life with stunning creative work. Your leadership in creative projects has consistently resulted in award-winning campaigns and iconic brand imagery.'
+            },
+            {
+                id: 'ceo',
+                name: 'Chief Executive Officer',
+                emoji: '👑',
+                description: 'As a seasoned leader, you\'ve successfully steered companies through growth and transformation. Your strategic vision and decisive leadership have been key to achieving long-term success and market leadership.'
+            },
+            {
+                id: 'cfo',
+                name: 'Chief Financial Officer',
+                emoji: '💰',
+                description: 'With a sharp financial acumen, you\'ve navigated complex financial landscapes to keep projects profitable. Your strategic financial management has been instrumental in sustaining growth and maximizing returns.'
+            },
+            {
+                id: 'cmo',
+                name: 'Chief Marketing Officer',
+                emoji: '📈',
+                description: 'A marketing powerhouse, you have successfully led branding and marketing initiatives that have positioned products as market leaders. Your ability to craft and execute winning strategies has driven significant market share growth.'
+            },
+            {
+                id: 'cto',
+                name: 'Chief Technology Officer',
+                emoji: '💻',
+                description: 'A technology visionary, you\'ve pioneered innovative solutions that have kept companies at the forefront of their industries. Your leadership in technology has driven sustainable growth and competitive advantage.'
+            },
+            {
+                id: 'cxo',
+                name: 'Chief Experience Officer',
+                emoji: '🌟',
+                description: 'A champion of customer experience, you have transformed customer interactions into memorable experiences. Your strategies have consistently improved customer satisfaction and loyalty, setting new standards in the industry.'
             }
         ];
 
@@ -2557,7 +2630,69 @@
                     </select>
             
                     <div className="prompt-label">PROMPT</div>
+                    {/* Add prompt actions bar */}
+                    <div className="prompt-actions" style={{
+                        position: 'relative',
+                        marginBottom: '0',  // Remove bottom margin to sit directly on textarea
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: '0.5rem'
+                    }}>
+                        <button
+                            className="result-button"
+                            onClick={handleEnhance}
+                            title="Enhance prompt"
+                            disabled={!prompt.text || enhancing}
+                        >
+                            {enhancing ? (
+                                <div className="loading-spinner"></div>
+                            ) : (
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" strokeWidth="2" strokeLinecap="round"/>
+                                </svg>
+                            )}
+                        </button>
+                        <button
+                            className="result-button"
+                            onClick={() => {
+                                const textarea = document.querySelector(`#prompt-${prompt.id}`);
+                                if (textarea) {
+                                    if (textarea.style.height === '500px') {
+                                        textarea.style.height = '200px'; // Return to original height
+                                    } else {
+                                        textarea.style.height = '500px'; // Expand
+                                    }
+                                }
+                            }}
+                            title="Toggle prompt size"
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
+                        <button
+                            className="result-button"
+                            onClick={() => navigator.clipboard.writeText(prompt.text)}
+                            title="Copy prompt"
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M8 4v12a2 2 0 002 2h8a2 2 0 002-2V7.242a2 2 0 00-.602-1.43L16.083 2.57A2 2 0 0014.685 2H10a2 2 0 00-2 2z" strokeWidth="2" strokeLinecap="round"/>
+                                <path d="M16 18v2a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2h2" strokeWidth="2" strokeLinecap="round"/>
+                            </svg>
+                        </button>
+                        <button
+                            className="result-button"
+                            onClick={() => onUpdate(prompt.id, { text: '' })}
+                            title="Clear prompt"
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M19 7l-7 7m0 0l-7-7m7 7V4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+
                     <textarea
+                        id={`prompt-${prompt.id}`}
                         value={prompt.text}
                         onChange={(e) => onUpdate(prompt.id, { text: e.target.value })}
                         placeholder={isImageMode ? "Enter your image analysis prompt..." : "Enter your prompt..."}
@@ -2567,52 +2702,81 @@
                         rows="6"
                     />
             
-                    <div className="result-label">RESULT{prompt.id}</div>
-            
-                            <div className="result-container">
-                                <textarea
-                                    value={prompt.result}
-                                    onChange={(e) => onUpdate(prompt.id, { result: e.target.value })}
-                                    placeholder="Results will appear here..."
-                                    className="result-textarea"
-                                    readOnly
-                                    rows="8"
-                                />
-                                <div className="result-actions">
-                                    <button
-                                        className="result-button"
-                                        onClick={handleEnhance}
-                                        title="Enhance content"
-                                        disabled={!prompt.result || enhancing}
-                                    >
-                                        {enhancing ? (
-                                            <div className="loading-spinner"></div>
-                                        ) : (
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" strokeWidth="2" strokeLinecap="round"/>
-                                            </svg>
-                                        )}
-                                    </button>
-                                    <button
-                                        className="result-button"
-                                        onClick={() => navigator.clipboard.writeText(prompt.result)}
-                                        title="Copy to clipboard"
-                                    >
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path d="M8 4v12a2 2 0 002 2h8a2 2 0 002-2V7.242a2 2 0 00-.602-1.43L16.083 2.57A2 2 0 0014.685 2H10a2 2 0 00-2 2z" strokeWidth="2" strokeLinecap="round"/>
-                                            <path d="M16 18v2a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2h2" strokeWidth="2" strokeLinecap="round"/>
-                                        </svg>
-                                    </button>
-                                    <button
-                                        className="result-button"
-                                        onClick={() => onUpdate(prompt.id, { result: '' })}
-                                        title="Clear result"
-                                    >
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path d="M19 7l-7 7m0 0l-7-7m7 7V4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                    <div className="result-container">
+                        <div className="result-label">RESULT{prompt.id}</div>
+                        
+                        {/* Move result actions here, above the textarea */}
+                        <div className="result-actions" style={{
+                            position: 'relative',
+                            marginBottom: '0.5rem',
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            gap: '0.5rem'
+                        }}>
+                            <button
+                                className="result-button"
+                                onClick={handleEnhance}
+                                title="Enhance content"
+                                disabled={!prompt.result || enhancing}
+                            >
+                                {enhancing ? (
+                                    <div className="loading-spinner"></div>
+                                ) : (
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" strokeWidth="2" strokeLinecap="round"/>
+                                    </svg>
+                                )}
+                            </button>
+                            <button
+                                className="result-button"
+                                onClick={() => {
+                                    const textarea = document.querySelector(`#result-${prompt.id}`);
+                                    if (textarea) {
+                                        // Toggle between expanded and normal height
+                                        if (textarea.style.height === '500px') {
+                                            textarea.style.height = '250px'; // Return to original height
+                                        } else {
+                                            textarea.style.height = '500px'; // Expand
+                                        }
+                                    }
+                                }}
+                                title="Toggle result size"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                            <button
+                                className="result-button"
+                                onClick={() => navigator.clipboard.writeText(prompt.result)}
+                                title="Copy to clipboard"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M8 4v12a2 2 0 002 2h8a2 2 0 002-2V7.242a2 2 0 00-.602-1.43L16.083 2.57A2 2 0 0014.685 2H10a2 2 0 00-2 2z" strokeWidth="2" strokeLinecap="round"/>
+                                    <path d="M16 18v2a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2h2" strokeWidth="2" strokeLinecap="round"/>
+                                </svg>
+                            </button>
+                            <button
+                                className="result-button"
+                                onClick={() => onUpdate(prompt.id, { result: '' })}
+                                title="Clear result"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M19 7l-7 7m0 0l-7-7m7 7V4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <textarea
+                            id={`result-${prompt.id}`}
+                            value={prompt.result}
+                            onChange={(e) => onUpdate(prompt.id, { result: e.target.value })}
+                            placeholder="Results will appear here..."
+                            className="result-textarea"
+                            readOnly
+                            rows="8"
+                        />
+                        
                         {enhanceStatus && (
                             <div className={`enhance-status ${enhanceStatus.includes('Error') ? 'error' : ''}`}>
                                 {enhanceStatus}
@@ -2716,20 +2880,47 @@
         // Update the SCENARIOS constant with populated fields
         const SCENARIOS = [
             {
-                id: 'content-strategy',
-                emoji: '📝',
-                name: 'Content Strategy',
+                id: 'digital-transformation',
+                emoji: '🚀',
+                name: 'Digital Transformation',
                 scenario: {
-                    situation: 'Developing a comprehensive content strategy for a growing business',
-                    description: 'Business seeks to establish thought leadership and increase market presence through content',
-                    context: 'Competitive market with increasing demand for high-quality, authoritative content',
-                    challenges: 'Limited resources, need for consistent quality, content distribution challenges',
-                    opportunities: 'Growing audience interest, emerging content platforms, partnership possibilities'
-                },
-                objective: {
-                    description: 'Create and implement a scalable content strategy that positions the business as an industry authority',
-                    alignment: 'Align content with business goals, audience needs, and market opportunities',
-                    measurable_outcomes: 'Increased engagement metrics, lead generation, audience growth targets'
+                    name: 'Enterprise Digital Transformation',
+                    contextDescription: 'Fortune 500 manufacturing company transitioning to Industry 4.0. Current infrastructure is legacy-based with minimal digital integration. 5,000+ employees across global facilities.',
+                    challenges: 'Legacy system dependencies, workforce digital literacy gaps, cybersecurity vulnerabilities, production downtime risks, union concerns about automation, data silos between departments.',
+                    opportunities: 'Predictive maintenance savings, real-time production insights, improved supply chain visibility, enhanced quality control, reduced operational costs, competitive advantage in market.'
+                }
+            },
+            {
+                id: 'customer-experience',
+                emoji: '🎯',
+                name: 'Customer Experience',
+                scenario: {
+                    name: 'Omnichannel CX Enhancement',
+                    contextDescription: 'Global retail chain with 500+ locations modernizing customer experience. Currently operates siloed online and physical channels with inconsistent customer journey touchpoints.',
+                    challenges: 'Fragmented customer data, inconsistent brand experience, legacy POS systems, staff training needs, real-time inventory sync issues, personalization limitations.',
+                    opportunities: 'Unified customer profiles, seamless cross-channel experiences, increased customer loyalty, data-driven personalization, improved inventory management, higher customer satisfaction.'
+                }
+            },
+            {
+                id: 'sustainability',
+                emoji: '🌱',
+                name: 'Sustainability Initiative',
+                scenario: {
+                    name: 'Green Supply Chain Transformation',
+                    contextDescription: 'International consumer goods company implementing sustainable practices. Current operations have high carbon footprint with traditional packaging and logistics methods.',
+                    challenges: 'Higher sustainable material costs, complex supplier transitions, maintaining product quality, measuring environmental impact, consumer price sensitivity, regulatory compliance.',
+                    opportunities: 'Reduced carbon footprint, brand reputation enhancement, access to green markets, regulatory compliance advantage, reduced packaging costs, increased market share.'
+                }
+            },
+            {
+                id: 'ai-integration',
+                emoji: '🤖',
+                name: 'AI Integration',
+                scenario: {
+                    name: 'Healthcare AI Implementation',
+                    contextDescription: 'Leading healthcare provider integrating AI across diagnostic and administrative systems. Currently operates traditional manual processes with growing patient wait times.',
+                    challenges: 'Data privacy compliance, integration with existing systems, staff resistance to change, accuracy validation, patient trust concerns, high implementation costs.',
+                    opportunities: 'Improved diagnostic accuracy, reduced wait times, optimized resource allocation, enhanced patient outcomes, reduced operational costs, competitive market position.'
                 }
             },
             {
@@ -2737,78 +2928,21 @@
                 emoji: '🌐',
                 name: 'Market Expansion',
                 scenario: {
-                    situation: 'Planning expansion into new market segments or geographical regions',
-                    description: 'Organization looking to capture new market opportunities and diversify revenue streams',
-                    context: 'Changing market dynamics, emerging opportunities in adjacent markets',
-                    challenges: 'Market entry barriers, resource allocation, competitive landscape',
-                    opportunities: 'Untapped customer segments, technological advantages, strategic partnerships'
-                },
-                objective: {
-                    description: 'Successfully enter and establish presence in new market segments',
-                    alignment: 'Strategic market positioning, resource optimization, risk management',
-                    measurable_outcomes: 'Market share targets, revenue goals, customer acquisition metrics'
-                }
-            },
-            {
-                id: 'digital-transformation',
-                emoji: '💻',
-                name: 'Digital Transformation',
-                scenario: {
-                    situation: 'Implementing digital transformation initiatives across organization',
-                    description: 'Business modernizing operations and customer experience through digital technologies',
-                    context: 'Industry-wide digital adoption, changing customer expectations',
-                    challenges: 'Technical complexity, change management, skill gaps',
-                    opportunities: 'Operational efficiency, enhanced customer experience, data-driven insights'
-                },
-                objective: {
-                    description: 'Transform key business processes through digital technologies',
-                    alignment: 'Technology adoption roadmap, stakeholder engagement, capability building',
-                    measurable_outcomes: 'Process efficiency metrics, digital adoption rates, ROI targets'
-                }
-            },
-            {
-                id: 'customer-experience',
-                emoji: '🤝',
-                name: 'Customer Experience',
-                scenario: {
-                    situation: 'Enhancing customer experience across all touchpoints',
-                    description: 'Organization focusing on improving customer satisfaction and loyalty',
-                    context: 'Increasing customer expectations, competitive service landscape',
-                    challenges: 'Consistency across channels, personalization needs, feedback integration',
-                    opportunities: 'Customer loyalty programs, personalized experiences, service innovation'
-                },
-                objective: {
-                    description: 'Deliver exceptional customer experience that drives loyalty and advocacy',
-                    alignment: 'Customer journey optimization, service excellence, feedback loops',
-                    measurable_outcomes: 'Customer satisfaction scores, retention rates, advocacy metrics'
-                }
-            },
-            {
-                id: 'innovation-initiative',
-                emoji: '💡',
-                name: 'Innovation Initiative',
-                scenario: {
-                    situation: 'Launching new innovation initiatives to drive growth',
-                    description: 'Organization implementing innovation programs to maintain competitive advantage',
-                    context: 'Rapid technological change, evolving market needs',
-                    challenges: 'Innovation culture, resource constraints, risk management',
-                    opportunities: 'New product development, process improvements, market differentiation'
-                },
-                objective: {
-                    description: 'Foster innovation culture and deliver breakthrough solutions',
-                    alignment: 'Innovation framework, cross-functional collaboration, rapid experimentation',
-                    measurable_outcomes: 'Innovation pipeline metrics, implementation success rates, impact assessment'
+                    name: 'APAC Market Entry Strategy',
+                    contextDescription: 'European B2B SaaS company expanding into APAC markets. Currently successful in EU/US markets with enterprise security software solutions.',
+                    challenges: 'Cultural adaptation needs, local regulatory compliance, established regional competitors, language barriers, different security standards, pricing model adjustments.',
+                    opportunities: 'Large untapped market potential, first-mover advantage in specific regions, strategic local partnerships, product localization value, regional tech hub presence.'
                 }
             }
         ];
 
         // React Components
-        const ScenarioCard = ({ scenario, onUpdate, onDelete, apiKey }) => {
-            const updateField = (section, field, value) => {
+        const ScenarioCard = ({ scenario, onUpdate, onDelete }) => {
+            const updateField = (field, value) => {
                 const updatedScenario = {
                     ...scenario,
-                    [section]: {
-                        ...scenario[section],
+                    scenario: {
+                        ...scenario.scenario,
                         [field]: value
                     }
                 };
@@ -2822,82 +2956,44 @@
                         <span className="scenario-title">SCENARIO CARD</span>
                     </div>
 
-                    <div className="scenario-section">
-                        <div className="scenario-section-title">Scenario</div>
-                        
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Situation</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.scenario?.situation || ''}
-                                onChange={(e) => updateField('scenario', 'situation', e.target.value)}
-                                placeholder="Describe the current environment and challenges..."
-                            />
-                        </div>
-
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Description</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.scenario?.description || ''}
-                                onChange={(e) => updateField('scenario', 'description', e.target.value)}
-                                placeholder="List factors or conditions influencing the scenario..."
-                            />
-                        </div>
-
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Context</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.scenario?.context || ''}
-                                onChange={(e) => updateField('scenario', 'context', e.target.value)}
-                                placeholder="Key challenges or obstacles faced..."
-                            />
-                        </div>
-
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Challenges</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.scenario?.challenges || ''}
-                                onChange={(e) => updateField('scenario', 'challenges', e.target.value)}
-                                placeholder="List specific challenges faced in the scenario..."
-                            />
-                        </div>
+                    <div className="scenario-field">
+                        <div className="scenario-field-label">Name</div>
+                        <textarea
+                            className="scenario-textarea"
+                            value={scenario.scenario?.name || ''}
+                            onChange={(e) => updateField('name', e.target.value)}
+                            placeholder="Enter scenario name..."
+                        />
                     </div>
 
-                    <div className="scenario-section">
-                        <div className="scenario-section-title">Objective</div>
-                        
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Description</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.objective?.description || ''}
-                                onChange={(e) => updateField('objective', 'description', e.target.value)}
-                                placeholder="Description of the strategies to achieve the objectives..."
-                            />
-                        </div>
+                    <div className="scenario-field">
+                        <div className="scenario-field-label">Context & Description</div>
+                        <textarea
+                            className="scenario-textarea"
+                            value={scenario.scenario?.contextDescription || ''}
+                            onChange={(e) => updateField('contextDescription', e.target.value)}
+                            placeholder="Describe the context and background..."
+                        />
+                    </div>
 
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Alignment</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.objective?.alignment || ''}
-                                onChange={(e) => updateField('objective', 'alignment', e.target.value)}
-                                placeholder="Specific tactics or actions to be implemented..."
-                            />
-                        </div>
+                    <div className="scenario-field">
+                        <div className="scenario-field-label">Challenges</div>
+                        <textarea
+                            className="scenario-textarea"
+                            value={scenario.scenario?.challenges || ''}
+                            onChange={(e) => updateField('challenges', e.target.value)}
+                            placeholder="List key challenges..."
+                        />
+                    </div>
 
-                        <div className="scenario-field">
-                            <div className="scenario-field-label">Measurable Outcomes</div>
-                            <textarea
-                                className="scenario-textarea"
-                                value={scenario.objective?.measurable_outcomes || ''}
-                                onChange={(e) => updateField('objective', 'measurable_outcomes', e.target.value)}
-                                placeholder="Plans for addressing potential risks or obstacles..."
-                            />
-                        </div>
+                    <div className="scenario-field">
+                        <div className="scenario-field-label">Opportunities</div>
+                        <textarea
+                            className="scenario-textarea"
+                            value={scenario.scenario?.opportunities || ''}
+                            onChange={(e) => updateField('opportunities', e.target.value)}
+                            placeholder="List potential opportunities..."
+                        />
                     </div>
 
                     <button 
@@ -2920,7 +3016,6 @@
                         ...baseScenario,
                         cardId: Date.now(),
                         scenario: { ...baseScenario.scenario },
-                        objective: { ...baseScenario.objective }
                     };
                     onAddScenario(newScenario);
                     setSelectedScenario('');
@@ -2965,7 +3060,7 @@
             {
                 id: 'summary',
                 name: 'Content Summary',
-                emoji: '📝',
+                emoji: '��',
                 text: 'Please provide a comprehensive summary, highlighting the key points and main ideas'
             },
             {
