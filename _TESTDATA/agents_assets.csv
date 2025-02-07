@@ -1,0 +1,7 @@
+name,description,inputs_needed,outputs_generated
+Strategic Visionary,Defines the overarching strategy and vision based on the organizational objectives outlined in the spreadsheet.,"Vision, mission, and goals sections from the spreadsheet.",A strategic roadmap aligned with organizational goals.
+Tactical Planner,Breaks down high-level strategies into actionable objectives and tasks.,Goals and objectives from the spreadsheet.,Action plans with timelines and deliverables.
+KPI Specialist,Defines and monitors metrics to evaluate success against objectives.,KPI definitions and SMART objectives from the spreadsheet.,Reports on key performance indicators.
+Documentation Architect,Develops and organizes tools and documents to communicate strategies and plans.,Content from all team members and sections of the spreadsheet.,"Project documentation, templates, and communication materials."
+Data Analyst,Analyzes data trends to inform decision-making and improve tactics.,Data reports and KPI metrics.,Data-driven recommendations for optimizing tactics.
+Team Coordinator,Oversees and synchronizes the efforts of all agents to ensure cohesive project execution.,"Detailed outputs, task progress, and dependencies from all agents.",Integrated project execution plan and regular progress updates.
